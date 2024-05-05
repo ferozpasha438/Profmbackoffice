@@ -1,0 +1,374 @@
+
+
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Schedules' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Schedules' | translate}}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{'Schedules List' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12 text-center">
+      <input type="button" class="btn waves-effect waves-light btn-primary btn-midblock w-20"
+             (click)="showList()" style="width: 15%; border-radius:10px" value="{{'List' | translate}}" />&nbsp;&nbsp;&nbsp;
+      <input type="button" class="btn waves-effect waves-light btn-primary btn-midblock w-20" *ngIf="isShowCalander"
+             (click)="showCalander()" style="width: 15%; border-radius:10px" value="{{'Calendar' | translate}}" />&nbsp;&nbsp;&nbsp;
+      <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+             value="{{'Back' | translate}}" (click)="closeModel()" /> &nbsp;
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isShowList" class="row">
+  <div class="col-md-12 col-lg-12">
+    <form [formGroup]="form" novalidate class="mt-4">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <br>
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label for="contractCode">{{'Contract Code' | translate}}</label>
+                    <input class="form-control" id="contractCode" type="text"
+                           placeholder="{{'Please_Enter' | translate}} {{'Contract_Code' | translate}} "
+                           formControlName="contractCode" readonly>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label for="custCode">{{'Customer_Code' | translate}}</label>
+                    <input class="form-control" id="custCode" type="text"
+                           placeholder="{{'Please_Enter' | translate}} {{'Customer_Code' | translate}} "
+                           formControlName="custCode" readonly>
+                    <!--<validation-message [control]="form.controls.custCode"></validation-message>-->
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group ">
+                    <label>{{'From Date' | translate}}</label>
+                    <input class="form-control" id="contStartDate" type="text"
+                           placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}"
+                           formControlName="contStartDate" readonly>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <div>
+                    <label>{{'To Date' | translate}}</label>
+                    <input class="form-control" id="contEndDate" type="text"
+                           placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}"
+                           formControlName="contEndDate" readonly>
+                  </div>
+                </div>
+
+              </div>
+              <!--<div class="row">
+                <div class="col-md-6 col-lg-6">
+                  <h2 class="text-right">{{'Contract Code' | translate}} </h2>
+                  <input class="form-control" id="contractCode" type="text" formControlName="contractCode"
+                         placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}" [(ngModel)]="contractCode">
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                  <h2 class="text-left">{{'Contract Name' | translate}} </h2>
+                  <input class="form-control" id="custCode" type="text" formControlName="custCode"
+                         placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}" [(ngModel)]="custCode">
+                </div>
+              </div>-->
+              &nbsp;
+              <!--<div class="row">
+                <div class="col-md-3 col-lg-3"></div>
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group ">
+                    <label for="yourentity">{{'From Date' | translate}}</label>
+                    <input class="form-control" id="yourentity" type="text"
+                           placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}">
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group ">
+                    <label for="yourentity">{{'To Date' | translate}}</label>
+                    <input class="form-control" id="yourentity" type="text"
+                           placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}">
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3"></div>
+              </div>-->
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-2 col-lg-2"></div>
+              <div class="col-md-8 col-lg-8">
+                <!--<label class="mr-sm-2" style="color: black;font-size: 22px;">
+                              {{
+                'Departments' |
+                                            translate
+                              }}
+                            </label>
+                            <select class="custom-select mr-sm-2">
+                              <option>{{'Select' | translate}}</option>
+                              <option>ABC</option>
+                              <option>XYZ</option>
+                              <option>123</option>
+                            </select>-->
+                <div class="form-group">
+                  <label for="deptCode">{{'Disciplines' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="deptCode" (change)="getShedule()">
+                    <option value="">{{'Select' | translate}} {{'Disciplines' | translate}} </option>
+                    <ng-container *ngIf="DepartmentCodeList">
+                      <option *ngFor="let item of DepartmentCodeList" value="{{item.deptCode}}">{{ isArab ? item.nameEng : item.nameEng  }}</option>
+                    </ng-container>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2 col-lg-2"></div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-12 col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="col-md-12 col-lg-12">
+                      <div class="table-responsive">
+                        <spinner-loader [isLoading]="isLoading"></spinner-loader>
+                        <div class="mat-elevation-z8">
+                          <ng-container>
+                            <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                              <ng-container matColumnDef="contractCode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Contract Code' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.contractCode }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="customerName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Customer Name' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="siteName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Site Name' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.siteName }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="schDate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Schedule Date' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.schDate | date: 'fullDate' }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="time">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Time' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.time }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="department">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Department' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.department }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="remarks">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Remarks' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.remarks  }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="serType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Service Type' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.serType }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="frequency">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Frequency' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.frequency }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="tranNumber">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Transcation Number' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.tranNumber  }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="serviceItem">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                  {{'Service Item' | translate}}
+                                </th>
+                                <td mat-cell *matCellDef="let row">{{ row.serviceItem  }}</td>
+                              </ng-container>
+
+                              <!-- <ng-container matColumnDef="Actions" stickyEnd>
+    <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+    <td mat-cell *matCellDef="let row">
+      <a class="tableicons" (click)="edit(row.id)" matTooltip="{{'Edit_Item' | translate}}">
+        <i class="icon-note"> </i>
+      </a> &nbsp;
+      <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}">
+        <i class="icon-trash"> </i>
+      </a>
+    </td>
+  </ng-container> -->
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                            <ng-container>
+                              <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                             [pageSizeOptions]="pageService.selectItemsPerPage">
+                              </mat-paginator>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row" *ngIf="!isShowList">
+  <div class="col-md-4 col-lg-4">
+    <div class="calendar">
+      <mat-calendar [selected]="selectedDate" [dateClass]="dateClass()" (activeDateChange)="onActiveDateChange($event)"
+                    (monthSelected)="monthSelected($event)" (selectedChange)="dateSelected($event)" #calendar></mat-calendar>
+
+
+    </div>
+  </div>
+  <div class="col-md-8 col-lg-8">
+    <br /><br />
+    <div class="table-responsive tableright" *ngIf="scheduleDateData.length>0">
+      <table id="zero_config1" class="table  table-bordered no-wrap">
+        <thead>
+          <tr>
+            <th>{{'Contract Code' | translate}}</th>
+            <th>{{'Customer Name' | translate}}</th>
+            <th>{{'Site Name' | translate}}</th>
+            <th>{{'Schedule Date' | translate}}</th>
+            <th> {{'Time' | translate}}  </th>
+            <th>{{'Department' | translate}}</th>
+            <th>{{'Remarks' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of scheduleDateData; let j = index;">
+            <td>
+              {{row.contractCode}}
+            </td>
+            <td>
+              {{row.customerName}}
+            </td>
+            <td>
+              {{row.siteName}}
+            </td>
+            <td>
+              {{ row.schDate | date: 'fullDate' }}
+            </td>
+            <td>
+              {{ row.time }}
+            </td>
+            <td>
+              {{ row.department }}
+            </td>
+            <td>
+              {{ row.remarks }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+<!--<form [formGroup]="form1" novalidate class="mt-4">-->
+
+
+
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 5px;
+    width: 5px;
+    color: black;
+  }
+
+  .custom-textarea {
+    width: 110px;
+    height: 32px;
+  }
+
+  .calendar-container {
+    border: 1px solid transparent;
+    border-color: #fff #ddd;
+    margin: 0 2em 2em
+  }
+
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .events {
+    margin-top: 20px;
+  }
+
+  .mat-calendar {
+    width: 500px;
+    /* Set the desired width */
+    height: 500px;
+    /* Set the desired height */
+  }
+
+  @media screen and (max-width: 600px) {
+    .calendar {
+      padding: 10px;
+      /* Add padding for smaller screens */
+    }
+
+    .mat-calendar {
+      width: 100%;
+      /* Make the calendar fill the entire width */
+    }
+  }
+
+  /* Adjust layout for screens larger than 600px */
+  @media screen and (min-width: 601px) {
+    .calendar {
+      justify-content: center;
+      /* Center the calendar horizontally */
+    }
+  }
+</style>
+
+

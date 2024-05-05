@@ -1,0 +1,222 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{modalTitle}}</h3>
+    <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="row">
+    <!--<div class="col-md-6 col-lg-6">
+      <div class="form-group">
+          <label for="deptCodes">{{'Department_Code' | translate}}</label>
+          <input class="form-control" id="deptCode" type="text"
+              placeholder="{{'Please_Enter' | translate}} {{'Department_Code' | translate}} "
+              formControlName="deptCodes" [readonly]="isReadOnly">
+          <validation-message [control]="form.controls.deptCodes"></validation-message>
+      </div>
+  </div>-->
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="deptCodes">{{'Department_Codes' | translate}}</label>
+        <ng-select [multiple]="true" formControlName="deptCodes">
+          <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
+        </ng-select>
+        <validation-message [control]="form.controls.deptCodes"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="subContCode">{{'Sub_Contractor_Code' | translate}}</label>
+        <input class="form-control" id="subContCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Sub_Contractor_Code' | translate}} "
+               formControlName="subContCode" [readonly]="isReadOnly">
+        <div *ngIf="form.controls.subContCode.hasError('maxlength')">
+          Maximum(20) length exceeded.
+        </div>
+        <validation-message [control]="form.controls.subContCode"></validation-message>
+      </div>
+    </div>
+  </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="nameEng">{{'Sub_Contractor_Name_EN' | translate}}</label>
+                <input class="form-control" id="nameEng" type="text"
+                    placeholder="{{'Please_Enter' | translate}} {{'Sub_Contractor_Name_EN' | translate}}"
+                    formControlName="nameEng">
+                <validation-message [control]="form.controls.nameEng"></validation-message>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+              <label for="nameArabic">{{'Sub_Contractor_Name_AR' | translate}}</label>
+                <input class="form-control" id="nameArabic" type="text"
+                    placeholder="{{'Please_Enter' | translate}} {{'Sub_Contractor_Name_AR' | translate}}"
+                    formControlName="nameArabic">
+                <validation-message [control]="form.controls.nameArabic"></validation-message>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{{'Address' | translate}}</label>
+          <textarea class="form-control" placeholder="{{'PleaseEnter' | translate}} {{'Address' | translate}}"
+                    formControlName="address">
+                </textarea>
+        </div>
+      </div>
+      <!--<div class="col-md-6 col-lg-6">
+        <label class="mr-sm-2">{{'City' | translate}}</label>
+        <select class="custom-select mr-sm-2">
+          <option>{{'Select' | translate}}</option>
+          <option>ABC</option>
+          <option>XYZ</option>
+          <option>123</option>
+        </select>
+        <validation-message [control]="form.controls.city"></validation-message>
+      </div>-->
+     
+        <div class="col-md-6 col-lg-6">
+          <label class="mr-sm-2">{{'City' | translate}}</label>
+          <select class="custom-select mr-sm-2" formControlName="city">
+            <option value="">{{'Select' | translate}}</option>
+            <option value="JED">{{'Jeddah' | translate}}</option>
+            <option value="MEC">{{'Mecca' | translate}}</option>
+            <option value="MED">{{'Medina' | translate}}</option>
+            <option value="RIY">{{'Riyadh ' | translate}}</option>
+          </select>
+          <validation-message [control]="form.controls.city"></validation-message>
+        </div>
+     
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-6">
+        <div class="form-group">
+          <label for="phone">{{'Phone' | translate}}</label>
+          <input class="form-control" id="phone" type="text"
+                 placeholder="{{'Please_Enter' | translate}} {{'Phone' | translate}}" formControlName="phone">
+          <div *ngIf="form.controls.phone.invalid && form.controls.phone.dirty">
+
+            <div *ngIf="form.controls.phone.hasError('pattern')">Invalid phone number (should be 10 digits).</div>
+          </div>
+          <validation-message [control]="form.controls.phone"></validation-message>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <div class="form-group">
+          <label for="mobile">{{'Mobile' | translate}}</label>
+          <input class="form-control" id="mobile" type="tel"
+                 placeholder="{{'Please_Enter' | translate}} {{'Mobile' | translate}}" formControlName="mobile">
+         
+
+          <div *ngIf="form.controls.mobile.invalid && form.controls.mobile.dirty">
+
+            <div *ngIf="form.controls.mobile.hasError('pattern')">Invalid mobile number (should be 10 digits).</div>
+          </div>
+          <validation-message [control]="form.controls.mobile"></validation-message>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <div class="form-group">
+          <label for="contactPerson1">{{'Contact_Person_1' | translate}}</label>
+          <input class="form-control" id="contactPerson1" type="text"
+                 placeholder="{{'Please_Enter' | translate}} {{'Contact_Person_1' | translate}}"
+                 formControlName="contactPerson1">
+          <validation-message [control]="form.controls.contactPerson1"></validation-message>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="desgContactPerson1">{{'Desgination_Of_Contact_Person_1' | translate}}</label>
+                <input class="form-control" id="desgContactPerson1" type="text"
+                    placeholder="{{'Please_Enter' | translate}} {{'Desgination_Of_Contact_Person_1' | translate}}"
+                    formControlName="desgContactPerson1">
+                <validation-message [control]="form.controls.desgContactPerson1"></validation-message>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="contactPerson1Phone">{{'Contact_Person_1_Phone' | translate}}</label>
+            <input class="form-control" id="contactPerson1Phone" type="tel"
+                   placeholder="{{'Please_Enter' | translate}} {{'Contact_Person_1_Phone' | translate}}"
+                   formControlName="contactPerson1Phone">
+            <div *ngIf="form.controls.contactPerson1Phone.invalid && form.controls.contactPerson1Phone.dirty">
+
+              <div *ngIf="form.controls.contactPerson1Phone.hasError('pattern')">Invalid phone number (should be 10 digits).</div>
+            </div>
+            <validation-message [control]="form.controls.contactPerson1Phone"></validation-message>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="contactPerson2">{{'Contact_Person_2' | translate}}</label>
+                <input class="form-control" id="contactPerson2" type="text"
+                    placeholder="{{'Please_Enter' | translate}} {{'Contact_Person_2' | translate}}"
+                    formControlName="contactPerson2">
+                <validation-message [control]="form.controls.contactPerson2"></validation-message>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="desgContactPerson2">{{'Desgination_Of_Contact_Person_2' | translate}}</label>
+                <input class="form-control" id="desgContactPerson2" type="text"
+                    placeholder="{{'Please_Enter' | translate}} {{'Desgination_Of_Contact_Person_2' | translate}}"
+                    formControlName="desgContactPerson2">
+                <validation-message [control]="form.controls.desgContactPerson2"></validation-message>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="contactPerson2Phone">{{'Contact_Person_2_Phone' | translate}}</label>
+            <input class="form-control" id="contactPerson2Phone" type="tel"
+                   placeholder="{{'Please_Enter' | translate}} {{'Contact_Person_2_Phone' | translate}}"
+                   formControlName="contactPerson2Phone">
+            <div *ngIf="form.controls.contactPerson2Phone.invalid && form.controls.contactPerson2Phone.dirty">
+
+              <div *ngIf="form.controls.contactPerson2Phone.hasError('pattern')">Invalid phone number (should be 10 digits).</div>
+            </div>
+            <validation-message [control]="form.controls.contactPerson2Phone"></validation-message>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="website">{{'Website' | translate}}</label>
+            <input class="form-control" id="website" type="url"
+                   placeholder="{{'Please_Enter' | translate}} {{'Website' | translate}}"
+                   formControlName="website">
+            
+            <div *ngIf="form.controls.website.invalid && form.controls.website.dirty">
+              
+              <div *ngIf="form.controls.website.hasError('pattern')">Invalid website URL.</div>
+            </div>
+            <!--<validation-message [control]="form.controls.website"></validation-message>-->
+          </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="isActive">{{'Is_Active' | translate}}</label>
+                <br />
+                <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 ">
+        <div class="col-md-12 col-lg-12 text-center">
+            <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+                value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+            <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                value="{{'Save' | translate}}" />
+        </div>
+    </div>
+</form>

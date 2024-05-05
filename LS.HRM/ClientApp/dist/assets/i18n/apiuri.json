@@ -1,0 +1,15 @@
+{
+  "financeurl": "https://13.69.11.184/commondevapi/api",
+  "financemgtapiurl": "https://13.69.11.184/commondevapi/api",
+  "operationapiurl": "https://13.69.11.184/commondevapi/api",
+  "inventoryapiurl": "https://13.69.11.184/commondevapi/api",
+  "inventorymgtapiurl": "https://13.69.11.184/commondevapi/api",
+  "salesapiurl": "https://13.69.11.184/commondevapi/api",
+  "purchaseapiurl": "https://13.69.11.184/commondevapi/api",
+  "schoolapiurl": "https://13.69.11.184/commondevapi/api",
+  "schoolmgtapiurl": "https://13.69.11.184/commondevapi/api",
+  "schooltestapiurl": "https://13.69.11.184/commondevapi/api",
+  "fleetapiurl": "https://13.69.11.184/commondevapi/api",
+  "fomapiurl": "https://13.69.11.184/fomdevapi/api"
+}
+

@@ -1,0 +1,211 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Schedules' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Schedules' | translate}}</li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{'Schedules Calendar' | translate}}
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-lg-12 text-center">
+        <input type="button" class="btn waves-effect waves-light btn-primary btn-midblock w-20"
+               (click)="navigateToRoute()" style="width: 15%; border-radius:10px"
+               value="{{'List' | translate}}" />&nbsp;&nbsp;&nbsp;
+        <input type="button" class="btn waves-effect waves-light btn-primary btn-midblock w-20"
+               style="width: 15%; border-radius:10px" value="{{'Calendar' | translate}}" />
+        <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+               value="{{'Close' | translate}}" (click)="closeModel()" /> &nbsp;
+      </div>
+    </div>
+    <br>
+    <div class="card" style="width: 100%;height: 750px;">
+      <div class="card-body">
+        <!--<br>
+        <div class="row">
+          <div class="col-md-6 col-lg-6">
+            <h2 class="text-right">{{'Contract Code' | translate}} </h2>
+          </div>
+
+          <div class="col-md-6 col-lg-6">
+            <h2 class="text-left">{{'Contract Name' | translate}} </h2>
+          </div>
+        </div>
+        &nbsp;
+        <div class="row">
+          <div class="col-md-3 col-lg-3"></div>
+          <div class="col-md-3 col-lg-3">
+            <div class="form-group ">
+              <label for="yourentity">{{'From Date' | translate}}</label>
+              <input class="form-control" id="yourentity" type="text"
+                     placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}">
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <div class="form-group ">
+              <label for="yourentity">{{'To Date' | translate}}</label>
+              <input class="form-control" id="yourentity" type="text"
+                     placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}">
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3"></div>
+        </div>-->
+        <div class="row">
+          <div class="col-md-4 col-lg-4">
+            <div class="calendar">
+              <mat-calendar [selected]="selectedDate" (selectedChange)="dateSelected($event)" #calendar></mat-calendar>
+              <!-- <div class="events">
+      <div *ngFor="let event of events">
+          <p>{{ event.title }}</p>
+      </div>
+  </div> -->
+            </div>
+          </div>
+          <!--<div class="col-md-68 col-lg-8">
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                    <ng-container matColumnDef="contractId">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Contract Id' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.contractId }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="schDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Schedule Date' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.schDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="department">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Department' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.department }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="serType">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Service Type' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.serType }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="frequency">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Frequency' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.frequency }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="tranNumber">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Transcation Number' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.tranNumber  }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="serviceItem">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Service Item' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.serviceItem  }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="remarks">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Remarks' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.remarks  }}</td>
+                    </ng-container>-->
+                    <!-- <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <a class="tableicons" (click)="edit(row.id)" matTooltip="{{'Edit_Item' | translate}}">
+                          <i class="icon-note"> </i>
+                        </a> &nbsp;
+                        <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}">
+                          <i class="icon-trash"> </i>
+                        </a>
+                      </td>
+                    </ng-container> -->
+                    <!--<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  </table>
+                  <ng-container>
+                    <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                      [pageSizeOptions]="pageService.selectItemsPerPage">
+                    </mat-paginator>
+                  </ng-container>
+                </ng-container>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </div>
+
+
+</div>
+
+
+<style>
+    .calendar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 5px;
+        width: 5px;
+        color: black;
+    }
+
+    .events {
+        margin-top: 20px;
+    }
+
+    .mat-calendar {
+        width: 500px;
+        /* Set the desired width */
+        height: 500px;
+        /* Set the desired height */
+    }
+
+    @media screen and (max-width: 600px) {
+        .calendar {
+            padding: 10px;
+            /* Add padding for smaller screens */
+        }
+
+        .mat-calendar {
+            width: 100%;
+            /* Make the calendar fill the entire width */
+        }
+    }
+
+    /* Adjust layout for screens larger than 600px */
+    @media screen and (min-width: 601px) {
+        .calendar {
+            justify-content: center;
+            /* Center the calendar horizontally */
+        }
+    }
+</style>

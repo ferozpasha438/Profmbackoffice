@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "CIN.DB.Two": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:63262;http://localhost:63263"
+    }
+  }
+}

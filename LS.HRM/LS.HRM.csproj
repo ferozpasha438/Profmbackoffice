@@ -1,0 +1,167 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	   <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\Financemgt\**" />
+    <Compile Remove="ClientApp\src\app\Inventorymgt\**" />
+    <Compile Remove="ClientApp\src\app\Inventorysetup\**" />
+    <Compile Remove="ClientApp\src\app\Purchasemgt\sharedpages\**" />
+    <Compile Remove="ClientApp\src\app\Purchasesetup\**" />
+    <Compile Remove="ClientApp\src\app\sales-and-distribution\**" />
+    <Compile Remove="ClientApp\src\app\Salesmgt\**" />
+    <Compile Remove="ClientApp\src\app\Sales\**" />
+    <Content Remove="ClientApp\src\app\Financemgt\**" />
+    <Content Remove="ClientApp\src\app\Inventorymgt\**" />
+    <Content Remove="ClientApp\src\app\Inventorysetup\**" />
+    <Content Remove="ClientApp\src\app\Purchasemgt\sharedpages\**" />
+    <Content Remove="ClientApp\src\app\Purchasesetup\**" />
+    <Content Remove="ClientApp\src\app\sales-and-distribution\**" />
+    <Content Remove="ClientApp\src\app\Salesmgt\**" />
+    <Content Remove="ClientApp\src\app\Sales\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Financemgt\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Inventorymgt\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Inventorysetup\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Purchasemgt\sharedpages\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Purchasesetup\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\sales-and-distribution\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Salesmgt\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\Sales\**" />
+    <None Remove="ClientApp\src\app\Financemgt\**" />
+    <None Remove="ClientApp\src\app\Inventorymgt\**" />
+    <None Remove="ClientApp\src\app\Inventorysetup\**" />
+    <None Remove="ClientApp\src\app\Purchasemgt\sharedpages\**" />
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\Purchasesetup\**" />
+    <None Remove="ClientApp\src\app\sales-and-distribution\**" />
+    <None Remove="ClientApp\src\app\Salesmgt\**" />
+    <None Remove="ClientApp\src\app\Sales\**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\models\SchoolMgt\CalendarHolidayData.ts" />
+    <None Remove="ClientApp\src\app\models\SchoolMgt\studentExamResultData.ts" />
+    <None Remove="ClientApp\src\app\models\SchoolMgt\studentResultData.ts" />
+    <None Remove="ClientApp\src\app\sharedcomponent\ParentHrmAdmin.component.ts" />
+    <None Remove="ClientApp\src\assets\i18n\ar.json~RF37a7dc74.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\arrowright.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\arrowright1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\arrowsquareleft.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\arrowsquareleft1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\arrowsquareright.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\arrowsquareright1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\ellipse-2%402x.png" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\ellipse-21%402x.png" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-11.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-9.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-91.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-92.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-93.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-94.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-95.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-96.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group-97.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\group2.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\screenshot-20230911-104055removebgpreview-1%402x.png" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\screenshot-20230911-104055removebgpreview-11%402x.png" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-23-1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-23-11.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-24-1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-24-11.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-25-1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-25-11.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-30-1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-30-11.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-30-2.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-30-3.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-30-5.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-31-10.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-31-2.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-31-21.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-31-6.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-31-61.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-33-4.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\svgexport17-33-41.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector1.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector10.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector11.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector12.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector13.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector14.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector2.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector3.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector4.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector5.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector6.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector7.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector8.svg" />
+    <Content Include="ClientApp\src\assets\dashboard\dashboard_images\vector9.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\dashboard\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\SchoolMgt\CalendarHolidayData.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\SchoolMgt\studentExamResultData.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\SchoolMgt\studentResultData.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\sharedcomponent\Parenthrmadmin.component.ts" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+	  <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+	  <!--<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />-->
+	  <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+	  <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <ProjectExtensions><VisualStudio><UserProperties clientapp_4src_4assets_4i18n_4apiuri_1json__JsonSchema="https://datahubproject.io/schemas/datahub_ingestion_schema.json" clientapp_4src_4assets_4i18n_4en_1json__JsonSchema="Alias" /></VisualStudio></ProjectExtensions>
+
+</Project>

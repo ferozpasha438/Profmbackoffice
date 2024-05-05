@@ -1,0 +1,184 @@
+
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">Dashboard</li>
+            <li class="breadcrumb-item text-muted ">Tickets</li>
+            <li class="breadcrumb-item text-muted ">Ticket Details</li>
+          </ol>
+        </nav>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+            <i data-feather="file-text"></i>&nbsp;Tickets
+          </h3>
+        </div>
+        <div class="col-md-6 col-lg-6 text-right">
+          <a class="tableicons" matTooltip="Print Ticket Details">
+            <i class="icon-printer">
+            </i>
+          </a>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <h3 style="color: black;">Report Information</h3>
+      <div class="card" style="border-radius: 10px;border: 1px solid #C7D0DE;">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Requester </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <!-- <p>{{ticketHead?.requester}} </p>-->
+              <p>{{ticketHead?.joBookedBy}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Mobile Number </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.mobileNumber}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Project Name </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p>{{ticketHead?.projectName}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Request date </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p>{{ticketHead?.joDate|date:'dd-MM-YYYY'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Ticket Number</p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.ticketNumber}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Ticket Status </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.requestStatus}} </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <h3 style="color: black;">Maintainence Details</h3>
+      <div class="card" style="border-radius: 10px;border: 1px solid #C7D0DE;">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Maintainence Type </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.jobMaintenanceType}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Service Type </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.serviceType}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Service Category </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p>{{ticketHead?.serviceCategory}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Request Date </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p>{{ticketHead?.joDate|date:'dd-MM-YYYY'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Problem/Request</p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.joSubject}} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Problem Description </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.joDescription}} </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <h3 style="color: black;">Photos From The Project</h3>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div *ngIf="ticketHead?.image1WithFullPath!=''" class="col-md-4 col-lg-3">
+              <img src="{{ticketHead?.image1WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
+            </div>
+            <!--<div class="col-md-4 col-lg-2">
+              <img src="../../../../assets/images/Reportimg1.svg" alt="">
+            </div>
+            <div class="col-md-4 col-lg-2">
+              <img src="../../../../assets/images/Reportimg2.svg" alt="">
+            </div>
+            <div class="col-md-4 col-lg-2">
+              <img src="../../../../assets/images/Reportimg3.svg" alt="">
+            </div>-->
+
+            <div *ngIf="ticketHead?.image2WithFullPath!=''" class="col-md-4 col-lg-3">
+              <img src="{{ticketHead?.image2WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
+            </div>
+            <div *ngIf="ticketHead?.image3WithFullPath!=''" class="col-md-4 col-lg-3">
+              <img src="{{ticketHead?.image3WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div *ngIf="ticketHead!=null">
+  {{ticketHead | json}}
+
+</div>-->

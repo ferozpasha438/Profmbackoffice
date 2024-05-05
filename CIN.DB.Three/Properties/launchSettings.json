@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "CIN.DB.Three": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:52284;http://localhost:52286"
+    }
+  }
+}

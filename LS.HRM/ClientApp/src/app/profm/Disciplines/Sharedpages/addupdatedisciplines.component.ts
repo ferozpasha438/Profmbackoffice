@@ -1,0 +1,203 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AuthorizeService } from 'src/app/api-authorization/AuthorizeService';
+import { ApiService } from 'src/app/services/api.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { DBOperation } from 'src/app/services/utility.constants';
+import { UtilityService } from 'src/app/services/utility.service';
+import { ParentHrmAdminComponent } from 'src/app/sharedcomponent/Parenthrmadmin.component';
+import { ValidationService } from 'src/app/sharedcomponent/ValidationService';
+import { CustomSelectListItem, LanCustomSelectListItem } from '../../../models/MenuItemListDto';
+import { ParentFomMgtComponent } from '../../../sharedcomponent/parentfommgt.component';
+
+@Component({
+  selector: 'app-addupdatedisciplines',
+  templateUrl: './addupdatedisciplines.component.html',
+  styles: [
+  ]
+})
+export class AddupdatedisciplinesComponent extends ParentFomMgtComponent implements OnInit {
+  modalTitle!: string;
+  modalBtnTitle!: string;
+  dbops!: DBOperation;
+  form!: FormGroup;
+  fileUploadone!: File;
+  //thumbNailImageUrl: string | ArrayBuffer | null = null;
+  TimePeriodList: Array<LanCustomSelectListItem> = [];
+  file1Url: string = '';
+  id: number = 0;
+  isReadOnly: boolean = false;
+  constructor(private fb: FormBuilder, private apiService: ApiService,
+    private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdatedisciplinesComponent>,
+    private notifyService: NotificationService, private validationService: ValidationService) {
+    super(authService)
+  };
+  ngOnInit(): void {
+    this.setForm();
+    if (this.id > 0) {
+      this.setEditForm();
+    } else {
+      this.loadPeriod();
+    }
+      
+  }
+  setForm() {
+    this.form = this.fb.group(
+      {
+        'serviceTimePeriods': [[], Validators.required],
+        'deptCode': ['', [Validators.required, Validators.maxLength(20)]],
+        'nameEng': ['', Validators.required],
+        'nameArabic': ['', Validators.required],
+        'deptServType': ['', Validators.required],
+        'isSheduleRequired1': [false],
+        'isSheduleRequired2': [false],
+        'thumbNailImage': [''],
+        'isActive': [false],
+      }
+    );
+    this.isReadOnly = false;
+  }
+
+
+  onSelectFiles(fileInput: any) {
+    if (fileInput.target.files.length > 1) {
+      this.notifyService.showWarning("Select Only 1 Image");
+    } else if (fileInput.target.files.length > 0) {
+      this.fileUploadone = <File>fileInput.target.files[0];
+      //if (fileInput.target.files.length > 1) {
+      //  this.fileUploadtwo = <File>fileInput.target.files[1];
+      //}
+      //if (fileInput.target.files.length > 2) {
+      //  this.fileUploadthree = <File>fileInput.target.files[2];
+      //}
+    }
+  }
+  setEditForm() {
+    this.apiService.getall('FomDiscipline/getSelectTimePeriodsList').subscribe(res => {
+      this.TimePeriodList = res;
+      this.apiService.get('FomDiscipline', this.id).subscribe(res => {
+        if (res) {
+          this.isReadOnly = true;
+          if (res['serviceTimePeriods'] != null) {
+            const filterArray = res['serviceTimePeriods'].split(',');
+            var perioddata = this.TimePeriodList as Array<any>;
+            res['serviceTimePeriods'] = perioddata.filter(item => filterArray.includes(item.text));
+            this.form.patchValue(res);
+
+            this.file1Url = res.thumbNailImage;
+          }
+          this.form.patchValue({ 'id': 0 });
+        }
+      });
+    });
+  }
+  closeModel() {
+    this.dialogRef.close();
+  }
+
+
+  loadPeriod() {
+    this.apiService.getall('FomDiscipline/getSelectTimePeriodsList').subscribe(res => {
+      this.TimePeriodList = res;
+    });
+  }
+
+
+  //onFileChanged(event: any, type: number) {
+  //  let reader = new FileReader();
+  //  if (event.target.files && event.target.files.length > 0) {
+  //    let file = event.target.files[0];
+  //    reader.readAsDataURL(file);
+  //    reader.onload = () => {
+  //      if (type === 1) {
+  //        this.thumbNailImageUrl = reader.result;
+  //        this.form.patchValue({
+  //          'thumbNailImage': file,
+  //        });
+  //      }
+  //    };
+  //  }
+  //}
+
+
+
+
+
+  //submit() {
+  //  if (this.form.valid) {
+  //    if (this.id > 0)
+  //      this.form.value['id'] = this.id;
+  //    var periodData = this.form.value['serviceTimePeriods'] as Array<any>;
+  //    this.form.value['serviceTimePeriods'] = periodData.map(item => item.text);
+  //    this.apiService.post('FomDiscipline', this.form.value)
+  //      .subscribe(res => {
+
+  //        this.utilService.OkMessage();
+  //        this.reset();
+  //        this.dialogRef.close(true);
+  //      },
+  //        error => {
+  //          this.utilService.ShowApiErrorMessage(error);
+  //        });
+  //  }
+  //  else
+  //    this.utilService.FillUpFields();
+  //}
+
+  submit() {
+    if (this.form.valid) {
+       if (this.id > 0)
+      this.form.value['id'] = this.id;
+      var periodData = this.form.value['serviceTimePeriods'] as Array<any>;
+      this.form.value['serviceTimePeriods'] = periodData.map(item => item.text);
+      this.apiService.post('FomDiscipline', this.form.value)
+        .subscribe(res => {
+          if (res && this.fileUploadone != null && this.fileUploadone != undefined) {
+            const deptRes = res as any;
+            const formData = new FormData();
+            formData.append("id", deptRes.id.toString());
+            formData.append("WebRoot", this.authService.ApiEndPoint().replace("/api", "") + '/DeptImages/');
+            formData.append("Image1IForm", this.fileUploadone);
+            this.apiService.post('FomDiscipline/UploadThumbnailFiles', formData)
+              .subscribe(res => {
+                this.utilService.OkMessage();
+                this.dialogRef.close(true);
+              },
+                error => {
+                  console.error(error);
+                  this.utilService.ShowApiErrorMessage(error);
+                });
+          } else if (res) {
+            this.utilService.OkMessage();
+            // this.reset();
+            this.dialogRef.close(true);
+          } else {
+            this.notifyService.showWarning("error");
+          }
+
+        },
+          error => {
+            console.error(error);
+            this.utilService.ShowApiErrorMessage(error);
+          });
+
+    }
+    else
+      this.utilService.FillUpFields();
+
+  }
+
+
+
+  reset() {
+    this.form.controls['serviceTimePeriods'].setValue('');
+    this.form.controls['nameEng'].setValue('');
+    this.form.controls['nameArabic'].setValue('');
+    this.form.controls['deptServType'].setValue('');
+    this.form.controls['isSheduleRequired1'].setValue('');
+    this.form.controls['isSheduleRequired2'].setValue('');
+    this.form.controls['thumbNailImage'].setValue('');
+    this.form.controls['isActive'].setValue('');
+  }
+}

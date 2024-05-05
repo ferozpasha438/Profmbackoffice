@@ -1,0 +1,495 @@
+<button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+
+<aside class="left-sidebar" data-sidebarbg="skin6">
+  <!-- Sidebar scroll-->
+  <div class="scroll-sidebar" style="padding-left: 12px;" data-sidebarbg="skin6">
+
+
+    <div class="modal-header">
+      <h1 class="modal-title">List Of Department</h1>
+    </div>
+    <ul id="sidebarnav" style="    
+color: #7C8798;
+font-family: Rubik;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: 16px;">
+    </ul>
+    <a (click)="changeType('Electrical')" style="    width: 254px;
+ height: 42px;" class="btn waves-effect waves-light btn-rounded btn-outline-primary"> {{'Electrical Department' |
+      translate}} </a>
+    <br>
+    <br>
+    <br>
+
+    <a (click)="changeType('Plumbing')" style="    width: 254px;
+ height: 42px;" class="btn waves-effect waves-light btn-rounded btn-outline-primary"> {{'Plumbing Department' |
+      translate}} </a>
+    <br>
+    <br>
+    <br>
+
+    <a (click)="changeType('AC')" style="    width: 254px;
+ height: 42px;" class="btn waves-effect waves-light btn-rounded btn-outline-primary"> {{'A/C Department' | translate}}
+    </a>
+    <br>
+    <br>
+    <br>
+
+    <a (click)="changeType('Janotorial')" style="    width: 254px;
+ height: 42px;" class="btn waves-effect waves-light btn-rounded btn-outline-primary"> {{'Janotorial Department' |
+      translate}} </a>
+    <br>
+    <br>
+    <br>
+
+
+  </div>
+  <!-- End Sidebar scroll-->
+
+</aside>
+<aside class="right-sidebar" data-sidebarbg="skin6" style="width: 78%; float: right;">
+  <div class="col-md-12 col-lg-12 text-right">
+    <a data-toggle="modal" data-target="#createnewbranch"
+      class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#"> <i
+        class="icon-plus"> </i>{{'Add Activities' | translate}} </a>
+  </div>
+  <div class="lst1" *ngIf="tabType=='Electrical'">
+    <div class="row">
+
+      <div class="col-md-12 col-lg-12" style="padding-top: 35px;">
+        <div class="card">
+          <div class="card-body">
+            <!--<div class="row pb-3">
+                      <div class="col-md-3">-->
+            <!--(keyup)="applyFilter($event)"-->
+            <!--<input class="form-control" placeholder="{{'Search' | translate}}..."
+                              [(ngModel)]="searchValue" />
+                      </div>
+                      <div class="col-md-4 arabicright">
+                          <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' |
+                              translate}}</button> &nbsp;
+                          <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+                      </div>
+                  </div>-->
+            <div class="row">
+              <div class="col-md-4 col-lg-4">
+                <h2 class="card-title pt6">{{'Electrical Department' | translate}}</h2>
+              </div>
+              <!-- <div class="col-md-8 col-lg-8 text-right">
+                        <a data-toggle="modal" data-target="#addupdateUnit"
+                            class="  btn waves-effect waves-light btn-rounded btn-outline-primary"
+                            href="#"> <i class="icon-plus"> </i>{{'Add_New_Subjects' |
+                            translate}}</a>
+        
+                    </div> -->
+            </div>
+            <div class="cardtitle-divider"></div>
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+              <div class="mat-elevation-z8">
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSort matSortActive="id" matSortDisableClear
+                    matSortDirection="desc" class="table  table-bordered no-wrap">
+                    <ng-container matColumnDef="deptCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptCode' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptName' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptName }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptNameAR">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptNameAR' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptNameAR }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptServType">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptServType' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptServType }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdBy">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdBy' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdBy }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdDate' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="isActive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'isActive' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                    </ng-container>
+                    <!--<ng-container matColumnDef="paidOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                              {{'Paid_On' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let row">{{ row.paidOn }}</td>
+                          </ng-container>-->
+                    <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef> {{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <!-- <a class="tableicons" (click)="editTermFeeHeader(row)" matTooltip="{{'Edit_Item' | translate}}" *ngIf="row.isPaid==false">
+                                <i class="icon-note"> </i>
+                              </a> -->
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  </table>
+                  <!-- <ng-container>
+                          <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                         [pageSizeOptions]="pageService.selectItemsPerPage"
+                                         (page)="onPageSwitch($event)">
+                          </mat-paginator>
+                        </ng-container> -->
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lst2" *ngIf="tabType=='Plumbing'">
+    <div class="row">
+      <div class="col-md-12 col-lg-12" style="padding-top: 35px;">
+        <div class="card">
+          <div class="card-body">
+            <!--<div class="row pb-3">
+                      <div class="col-md-3">-->
+            <!--(keyup)="applyFilter($event)"-->
+            <!--<input class="form-control" placeholder="{{'Search' | translate}}..."
+                              [(ngModel)]="searchValue" />
+                      </div>
+                      <div class="col-md-4 arabicright">
+                          <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' |
+                              translate}}</button> &nbsp;
+                          <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+                      </div>
+                  </div>-->
+            <div class="row">
+              <div class="col-md-4 col-lg-4">
+                <h2 class="card-title pt6">{{'Plumbing Department' | translate}}</h2>
+              </div>
+              <!-- <div class="col-md-8 col-lg-8 text-right">
+                        <a data-toggle="modal" data-target="#addupdateUnit"
+                            class="  btn waves-effect waves-light btn-rounded btn-outline-primary"
+                            href="#"> <i class="icon-plus"> </i>{{'Add_New_Subjects' |
+                            translate}}</a>
+        
+                    </div> -->
+            </div>
+            <div class="cardtitle-divider"></div>
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+              <div class="mat-elevation-z8">
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSort matSortActive="id" matSortDisableClear
+                    matSortDirection="desc" class="table  table-bordered no-wrap">
+                    <ng-container matColumnDef="deptCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptCode' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptName' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptName }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptNameAR">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptNameAR' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptNameAR }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptServType">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptServType' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptServType }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdBy">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdBy' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdBy }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdDate' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="isActive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'isActive' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                    </ng-container>
+                    <!--<ng-container matColumnDef="paidOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                              {{'Paid_On' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let row">{{ row.paidOn }}</td>
+                          </ng-container>-->
+                    <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef> {{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <!-- <a class="tableicons" (click)="editTermFeeHeader(row)" matTooltip="{{'Edit_Item' | translate}}" *ngIf="row.isPaid==false">
+                                <i class="icon-note"> </i>
+                              </a> -->
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
+                  </table>
+                  <!-- <ng-container>
+                          <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                         [pageSizeOptions]="pageService.selectItemsPerPage"
+                                         (page)="onPageSwitch($event)">
+                          </mat-paginator>
+                        </ng-container> -->
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lst3" *ngIf="tabType=='AC'">
+    <div class="row">
+      <div class="col-md-12 col-lg-12" style="padding-top: 35px;">
+        <div class="card">
+          <div class="card-body">
+            <!--<div class="row pb-3">
+                      <div class="col-md-3">-->
+            <!--(keyup)="applyFilter($event)"-->
+            <!--<input class="form-control" placeholder="{{'Search' | translate}}..."
+                              [(ngModel)]="searchValue" />
+                      </div>
+                      <div class="col-md-4 arabicright">
+                          <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' |
+                              translate}}</button> &nbsp;
+                          <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+                      </div>
+                  </div>-->
+            <div class="row">
+              <div class="col-md-4 col-lg-4">
+                <h2 class="card-title pt6">{{'A/C Department' | translate}}</h2>
+              </div>
+              <!-- <div class="col-md-8 col-lg-8 text-right">
+                        <a data-toggle="modal" data-target="#addupdateUnit"
+                            class="  btn waves-effect waves-light btn-rounded btn-outline-primary"
+                            href="#"> <i class="icon-plus"> </i>{{'Add_New_Subjects' |
+                            translate}}</a>
+        
+                    </div> -->
+            </div>
+            <div class="cardtitle-divider"></div>
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+              <div class="mat-elevation-z8">
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSort matSortActive="id" matSortDisableClear
+                    matSortDirection="desc" class="table  table-bordered no-wrap">
+                    <ng-container matColumnDef="deptCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptCode' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptName' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptName }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptNameAR">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptNameAR' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptNameAR }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptServType">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptServType' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptServType }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdBy">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdBy' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdBy }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdDate' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="isActive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'isActive' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                    </ng-container>
+                    <!--<ng-container matColumnDef="paidOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                              {{'Paid_On' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let row">{{ row.paidOn }}</td>
+                          </ng-container>-->
+                    <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef> {{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <!-- <a class="tableicons" (click)="editTermFeeHeader(row)" matTooltip="{{'Edit_Item' | translate}}" >
+                                <i class="icon-plus"> </i>
+                              </a> -->
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns3; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns3"></tr>
+                  </table>
+                  <!-- <ng-container>
+                          <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                         [pageSizeOptions]="pageService.selectItemsPerPage"
+                                         (page)="onPageSwitch($event)">
+                          </mat-paginator>
+                        </ng-container> -->
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lst4" *ngIf="tabType=='Janotorial'">
+    <div class="row">
+      <div class="col-md-12 col-lg-12" style="padding-top: 35px;">
+        <div class="card">
+          <div class="card-body">
+            <!--<div class="row pb-3">
+                      <div class="col-md-3">-->
+            <!--(keyup)="applyFilter($event)"-->
+            <!--<input class="form-control" placeholder="{{'Search' | translate}}..."
+                              [(ngModel)]="searchValue" />
+                      </div>
+                      <div class="col-md-4 arabicright">
+                          <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' |
+                              translate}}</button> &nbsp;
+                          <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+                      </div>
+                  </div>-->
+            <div class="row">
+              <div class="col-md-4 col-lg-4">
+                <h2 class="card-title pt6">{{'Janotorial Department' | translate}}</h2>
+              </div>
+              <!-- <div class="col-md-8 col-lg-8 text-right">
+                        <a data-toggle="modal" data-target="#addupdateUnit"
+                            class="  btn waves-effect waves-light btn-rounded btn-outline-primary"
+                            href="#"> <i class="icon-plus"> </i>{{'Add_New_Subjects' |
+                            translate}}</a>
+        
+                    </div> -->
+            </div>
+            <div class="cardtitle-divider"></div>
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+              <div class="mat-elevation-z8">
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSort matSortActive="id" matSortDisableClear
+                    matSortDirection="desc" class="table  table-bordered no-wrap">
+                    <ng-container matColumnDef="deptCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptCode' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptName' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptName }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptNameAR">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptNameAR' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptNameAR }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="deptServType">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'deptServType' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.deptServType }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdBy">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdBy' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdBy }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'createdDate' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.createdDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="isActive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'isActive' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                    </ng-container>
+                    <!--<ng-container matColumnDef="paidOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                              {{'Paid_On' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let row">{{ row.paidOn }}</td>
+                          </ng-container>-->
+                    <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef> {{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <!-- <a class="tableicons" (click)="editTermFeeHeader(row)" matTooltip="{{'Edit_Item' | translate}}" >
+                                <i class="icon-note"> </i>
+                              </a> -->
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns3; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns3"></tr>
+                  </table>
+                  <!-- <ng-container>
+                          <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                         [pageSizeOptions]="pageService.selectItemsPerPage"
+                                         (page)="onPageSwitch($event)">
+                          </mat-paginator>
+                        </ng-container> -->
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,117 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Resources' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Resources' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">{{'Resources_List' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row pb-3">
+              <div class="col-md-12 col-lg-12">
+                <h4 class="card-title pt6">{{'Manage_Resources' | translate}} </h4>
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" placeholder="{{'Search' | translate}}..." [(ngModel)]="searchValue" />
+              </div>
+              <div class="col-md-4 arabicright">
+                <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' | translate}}</button>
+                &nbsp;
+                <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+              </div>
+              <div class="col-md-5 col-lg-5 text-right">
+                <a data-toggle="modal" data-target="#createnewbranch"
+                  class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#"> <i
+                    class="icon-plus"> </i>{{'Add_Resources' | translate}} </a>
+              </div>
+            </div>
+            <div class="cardtitle-divider"></div>
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+              <div class="mat-elevation-z8">
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                    <!--<ng-container matColumnDef="deptCodes">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Department_Code' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.deptCodes : row.deptCodes }}</td>
+                    </ng-container>-->
+                    <ng-container matColumnDef="resTypeCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Resources_Type_Code' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.resTypeCode : row.resTypeCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="nameEng">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Resources_Name' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.nameEng : row.nameEng }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="nameAr">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Resources_Name_AR' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.nameAr : row.nameAr }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Created_Date' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.createdOn : row.createdOn }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="approvalAuth">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Approval_Authority' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.approvalAuth : row.approvalAuth }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isActive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'IsActive' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <a class="tableicons" (click)="edit(row.id)" matTooltip="{{'Edit_Item' | translate}}">
+                          <i class="icon-note"> </i>
+                        </a> &nbsp;
+                        <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}">
+                          <i class="icon-trash"> </i>
+                        </a>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  </table>
+                  <ng-container>
+                    <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                      [pageSizeOptions]="pageService.selectItemsPerPage">
+                    </mat-paginator>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

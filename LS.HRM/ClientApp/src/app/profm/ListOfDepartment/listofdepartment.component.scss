@@ -1,0 +1,13 @@
+.left-sidebar {
+    position: absolute;
+    width: 288px;
+    height: 100%;
+    top: 0px;
+    z-index: 10;
+    padding-top: 89px;
+    background: transparent;
+    transition: 0.2s ease-in;
+    box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+    -webkit-box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+    -moz-box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+}

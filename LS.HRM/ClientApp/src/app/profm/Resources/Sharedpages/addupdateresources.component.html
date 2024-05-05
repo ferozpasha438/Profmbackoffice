@@ -1,0 +1,126 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{modalTitle}}</h3>
+    <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="deptCodes">{{'Department_Codes' | translate}}</label>
+        <ng-select [multiple]="true" formControlName="deptCodes">
+          <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
+        </ng-select>
+        <validation-message [control]="form.controls.deptCodes"></validation-message>
+      </div>
+    </div>
+    <!--<div class="col-md-6 col-lg-6">
+    <div class="form-group">
+      <label for="deptCodes">{{'Department_Codes' | translate}}</label>
+      <input class="form-control" id="deptCodes" type="text"
+             placeholder="{{'Please_Enter' | translate}} {{'Department_Codes' | translate}}"
+             formControlName="deptCodes">
+      <validation-message [control]="form.controls.deptCodes"></validation-message>
+    </div>
+  </div>-->
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="resCode">{{'Resources_Codes' | translate}}</label>
+        <input class="form-control" id="resCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Department_Codes' | translate}}"
+               formControlName="resCode">
+        <div *ngIf="form.controls.resCode.hasError('maxlength')">
+          Maximum(20) length exceeded.
+        </div>
+        <validation-message [control]="form.controls.resCode"></validation-message>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <!--<div class="col-md-6 col-lg-6">
+    <div class="form-group">
+      <label for="resTypeCode">{{'Resources_Type_Code' | translate}}</label>
+      <input class="form-control" id="resTypeCode" type="text"
+             placeholder="{{'Please_Enter' | translate}} {{'Resources_Type_Code' | translate}}"
+             formControlName="resTypeCode">
+      <validation-message [control]="form.controls.resTypeCode"></validation-message>
+    </div>
+  </div>-->
+    <div class="col-md-6 col-lg-6 col-sm-6">
+      <div class="form-group">
+        <label>{{'Resources_Type_Code' | translate}}</label>
+        <select class="custom-select mr-sm-2" formControlName="resTypeCode">
+          <option value="">{{'Select' | translate}} {{'Resources_Type_Code' | translate}} </option>
+          <ng-container *ngIf="ResourceTypeCodeList">
+            <option *ngFor="let item of ResourceTypeCodeList" value="{{item.resTypeCode}}">{{ isArab ? item.resTypeCode : item.resTypeCode  }}</option>
+          </ng-container>
+        </select>
+
+        <validation-message [control]="form.controls.resTypeCode"></validation-message>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="nameEng">{{'Resources_Name_EN' | translate}}</label>
+        <input class="form-control" id="nameEng" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Resources_Name_EN' | translate}}"
+               formControlName="nameEng">
+        <validation-message [control]="form.controls.nameEng"></validation-message>
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="nameAr">{{'Resources_Name_AR' | translate}}</label>
+        <input class="form-control" id="nameAr" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Resources_Name_AR' | translate}}"
+               formControlName="nameAr">
+        <validation-message [control]="form.controls.nameAr"></validation-message>
+
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="approvalAuth">{{'Approval_Authority' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="approvalAuth"></mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+   
+    <br>
+    <div class="row">
+      <div class="col-md-6 col-lg-6">
+        <div class="form-group">
+          <label for="isActive">{{'Is_Active' | translate}}</label>
+          <br />
+          <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6 col-sm-6">
+        <div class="form-group">
+          <label>{{'Resource_Login_User' | translate}}</label>
+          <select class="custom-select mr-sm-2" formControlName="loginUser">
+            <option value="">{{'Select' | translate}} {{'Resource_Login_User' | translate}} </option>
+            <ng-container *ngIf="ResourceLoginUserList">
+              <option *ngFor="let item of ResourceLoginUserList" value="{{item.value}}">{{ isArab ? item.text : item.text  }}</option>
+            </ng-container>
+          </select>
+
+          <validation-message [control]="form.controls.loginUser"></validation-message>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3 ">
+      <div class="col-md-12 col-lg-12 text-center">
+        <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+               value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+        <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+               value="{{'Save' | translate}}" />
+      </div>
+    </div>
+</form>

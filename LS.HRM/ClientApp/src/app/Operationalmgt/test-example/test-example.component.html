@@ -1,0 +1,417 @@
+
+
+
+  <div class="row" *ngIf="isShowDonut">
+
+    <div class="col-md-3">
+      <div class="frame-parent15">
+        <div class="group-parent5">
+          <img class="frame-child37" alt="" src="../../assets/dashboard/dashboard_images/group-94.svg" />
+          <div class="security-guards-parent">
+            <div class="security-guards">Security Guards</div>
+            <b class="b11">{{oprDashboard?.totalEmpCount}}</b>
+          </div>
+        </div>
+        <div class="total-in-the-company-parent">
+          <div class="total-in-the">Total in the company</div>
+          <img class="vector-icon28" alt="" src="../../assets/dashboard/dashboard_images/vector5.svg" />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="frame-parent15">
+        <div class="group-parent5">
+          <img class="frame-child37" alt="" src="../../assets/dashboard/dashboard_images/group-95.svg" />
+          <div class="security-guards-parent">
+            <div class="security-guards">Arrived On Duty</div>
+            <b class="b11"> {{(oprDashboard?.reportedEmpCount-oprDashboard?.lateArrivalsCount)}}</b>
+          </div>
+        </div>
+        <div class="total-in-the-company-parent">
+          <div class="total-in-the">See All</div>
+          <img class="vector-icon28" alt="" src="../../assets/dashboard/dashboard_images/vector9.svg" />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="frame-parent15">
+        <div class="group-parent5">
+          <img class="frame-child37" alt="" src="../../assets/dashboard/dashboard_images/group-96.svg" />
+          <div class="security-guards-parent">
+            <div class="security-guards">Late To Duty</div>
+            <b class="b11">{{oprDashboard?.lateArrivalsCount}}</b>
+          </div>
+        </div>
+        <div class="total-in-the-company-parent">
+          <div class="total-in-the">See All</div>
+          <img class="vector-icon28" alt="" src="../../assets/dashboard/dashboard_images/vector5.svg" />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="frame-parent15">
+        <div class="group-parent5">
+          <img class="frame-child37" alt="" src="../../assets/dashboard/dashboard_images/group-97.svg" />
+          <div class="security-guards-parent">
+            <div class="security-guards">Not In Duty</div>
+            <b class="b11"> {{oprDashboard?.notReportedEmpCount}}</b>
+          </div>
+        </div>
+        <div class="total-in-the-company-parent">
+          <div class="total-in-the">See All</div>
+          <img class="vector-icon28" alt="" src="../../assets/dashboard/dashboard_images/vector5.svg" />
+        </div>
+      </div>
+    </div>
+
+
+
+    <!--<div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <span class=" fas fa-address-book" style="font-size:xx-large;color:red"></span>
+            </div>
+            <div class="col-md-10">
+              <div class="flex-1 text-right md:text-center">
+                <h5 class="font-bold uppercase text-gray-600">{{'Shift_Not_Assigned' | translate}}</h5>
+                <h3 class="font-bold text-3xl">
+                  {{oprDashboard?.shiftsNotAssignedCount}}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <span class=" fas fa-address-book" style="font-size:xx-large;color:red"></span>
+            </div>
+            <div class="col-md-10">
+              <div class="flex-1 text-right md:text-center">
+                <h5 class="font-bold uppercase text-gray-600">{{'Employees_On_Leave' | translate}}</h5>
+                <h3 class="font-bold text-3xl">
+                  {{oprDashboard?.leavesCount}}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+    <!--<div class="col-md-3">
+      <div class="card w-full h-full">
+        <div class="card-body">
+          <h4 class="card-title">{{'Attandance_Today' | translate}}</h4>
+          <div class="chart-wrap">
+            <div id="chart">
+              <apx-chart [series]="chartOptions1.series"
+                         [chart]="chartOptions1.chart"
+                         [labels]="chartOptions1.labels"
+                         [responsive]="chartOptions1.responsive"></apx-chart>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>-->
+
+
+
+    <div class="col-md-10">
+      <div class="dashboard-child">
+        <div class="frame-parent19">
+          <div class="svgexport-17-23-1-group">
+            <img class="svgexport-17-23-11"
+                 alt=""
+                 src="../../assets/dashboard/dashboard_images/svgexport17-23-11.svg" />
+            <div class="city">
+              <ng-select style="width:150px;" [items]="citySelectionList" placeholder="City"
+                         bindLabel="lable"
+                         bindValue="value" [(ngModel)]="input.branchCode" (change)="applyFilter()">  </ng-select>
+              &nbsp;&nbsp;
+              <ng-select style="width:250px" [items]="projectsSelectionList" placeholder="Project"
+                         bindLabel="textTwo"
+                         bindValue="value" [(ngModel)]="input.projectCode" (change)="applyFilter()">  </ng-select>
+              &nbsp;&nbsp;
+              <ng-select style="width:250px" [items]="sitesSelectionList" placeholder="Site"
+                         bindLabel="textTwo"
+                         bindValue="value" [(ngModel)]="input.siteCode" (change)="applyFilter()">  </ng-select>
+              &nbsp;&nbsp;
+              <ng-select style="width:250px" [items]="employeesSelectionList" placeholder="Employee"
+                         bindLabel="textTwo"
+                         bindValue="value" [(ngModel)]="input.employeeNumber" (change)="applyFilter()">  </ng-select>
+              &nbsp;&nbsp;
+            </div>
+          </div>
+          <!--<div class="search-by-project">
+            <input type="text" placeholder="Search by project , site , name , id" />
+            <div class="svgexport-17-25-1-group">
+              <img class="group-icon2" alt="" src="../../assets/dashboard/dashboard_images/group2.svg" />
+              <div class="find">
+                <img class="svgexport-17-25-11" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-25-11.svg">
+                 &nbsp;FIND
+              </div>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="daily-records">
+        <div class="city">
+          <select>
+            <option value="">Daily Records</option>
+            <option value="Jeddah">Jeddah</option>
+            <option value="Riyadh">Riyadh</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12" style="padding:0px 0px 0px 0px">
+      <div class="filter-parent" style="padding:0px 0px 0px 0px">
+        <div class="svgexport-17-24-1-group" style="padding:0px 0px 0px 0px;">
+          <img class="svgexport-17-24-11" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-24-11.svg">
+          <div class="filter2" style="padding:0px 0px 0px 0px">FILTER</div>
+        </div>
+        <div class="row" style="padding:0px 0px 0px 0px;">
+
+
+          <div class="card-body btn-list" *ngFor="let op of filterOptions;let i=index;" style="padding: 0px 2px 0px 2px; text-align: left; font-size: smaller">
+            <button type="button" (click)="updateFilterOptions(i)" *ngIf="op.isSelected" class="btn waves-effect waves-light btn-rounded btn-outline-success" style="padding:0px 5px 0px 5px">{{op.key}}</button>
+            <button type="button" (click)="updateFilterOptions(i)" *ngIf="!op.isSelected" class="btn waves-effect waves-light btn-rounded btn-outline-secondary" style="padding: 0px 5px 0px 5px">{{op.key}}</button>
+          </div>
+          <div class="card-body btn-list" hidden>
+            <span class="btn btn-success" (click)="enterAutoAttendance()">Auto_Attendance</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="AttendanceData" class="col-md-12" style="padding:0px 0px 0px 0px">
+
+
+      <table class="table-responsive" mat-table [dataSource]="attendanceData" matSort (matSortChange)="onSortOrder($event)" border="1">
+
+
+
+        <ng-container matColumnDef="projectCode">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Project' | translate}}
+          </th>
+          <td *matCellDef="let row">{{ row?.projectCode }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="projectName">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Project' | translate}}
+          </th>
+          <td *matCellDef="let row">{{ row?.projectName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="siteCode">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Site_Code' | translate}}
+          </th>
+          <td *matCellDef="let row">{{ row?.siteCode }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="siteName">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Site' | translate}}
+          </th>
+          <td *matCellDef="let row">{{row?.siteName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="shiftCode">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Shift' | translate}}
+          </th>
+          <td *matCellDef="let row">{{row?.shiftCode }}</td>
+        </ng-container>
+
+
+
+
+        <ng-container matColumnDef="employeeName">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Name' | translate}}
+          </th>
+          <td *matCellDef="let row">{{row?.employeeName}}</td>
+        </ng-container>
+        <ng-container matColumnDef="employeeNumber">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'ID' | translate}}
+          </th>
+          <td *matCellDef="let row">{{row?.employeeNumber}}</td>
+        </ng-container>
+        <ng-container matColumnDef="inTime">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Punch In' | translate}}
+          </th>
+          <td *matCellDef="let row">{{(row?.inTime.substring(0,5))}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="outTime">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Punch Out' | translate}}
+          </th>
+          <td *matCellDef="let row">{{(row?.outTime.substring(0,5))}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="arrive">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Arrive' | translate}}
+          </th>
+          <td *matCellDef="let row">
+            <img class="svgexport-17-33-41" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-33-41.svg" *ngIf="!row?.isLate &&row?.isReported; else inActive">
+            <ng-template #inActive>
+              <img class="svgexport-17-31-21" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-31-21.svg">
+            </ng-template>
+          </td>
+
+
+        </ng-container>
+
+        <ng-container matColumnDef="late">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Late' | translate}}
+          </th>
+          <td *matCellDef="let row">
+            <img class="svgexport-17-33-41" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-33-41.svg" *ngIf="row?.isLate &&row?.isReported; else inActive">
+            <ng-template #inActive>
+              <img class="svgexport-17-31-21" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-31-21.svg">
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="isGeofenseOut">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Current Geofense' | translate}}
+          </th>
+          <td *matCellDef="let row">
+            <img class="svgexport-17-33-41" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-33-41.svg" *ngIf="!row?.isGeofenseOut &&row?.isReported; else inActive">
+            <ng-template #inActive>
+              <img class="svgexport-17-31-21" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-31-21.svg">
+            </ng-template>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="geofenseOutCount">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Out Of Geofense' | translate}}
+          </th>
+          <td *matCellDef="let row">
+
+            <span class="btn btn-circle bg-danger font-bold" style="height:fit-content;color:white">{{ row?.geofenseOutCount}}</span>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="overtime">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Over time' | translate}}
+          </th>
+          <td *matCellDef="let row">
+            <img class="svgexport-17-33-41" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-33-41.svg" *ngIf="(row?.attendance=='OT'); else inActive">
+            <ng-template #inActive>
+              <img class="svgexport-17-31-21" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-31-21.svg">
+            </ng-template>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isOnBreak">
+          <th *matHeaderCellDef mat-sort-header>
+            {{'Break' | translate}}
+          </th>
+          <td *matCellDef="let row">
+
+            <img class="svgexport-17-33-41" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-33-41.svg" *ngIf="row?.isOnBreak; else inActive">
+            <ng-template #inActive>
+              <img class="svgexport-17-31-21" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-31-21.svg">
+            </ng-template>
+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Actions" stickyEnd>
+          <th *matHeaderCellDef>{{'Actions' | translate}}</th>
+          <td *matCellDef="let row" class="clickaction clickicons">
+            <span [matTooltip]="translateToolTip('Message')"><img class="svgexport-17-30-11" alt="" src="../../assets/dashboard/dashboard_images/svgexport17-30-11.svg"></span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      </table>
+
+
+      <mat-paginator [length]="totalItemsCount"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="pageService.selectItemsPerPage"
+                     (page)="onPageSwitch($event)">
+      </mat-paginator>
+
+      <style>
+        table.table-responsive th, td {
+          font-size: smaller;
+          text-align: center;
+        }
+      </style>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <style>
+    .card.border-right {
+      width: 500px;
+      display: table;
+      padding: 3%;
+      margin: 2%;
+    }
+
+    .card-body {
+      flex: 1 1 auto;
+      padding: 10px;
+    }
+  </style>
+
+

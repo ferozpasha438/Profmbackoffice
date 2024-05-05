@@ -1,0 +1,144 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Customer_Contract' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Customer_Contract' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">{{'Customer_Contract_List' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row pb-3">
+              <div class="col-md-12 col-lg-12">
+                <h4 class="card-title pt6">{{'Manage_Customer_Contract' | translate}} </h4>
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" placeholder="{{'Search' | translate}}..." [(ngModel)]="searchValue" />
+              </div>
+              <div class="col-md-4 arabicright">
+                <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' | translate}}</button>
+                &nbsp;
+                <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+              </div>
+              <div class="col-md-5 col-lg-5 text-right">
+                <a data-toggle="modal" data-target="#createnewbranch"
+                  class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#"> <i
+                    class="icon-plus"> </i>{{'Add_Customer_Contract' | translate}} </a>
+              </div>
+            </div>
+            <div class="cardtitle-divider"></div>
+            <div class="table-responsive">
+              <spinner-loader [isLoading]="isLoading"></spinner-loader>
+              <div class="mat-elevation-z8">
+                <ng-container>
+                  <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                    <ng-container matColumnDef="contractCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Contract_Code' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.contractCode : row.contractCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="custCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Customer_Code' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.custCode : row.custCode }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="custSiteCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Contract_Site_Code' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.custSiteCode : row.custSiteCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="contDeptCode">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Department_Code' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.contDeptCode : row.contDeptCode }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="contProjManager">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Project_Manager' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.contProjManager : row.contProjManager }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="contProjSupervisor">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Project_Supervisor' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">  {{ !isArab ? row.contProjSupervisor : row.contProjSupervisor }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="contApprAuthorities">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Approval_Authorities' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.contApprAuthorities : row.contApprAuthorities }}</td>
+                    </ng-container>
+                    <!--<ng-container matColumnDef="createdBy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{'Created_By' | translate}}
+    </th>
+    <td mat-cell *matCellDef="let row">{{ !isArab ? row.createdBy : row.createdBy }}</td>
+  </ng-container>-->
+                    <ng-container matColumnDef="createdDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'Created_Date' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.createdDate : row.createdDate }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="isActive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'IsActive' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Actions" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+                      <td mat-cell *matCellDef="let row">
+                        <a class="tableicons" (click)="edit(row.id)" matTooltip="{{'Edit_Item' | translate}}">
+                          <i class="icon-note"> </i>
+                        </a> &nbsp;
+                        <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}">
+                          <i class="icon-trash"> </i>
+                        </a>
+                        <!--<a class="tableicons" (click)="Approve(row.id)" matTooltip="{{'Approved_Item' | translate}}">
+    <i class="fas fa-arrow-up"></i>
+  </a>-->
+                        <a class="tableicons" (click)="schedule(row)" matTooltip="{{'Schedule_Item' | translate}}">
+                          <i class="fas fa-address-card"></i>
+                        </a>
+                        <a class="tableicons" (click)="genSchDetails(row)" matTooltip="{{'Schedule_Details' | translate}}">
+                          <i class="fas fa-align-justify"></i>
+                        </a>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  </table>
+                  <ng-container>
+                    <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                   [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
+                    </mat-paginator>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

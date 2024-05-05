@@ -1,0 +1,292 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{modalTitle}}</h3>
+    <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="contractCode">{{'Contract_Code' | translate}}</label>
+        <input class="form-control" id="contractCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Contract_Code' | translate}} "
+               formControlName="contractCode" [readonly]="isReadOnly">
+        <div *ngIf="form.controls.contractCode.hasError('maxlength')">
+          Maximum(20) length exceeded.
+        </div>
+        <validation-message [control]="form.controls.contractCode"></validation-message>
+      </div>
+    </div>
+    <!--<div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label for="custCode">{{'Customer_Code' | translate}}</label>
+        <input class="form-control" id="custCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Customer_Code' | translate}} "
+               formControlName="custCode" [readonly]="isReadOnly">
+        <validation-message [control]="form.controls.custCode"></validation-message>
+      </div>
+    </div>-->
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label>{{'Customer_Code' | translate}}</label>
+        <select class="custom-select mr-sm-2" formControlName="custCode" (change)="onCustSiteCode($event.target.value)">
+          <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
+          <ng-container *ngIf="CustomerCodeList">
+            <option *ngFor="let item of CustomerCodeList" value="{{item.custCode}}">{{ isArab ? item.custCode : item.custCode  }}</option>
+          </ng-container>
+        </select>
+
+        <validation-message [control]="form.controls.custCode"></validation-message>
+      </div>
+    </div>
+    <!--<div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label for="custSiteCode">{{'Customer_Site_Code' | translate}}</label>
+        <input class="form-control" id="custSiteCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Customer_Site_Code' | translate}} "
+               formControlName="custSiteCode" [readonly]="isReadOnly">
+        <validation-message [control]="form.controls.custSiteCode"></validation-message>
+      </div>
+    </div>-->
+
+
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label>{{'Customer_Site_Code' | translate}}</label>
+        <select class="custom-select mr-sm-2" formControlName="custSiteCode">
+          <option value="">{{'Select' | translate}} {{'Customer_Site_Code' | translate}} </option>
+          <ng-container *ngIf="SiteCodeList">
+            <option *ngFor="let item of SiteCodeList" value="{{item.value}}">{{ isArab ? item.text : item.text  }}</option>
+          </ng-container>
+        </select>
+
+        <validation-message [control]="form.controls.custSiteCode"></validation-message>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <!--<div class="col-md-6 col-lg-6">
+        <div class="form-group">
+            <label for="contDeptCode">{{'Contract_Department_Code' | translate}}</label>
+
+        <input class="form-control" id="contDeptCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Customer_Site_Code' | translate}} "
+               formControlName="contDeptCode" [readonly]="isReadOnly">
+            <validation-message [control]="form.controls.contDeptCode"></validation-message>
+        </div>
+    </div>-->
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="deptCodes">{{'Department_Codes' | translate}}</label>
+        <ng-select [multiple]="true" formControlName="contDeptCode">
+          <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
+        </ng-select>
+        <validation-message [control]="form.controls.contDeptCode"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group ">
+        <label class="mr-sm-2">
+          {{'Contract_Start_Date' | translate}}
+        </label>
+        <div class="input-group ">
+          <input class="form-control"
+                 placeholder=" {{'Please_Enter' | translate}} {{'Contract_Start_Date' | translate}}"
+                 formControlName="contStartDate" [matDatepicker]="picker1">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <validation-message [control]="form.controls.contStartDate"></validation-message>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group ">
+        <label class="mr-sm-2">
+          {{'Contract_End_Date' | translate}}
+        </label>
+        <div class="input-group ">
+          <input class="form-control"
+                 placeholder=" {{'Please_Enter' | translate}} {{'Contract_End_Date' | translate}}"
+                 formControlName="contEndDate" [matDatepicker]="picker2">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+
+            <validation-message [control]="form.controls.contEndDate"></validation-message>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <!--<div class="col-md-6 col-lg-6">
+    <div class="form-group">
+      <label for="contProjManager">{{'Contract_Project_Manager' | translate}}</label>
+
+      <input class="form-control" id="contProjManager" type="text"
+             placeholder="{{'Please_Enter' | translate}} {{'Contract_Project_Manager' | translate}} "
+             formControlName="contProjManager" [readonly]="isReadOnly">
+      <validation-message [control]="form.controls.contProjManager"></validation-message>
+    </div>
+  </div>-->
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group ">
+        <label class="mr-sm-2">
+          {{'Contract_Project_Manager' | translate}}
+
+        </label>
+        <!--<input class="form-control" type="text" placeholder=" {{'Please_Enter' | translate}}  {{'Category' | translate}}" formControlName="custCatCode">-->
+        <!--<label for="exampleFormControlSelectCatCode">{{'Category' | translate}}</label>-->
+        <auto-loader [isLoading]="isDataLoading"></auto-loader>
+        <input type="text" class="form-control"
+               placeholder="{{'Please_Select' | translate}} {{'Contract_Project_Manager' | translate}}"
+               [formControl]="catProjectManagerControl"
+               matInput
+               [matAutocomplete]="auto3">
+
+        <mat-autocomplete #auto3="matAutocomplete">
+          <mat-option *ngFor="let option of filteredContProjectManagerCodes | async"
+                      [value]="option.text">
+            <!--[value]="option.text + '-' + option.value"> (optionSelected)="selectedOption($event)" -->
+            {{option.text}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+    </div>
+    <!--<div class="col-md-6 col-lg-6">
+    <div class="form-group">
+      <label for="contProjSupervisor">{{'Contract_SuperVisor' | translate}}</label>
+
+      <input class="form-control" id="contProjSupervisor" type="text"
+             placeholder="{{'Please_Enter' | translate}} {{'Contract_SuperVisor' | translate}} "
+             formControlName="contProjSupervisor">
+      <validation-message [control]="form.controls.contProjSupervisor"></validation-message>
+    </div>
+  </div>-->
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group ">
+        <label class="mr-sm-2">
+          {{'Contract_SuperVisor' | translate}}
+
+        </label>
+        <!--<input class="form-control" type="text" placeholder=" {{'Please_Enter' | translate}}  {{'Category' | translate}}" formControlName="custCatCode">-->
+        <!--<label for="exampleFormControlSelectCatCode">{{'Category' | translate}}</label>-->
+        <auto-loader [isLoading]="isDataLoading"></auto-loader>
+        <input type="text" class="form-control"
+               placeholder="{{'Please_Select' | translate}} {{'Contract_SuperVisor' | translate}}"
+               [formControl]="catSuperVisorCodeControl"
+               matInput
+               [matAutocomplete]="auto2">
+
+        <mat-autocomplete #auto2="matAutocomplete">
+          <mat-option *ngFor="let option of filteredContSuperVisorCodes | async"
+                      [value]="option.text">
+            <!--[value]="option.text + '-' + option.value"> (optionSelected)="selectedOption($event)" -->
+            {{option.text}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label>{{'Remarks' | translate}}</label>
+        <textarea class="form-control" placeholder="{{'PleaseEnter' | translate}} {{'Remarks' | translate}}"
+                  formControlName="remarks">
+                  </textarea>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group ">
+        <label class="mr-sm-2">
+          {{'Contract_Approved_Authorities' | translate}}
+
+        </label>
+        <!--<input class="form-control" type="text" placeholder=" {{'Please_Enter' | translate}}  {{'Category' | translate}}" formControlName="custCatCode">-->
+        <!--<label for="exampleFormControlSelectCatCode">{{'Category' | translate}}</label>-->
+        <auto-loader [isLoading]="isDataLoading"></auto-loader>
+        <input type="text" class="form-control"
+               placeholder="{{'Please_Select' | translate}} {{'Contract_Approved_Authorities' | translate}}"
+               [formControl]="catApproveAuthControl"
+               matInput
+               [matAutocomplete]="auto1">
+
+        <mat-autocomplete #auto1="matAutocomplete">
+          <mat-option *ngFor="let option of filteredContApprovAuthCodes | async"
+                      [value]="option.text">
+            <!--[value]="option.text + '-' + option.value"> (optionSelected)="selectedOption($event)" -->
+            {{option.text}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+    </div>
+    <!--<div class="col-md-6 col-lg-6">
+      <div class="form-group">
+          <label for="contApprAuthorities">{{'Contract_Approved_Authorities' | translate}}</label>
+          <input class="form-control" id="contApprAuthorities" type="text"
+              placeholder="{{'Please_Enter' | translate}} {{'Contract_Approved_Authorities' | translate}}"
+              formControlName="contApprAuthorities">
+          <validation-message [control]="form.controls.contApprAuthorities"></validation-message>
+      </div>
+  </div>-->
+    <!--//=========================autocomplete===================================-->
+    <!--//==========================endautocomplete================================-->
+
+  </div>
+
+  <br>
+  <div class="row">
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label for="isAppreoved">{{'Is_Approved' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="isAppreoved"></mat-slide-toggle>
+      </div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group ">
+        <label class="mr-sm-2">
+          {{'Approved_Date' | translate}}
+        </label>
+        <div class="input-group ">
+          <input class="form-control"
+                 placeholder=" {{'Please_Enter' | translate}} {{'Approved_Date' | translate}}"
+                 formControlName="approvedDate" [matDatepicker]="picker">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <validation-message [control]="form.controls.approvedDate"></validation-message>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label for="isActive">{{'Is_Active' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-lg-3">
+      <div class="form-group">
+        <label for="isSheduleRequired">{{'Schedule Required' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="isSheduleRequired"></mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3 ">
+    <div class="col-md-12 col-lg-12 text-center">
+      <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+             value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+      <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+             value="{{'Save' | translate}}" />
+    </div>
+  </div>
+</form>

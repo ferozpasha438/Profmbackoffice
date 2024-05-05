@@ -1,0 +1,363 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Schedules' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Schedules' | translate}}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{'Schedules' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <!--<div class="row">
+              <div class="col-md-3 col-lg-3"></div>
+              <div class="col-md-3 col-lg-3">
+                <h2 class="text-right">{{'Contract Id' | translate}} </h2>
+              </div>
+
+              <div class="col-md-3 col-lg-3">
+                <h2 class="text-left">{{'Contract Name' | translate}} </h2>
+              </div>
+              <div class="col-md-3 col-lg-3"></div>
+
+
+            </div>-->
+
+            <br>
+            <div class="row">
+              <div class="col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label for="contractCode">{{'Contract Code' | translate}}</label>
+                  <input class="form-control" id="contractCode" type="text"
+                         placeholder="{{'Please_Enter' | translate}} {{'Contract_Code' | translate}} "
+                         formControlName="contractCode" readonly>
+                </div>
+              </div>
+              <div class="col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label for="custCode">{{'Customer_Code' | translate}}</label>
+                  <input class="form-control" id="custCode" type="text"
+                         placeholder="{{'Please_Enter' | translate}} {{'Customer_Code' | translate}} "
+                         formControlName="custCode" readonly>
+                  <!--<validation-message [control]="form.controls.custCode"></validation-message>-->
+                </div>
+              </div>
+              <div class="col-md-3 col-lg-3">
+                <div class="form-group ">
+                  <label>{{'From Date' | translate}}</label>
+                  <input class="form-control" id="contStartDate" type="text"
+                         placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}"
+                         formControlName="contStartDate" readonly>
+                </div>
+              </div>
+              <div class="col-md-3 col-lg-3">
+                <div>
+                  <label>{{'To Date' | translate}}</label>
+                  <input class="form-control" id="contEndDate" type="text"
+                         placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}"
+                         formControlName="contEndDate" readonly>
+                </div>
+              </div>
+
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-4 col-lg-4">
+                <!--<div class="form-group">
+                  <label for="contractCode">{{'Contract_Code' | translate}}</label>
+                  <input class="form-control" id="" type="text"
+                         placeholder="{{'Please_Enter' | translate}} {{'Contract_Code' | translate}} "
+                         formControlName="contractCode"  readonly>
+                </div>-->
+                </div>
+              <div class="col-md-4 col-lg-4">
+                
+                <div class="form-group">
+                  <label for="deptCode">{{'Disciplines' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="deptCode" (change)="setEditShedule()">
+                    <option value="">{{'Select' | translate}} {{'Disciplines' | translate}} </option>
+                    <ng-container *ngIf="DepartmentCodeList">
+                      <option *ngFor="let item of DepartmentCodeList" value="{{item.deptCode}}">{{ isArab ? item.nameEng : item.nameEng  }}</option>
+                    </ng-container>
+                  </select>
+                </div>
+              </div>
+                <div class="col-md-4 col-lg-4"></div>
+              </div>
+            <br>
+            <div class="container-fluid">
+              <div class="card">
+                <div class="card-body">
+                  <div class="col-md-12 col-lg-12">
+                    <div class="table-responsive">
+                      <div class="mat-elevation-z8">
+                        <table>
+                          <tr>
+                            <th></th>
+                            <th>Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                          </tr>
+                          <tr>
+                            <td>Select</td>
+                            <td><mat-slide-toggle formControlName="selectSun" color="primary"></mat-slide-toggle></td>
+                            <td><mat-slide-toggle formControlName="selectMon" color="primary"></mat-slide-toggle></td>
+                            <td><mat-slide-toggle formControlName="selectTue" color="primary"></mat-slide-toggle></td>
+                            <td><mat-slide-toggle formControlName="selectWed" color="primary"></mat-slide-toggle></td>
+                            <td><mat-slide-toggle formControlName="selectThu" color="primary"></mat-slide-toggle></td>
+                            <td><mat-slide-toggle formControlName="selectFri" color="primary"></mat-slide-toggle></td>
+                            <td><mat-slide-toggle formControlName="selectSat" color="primary"></mat-slide-toggle></td>
+                          </tr>
+                          <tr>
+                            <td>Time</td>
+                            <td><input type="time" formControlName="timeSun" ></td>
+                            <td><input type="time" formControlName="timeMon" ></td>
+                            <td><input type="time" formControlName="timeTue"></td>
+                            <td><input type="time" formControlName="timeWed"></td>
+                            <td><input type="time" formControlName="timeThu"></td>
+                            <td><input type="time" formControlName="timeFri"></td>
+                            <td><input type="time" formControlName="timeSat"></td>
+                          </tr>
+                          <tr>
+                            <td>Remarks</td>
+                            <td><textarea class="custom-textarea" formControlName="remarkSun"></textarea></td>
+                            <td><textarea class="custom-textarea" formControlName="remarkMon"></textarea></td>
+                            <td><textarea class="custom-textarea" formControlName="remarkTue"></textarea></td>
+                            <td><textarea class="custom-textarea" formControlName="remarkWed"></textarea></td>
+                            <td><textarea class="custom-textarea" formControlName="remarkThu"></textarea></td>
+                            <td><textarea class="custom-textarea" formControlName="remarkFri"></textarea></td>
+                            <td><textarea class="custom-textarea" formControlName="remarkSat"></textarea></td>
+                          </tr>
+
+
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-1 mr-2 mb-3">
+            <div class="col-md-12 col-lg-12 text-right">
+              <input type="submit" id="saveButton" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                     value="{{'SAVE' | translate}}" /> &nbsp;
+              <input type="button" (click)="generate()" id="genButton"  class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                     value="{{'GENERATE' | translate}}" /> &nbsp;
+              <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+                     value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </form>
+
+
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 5px;
+      width: 5px;
+      color: black;
+    }
+
+    .custom-textarea {
+      width: 110px;
+      height: 32px;
+    }
+  </style>
+
+<!--<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Schedules' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Schedules' | translate}}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{'Schedules' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3 col-lg-3"></div>
+            <div class="col-md-3 col-lg-3">
+              <h2 class="text-right">{{'Contract Id' | translate}} </h2>
+            </div>
+
+            <div class="col-md-3 col-lg-3">
+              <h2 class="text-left">{{'Contract Name' | translate}} </h2>
+            </div>
+            <div class="col-md-3 col-lg-3"></div>
+          </div>
+
+          <br>
+          <div class="row">
+            <div class="col-md-3 col-lg-3"></div>
+            <div class="col-md-3 col-lg-3">
+              <div class="form-group ">
+                <label for="yourentity">{{'From Date' | translate}}</label>
+                <input class="form-control" id="yourentity" type="text"
+                       placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}">
+              </div>
+            </div>
+            <div class="col-md-3 col-lg-3">
+              <div class="form-group ">
+                <label for="yourentity">{{'To Date' | translate}}</label>
+                <input class="form-control" id="yourentity" type="text"
+                       placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}">
+              </div>
+            </div>
+            <div class="col-md-3 col-lg-3"></div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-2 col-lg-2"></div>
+            <div class="col-md-8 col-lg-8">
+              <label class="mr-sm-2" style="color: black;font-size: 22px;">
+                {{
+'Disciplines' |
+                                translate
+                }}
+              </label>
+              <select class="custom-select mr-sm-2">
+                <option>{{'Select' | translate}}</option>
+                <option>ABC</option>
+                <option>XYZ</option>
+                <option>123</option>
+              </select>
+            </div>
+            <div class="col-md-2 col-lg-2"></div>
+          </div>
+          <br>
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-body">
+                <div class="col-md-12 col-lg-12">
+                  <div class="table-responsive">
+                    <div class="mat-elevation-z8">
+                      <table>
+                        <tr>
+                          <th></th>
+                          <th>Sunday</th>
+                          <th>Monday</th>
+                          <th>Tuesday</th>
+                          <th>Wednesday</th>
+                          <th>Thursday</th>
+                          <th>Friday</th>
+                          <th>Saturday</th>
+                        </tr>
+                        <tr>
+                          <td>Select</td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                          <td><mat-slide-toggle color="primary"></mat-slide-toggle></td>
+                        </tr>
+                        <tr>
+                          <td>Time</td>
+                          <td><input type="time"></td>
+                          <td><input type="time"></td>
+                          <td><input type="time"></td>
+                          <td><input type="time"></td>
+                          <td><input type="time"></td>
+                          <td><input type="time"></td>
+                          <td><input type="time"></td>
+                        </tr>
+                        <tr>
+                          <td>Remarks</td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                          <td><textarea class="custom-textarea"></textarea></td>
+                        </tr>
+
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-1 mr-2 mb-3">
+          <div class="col-md-12 col-lg-12 text-right">
+            <input type="button" class="btn waves-effect waves-light btn-rounded btn-secondary btn-midblock"
+                   value="{{'SAVE' | translate}}" /> &nbsp;
+            <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                   value="{{'GENERATE' | translate}}" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 5px;
+    width: 5px;
+    color: black;
+  }
+
+  .custom-textarea {
+    width: 110px;
+    height: 32px;
+  }
+</style>-->

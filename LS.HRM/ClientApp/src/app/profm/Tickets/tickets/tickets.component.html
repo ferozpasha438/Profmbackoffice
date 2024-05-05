@@ -1,0 +1,139 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">Dashboard</li>
+            <li class="breadcrumb-item text-muted ">Tickets</li>
+          </ol>
+        </nav>
+      </div>
+      <br>
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        <i data-feather="file-text"></i>&nbsp;Tickets
+      </h3>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row pb-3">
+            <div class="col-md-3">
+              <!--(keyup)="applyFilter($event)"-->
+              <input class="form-control" type="text" [(ngModel)]="filter.query" (keyup)="loadData()" [ngModelOptions]="{standalone: true}" placeholder="Search">
+            </div>
+            <div class="col-md-3">
+              <ng-select [items]="statusSelectionList"
+                         bindLabel="text"
+                         bindValue="value" [(ngModel)]="filter.status" [ngModelOptions]="{standalone: true}" (change)="loadData()" placeholder="{{'Select_Status' |translate}}">
+              </ng-select>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <input type="button"
+                       class="btn waves-effect waves-light btn-rounded btn-secondary btn-midblock"
+                       value="Reset" style="background-color: #5f76e8;width: 9em;border-radius: 10px;
+                                     border: none;" (click)="resetFilter()" />
+              </div>
+             
+            </div>
+            <div *ngIf="isLoading" class="row" >
+              <div class="col-md-3">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-lg-12">
+              <div class="card" style="border-radius: 19px; border: 1px solid #c7d0de">
+                <div class="card-body">
+                  <ng-container>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <tr>
+                          <th style="border-radius: 15px 0px 0px 15px; color: black;">
+                            Ticket Number
+                          </th>
+                          <th style="color:black">
+                            Project Name
+                          </th>
+                          <th style="color:black">
+                            Maintainence Type
+                          </th>
+                          <th style="color:black">
+                            Service Type
+                          </th>
+                          <th style="color:black">
+                            Date Of Request
+                          </th>
+                          <th style="color:black">
+                            Status
+                          </th>
+                          <th style="color:black;border-radius: 0px 15px 15px 0px;">
+                            Action
+                          </th>
+                        </tr>
+                        <ng-container *ngFor="let row of data; let i=index;">
+                          <tr>
+                            <td style="border-radius: 15px 0px 0px 15px;color: #5f76e8;">
+                              {{row.ticketNumber}}
+                            </td>
+                            <td>
+                              {{row.projectNameEng}}
+                            </td>
+                            <td>
+                              {{row.jobMaintenanceType}}
+                            </td>
+                            <td>
+                              <!-- {{row.joDeptCode}}-->
+                              {{row.depNameEng}}
+                            </td>
+                            <td>
+                              {{row?.joDate| date:'dd/MM/YYYY'}}
+                            </td>
+                            <td>
+                              {{row.statusStr}}
+                            </td>
+                            <td style="border-radius: 0px 15px 15px 0px;">
+                              &nbsp;
+                              <a class="tableicons" matTooltip="Ticket Details"
+                                 (click)="ticketdetail(row.ticketNumber)"><i class="icon-list"> </i></a>
+                              &nbsp;
+                              <!--<a class="tableicons" matTooltip="Ticket Details"
+                                 (click)="editTicket(row.ticketNumber)"><i class="icon-list"> </i></a>
+                              &nbsp;-->
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </table>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="row">
+                     <div class="col-md-4 col-lg-4"></div>
+                     <div class="col-md-4 col-lg-4"></div>
+                     <div class="col-md-4 col-lg-4">
+                        <div class="btn-group  container text-left mt-2">
+                          <button class="btn btn-primary" id="leftBtn" (click)="clickPaginationButton('leftBtn')"><i class="fas fa-arrow-left"></i></button>
+                          <button class="btn btn-primary" id="upBtn" (click)="clickPaginationButton('upBtn')"><i class="fas fa-arrow-up"></i></button>
+                          <button class="btn btn-primary" id="downBtn" (click)="clickPaginationButton('downBtn')"><i class="fas fa-arrow-down"></i></button>
+                          <button class="btn btn-primary" id="rightBtn" (click)="clickPaginationButton('rightBtn')"><i class="fas fa-arrow-right"></i></button>
+                        </div>
+                     </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
