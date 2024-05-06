@@ -47,6 +47,8 @@ import { WorkOrdersComponent } from './WorkOrders/workOrders/workOrders.componen
 import { AllschedulecalendarComponent } from './GetScheduling/SharedPages/allschedulecalendar.component';
 import { TicketdetailComponent } from './Tickets/ticketdetail/ticketdetail.component';
 import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorderdetail.component';
+import { GetserviceitemComponent } from './ServiceItem/GetServiceItem/getserviceitem/getserviceitem.component';
+import { AddupdateserviceitemComponent } from './ServiceItem/Sharedpages/addupdateserviceitem/addupdateserviceitem.component';
 
 
 @NgModule({
@@ -87,7 +89,9 @@ import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorder
     WorkOrdersComponent,
     AllschedulecalendarComponent,
     TicketdetailComponent,
-    WorkOrderDetailComponent
+    WorkOrderDetailComponent,
+    GetserviceitemComponent,
+    AddupdateserviceitemComponent
   ],
 
   imports: [
