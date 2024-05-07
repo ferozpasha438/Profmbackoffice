@@ -17,6 +17,8 @@ import { TicketdetailComponent } from './Tickets/ticketdetail/ticketdetail.compo
 import { TicketsComponent } from './Tickets/tickets/tickets.component';
 import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorderdetail.component';
 import { WorkOrdersComponent } from './WorkOrders/workOrders/workOrders.component';
+import { BtcTicketsComponent } from './B2C/btctickets.component';
+import { BtcschedulelistComponent } from './B2C/btcschedulelist.component';
 
 const routes: Routes = [
   { path: 'getdisciplines', component: GetdisciplineslistComponent },
@@ -38,6 +40,8 @@ const routes: Routes = [
   { path: 'getworkorders', component: WorkOrdersComponent },
   { path: 'workorderdetail', component: WorkOrderDetailComponent },
 
+  { path: 'btcscheduleslist', component: BtcschedulelistComponent },
+  { path: 'btctickets', component: BtcTicketsComponent },
 ];
 
 @NgModule({

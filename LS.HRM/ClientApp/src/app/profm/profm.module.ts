@@ -47,6 +47,11 @@ import { WorkOrdersComponent } from './WorkOrders/workOrders/workOrders.componen
 import { AllschedulecalendarComponent } from './GetScheduling/SharedPages/allschedulecalendar.component';
 import { TicketdetailComponent } from './Tickets/ticketdetail/ticketdetail.component';
 import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorderdetail.component';
+import { BtcTicketsComponent } from './B2C/btctickets.component';
+import { CommonRemarkComponent } from './B2C/commonremark.component';
+import { BtcschedulelistComponent } from './B2C/btcschedulelist.component';
+import { BtcschedulecalendarComponent } from './B2C/btcschedulecalendar.component';
+
 
 
 @NgModule({
@@ -87,7 +92,11 @@ import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorder
     WorkOrdersComponent,
     AllschedulecalendarComponent,
     TicketdetailComponent,
-    WorkOrderDetailComponent
+    WorkOrderDetailComponent,
+    BtcTicketsComponent,
+    CommonRemarkComponent,
+    BtcschedulelistComponent,
+    BtcschedulecalendarComponent
   ],
 
   imports: [
