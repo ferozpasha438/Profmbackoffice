@@ -674,7 +674,7 @@
                      <span class="badge bg-primary font-12 text-white font-weight-medium badge-pill ml-2 d-lg-block d-md-none">+18.33%</span> -->
                   <!-- </div>
                   </div> -->
-                  <div class="ml-5 mt-4 md-0 mt-lg-1">
+                  <div class="ml-5 mt-4 md-0 mt-lg-0">
                     <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions3.series"
                                [chart]="radialChartOptions3.chart" [plotOptions]="radialChartOptions3.plotOptions"
                                [labels]="radialChartOptions3.labels"></apx-chart>
@@ -693,7 +693,7 @@
                     <img class="group-icon" style="width: 87%;padding: 10% 0% 0% 3%;height: 84%;" alt=""
                          src="../../assets/images/Frame4.svg">
                   </div>
-                  <div class="security-guards-parent">
+                  <div class="security-guards-parent" style="margin-left: 8px;">
                     <!--<div class="security-guards">Electrical</div>-->
                     <div class="security-guards">{{profmDashboard?.depWiseData[0].department}}</div>
                     <b class="b11">{{profmDashboard?.depWiseData[0].totalTickets}}</b>
@@ -729,7 +729,7 @@
                     <img class="group-icon" style="width: 87%;padding: 16% 0% 6% 19%;" alt=""
                          src="../../assets/images/Frame5.svg">
                   </div>
-                  <div class="security-guards-parent">
+                  <div class="security-guards-parent" style="margin-left: 8px;">
                     <!-- <div class="security-guards">Mechanical</div>-->
                     <div class="security-guards">{{profmDashboard?.depWiseData[1].department}}</div>
                     <b class="b11">{{profmDashboard?.depWiseData[1].totalTickets}}</b>
@@ -765,7 +765,7 @@
                     <img class="group-icon" style="width: 87%;padding: 26% 0% 0% 5%;" alt=""
                          src="../../assets/images/Frame6.svg">
                   </div>
-                  <div class="security-guards-parent">
+                  <div class="security-guards-parent" style="margin-left: 8px;">
                     <!--  <div class="security-guards">Plumbing</div>-->
                     <div class="security-guards">{{profmDashboard?.depWiseData[2].department}}</div>
                     <b class="b11">{{profmDashboard?.depWiseData[2].totalTickets}}</b>
@@ -801,8 +801,11 @@
             <div *ngIf="profmDashboard?.depWiseData?.length>3" class="col-md-4">
               <div class="frame-parent15">
                 <div class="group-parent5">
-                  <img class="frame-child37" alt="" src="../../assets/images/Frame7.svg" />
-                  <div class="security-guards-parent">
+                  <div class="rectangle-div">
+                    <img class="group-icon" style="width: 85%;padding: 14% 0% 0% 12%;" alt=""
+                         src="../../assets/images/Frame7.svg">
+                  </div>
+                  <div class="security-guards-parent" style="margin-left: 8px;">
                     <!--<div class="security-guards">HVAC</div>-->
                     <div class="security-guards">{{profmDashboard?.depWiseData[3].department}}</div>
                     <b class="b11">{{profmDashboard?.depWiseData[3].totalTickets}}</b>
@@ -814,8 +817,11 @@
             <div *ngIf="profmDashboard?.depWiseData?.length>4" class="col-md-4">
               <div class="frame-parent15">
                 <div class="group-parent5">
-                  <img class="frame-child37" alt="" src="../../assets/images/Frame8.svg" />
-                  <div class="security-guards-parent">
+                  <div class="rectangle-div">
+                    <img class="group-icon" style="width: 85%;padding: 14% 0% 0% 12%;" alt=""
+                         src="../../assets/images/Frame8.svg">
+                  </div>
+                  <div class="security-guards-parent" style="margin-left: 8px;">
                     <!--<div class="security-guards">Civil</div>-->
                     <div class="security-guards">{{profmDashboard?.depWiseData[4].department}}</div>
                     <b class="b11">{{profmDashboard?.depWiseData[4].totalTickets}}</b>
@@ -828,7 +834,7 @@
               <div class="frame-parent15">
                 <div class="group-parent5">
                   <img class="frame-child37" alt="" src="../../assets/images/Frame9.svg" />
-                  <div class="security-guards-parent">
+                  <div class="security-guards-parent" style="margin-left: 8px;">
                     <!-- <div class="security-guards">Others</div>-->
                     <div class="security-guards">{{profmDashboard?.depWiseData[5].department}}</div>
                     <b class="b11">{{profmDashboard?.depWiseData[5].totalTickets}}</b>
@@ -845,8 +851,8 @@
       <div class="card" style="width: 50%;min-height: 43%;border-radius: 19px; border: 1px solid #c7d0de">
         <div class="card-body">
           <div class="d-flex d-lg-flex d-md-block align-items-center">
-            <div style="vertical-align:middle">
-              <b class="b11">{{'Overall_Performance'|translate}} </b>
+            <div style="vertical-align:middle;text-align: center;">
+              <b class="b11">{{'Overall Performance'|translate}} </b>
               <div id="chart">
                 <apx-chart [series]="semiRadialChartOptions1.series" [chart]="semiRadialChartOptions1.chart"
                            [plotOptions]="semiRadialChartOptions1.plotOptions" [labels]="semiRadialChartOptions1.labels"
@@ -865,14 +871,13 @@
       <div class="card" style="width: 50%;min-height: 43%;border-radius: 19px; border: 1px solid #c7d0de">
         <div class="card-body">
           <div class="d-flex d-lg-flex d-md-block align-items-center">
-            <div style="vertical-align:middle">
-              <b class="b11">{{'Monthly_Performance'|translate}} </b>
+            <div style="vertical-align:middle;text-align: center;">
+              <b class="b11">{{'Monthly Performance'|translate}} </b>
               <div id="chart">
                 <apx-chart [series]="semiRadialChartOptions2.series" [chart]="semiRadialChartOptions2.chart"
                            [plotOptions]="semiRadialChartOptions2.plotOptions" [labels]="semiRadialChartOptions2.labels"
                            [fill]="semiRadialChartOptions2.fill"></apx-chart>
               </div>
-
             </div>
           </div>
         </div>
@@ -889,60 +894,80 @@
             <div class="col-md-4">
               <div class="frame-parent15">
                 <div class="group-parent5">
-                  <div class="rectangle-div1">
-                    <img class="frame-child" style="width: 87%;    padding: 18% 0% 0% 11%;height: 84%;" alt=""
-                         src="../../assets/images/Frame1.svg">
+                  <div class="row">
+                    <div class="col-3" style="margin-top: 18px;">
+                      <div class="rectangle-div1">
+                        <img class="frame-child" style="width: 87%;    padding: 18% 0% 0% 11%;height: 84%;" alt=""
+                             src="../../assets/images/Frame1.svg">
+                      </div>
+                    </div>
+                    <div class="col-3" style="margin-top: 18px;">
+                      <div class="security-guards-parent">
+                        <div class="security-guards">{{'Total Tickets'|translate}}</div>
+                        <b class="b11">{{profmDashboard?.last30DaysData?.totalTickets}}</b>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="ml-5 mt-4 md-0 mt-lg-1">
+                        <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions4.series"
+                                   [chart]="radialChartOptions4.chart" [plotOptions]="radialChartOptions4.plotOptions"
+                                   [labels]="radialChartOptions4.labels"></apx-chart>
+                      </div>
+                    </div>
                   </div>
-                  <div class="security-guards-parent">
-                    <div class="security-guards">{{'Total_Tickets'|translate}}</div>
-                    <b class="b11">{{profmDashboard?.last30DaysData?.totalTickets}}</b>
-                  </div>
-                  <div class="ml-5 mt-4 md-0 mt-lg-1">
-                    <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions4.series"
-                               [chart]="radialChartOptions4.chart" [plotOptions]="radialChartOptions4.plotOptions"
-                               [labels]="radialChartOptions4.labels"></apx-chart>
-                  </div>
-
                 </div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="frame-parent15">
                 <div class="group-parent5">
-                  <div class="rectangle-div2">
-                    <img class="frame-child" style="width: 87%;    padding: 18% 0% 0% 11%;height: 84%;" alt=""
-                         src="../../assets/images/Frame2.svg">
+                  <div class="row">
+                    <div class="col-3" style="margin-top: 18px;">
+                      <div class="rectangle-div2">
+                        <img class="frame-child" style="width: 87%;    padding: 18% 0% 0% 11%;height: 84%;" alt=""
+                             src="../../assets/images/Frame2.svg">
+                      </div>
+                    </div>
+                    <div class="col-3" style="margin-top: 18px;">
+                      <div class="security-guards-parent">
+                        <div class="security-guards">{{'Closed Tickets'|translate}}</div>
+                        <b class="b11">{{profmDashboard?.last30DaysData?.closedTickets}}</b>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="ml-5 mt-4 md-0 mt-lg-1">
+                        <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions5.series"
+                                   [chart]="radialChartOptions5.chart" [plotOptions]="radialChartOptions5.plotOptions"
+                                   [labels]="radialChartOptions5.labels"></apx-chart>
+                      </div>
+                    </div>
                   </div>
-                  <div class="security-guards-parent">
-                    <div class="security-guards">{{'Closed_Tickets'|translate}}</div>
-                    <b class="b11">{{profmDashboard?.last30DaysData?.closedTickets}}</b>
-                  </div>
-                  <div class="ml-5 mt-4 md-0 mt-lg-1">
-                    <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions5.series"
-                               [chart]="radialChartOptions5.chart" [plotOptions]="radialChartOptions5.plotOptions"
-                               [labels]="radialChartOptions5.labels"></apx-chart>
-                  </div>
-
                 </div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="frame-parent15">
                 <div class="group-parent5">
-                  <div class="rectangle-div3">
-                    <img class="frame-child" style="width: 87%;    padding: 18% 0% 0% 11%;height: 84%;" alt=""
-                         src="../../assets/images/Frame3.svg">
+                  <div class="row">
+                    <div class="col-3" style="margin-top: 18px;">
+                      <div class="rectangle-div3">
+                        <img class="frame-child" style="width: 87%;    padding: 18% 0% 0% 11%;height: 84%;" alt=""
+                             src="../../assets/images/Frame3.svg">
+                      </div>
+                    </div>
+                    <div class="col-3" style="margin-top: 18px;">
+                      <div class="security-guards-parent">
+                        <div class="security-guards">{{'Pending Tickets'|translate}}</div>
+                        <b class="b11">{{profmDashboard?.last30DaysData?.pendingTickets}}</b>
+                      </div></div>
+                    <div class="col-3">
+                      <div class="ml-5 mt-4 md-0 mt-lg-1">
+                        <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions6.series"
+                                   [chart]="radialChartOptions6.chart" [plotOptions]="radialChartOptions6.plotOptions"
+                                   [labels]="radialChartOptions6.labels"></apx-chart>
+                      </div>
+                    </div>
                   </div>
-                  <div class="security-guards-parent">
-                    <div class="security-guards">{{'Pending_Tickets'|translate}}</div>
-                    <b class="b11">{{profmDashboard?.last30DaysData?.pendingTickets}}</b>
-                  </div>
-                  <div class="ml-5 mt-4 md-0 mt-lg-1">
-                    <apx-chart style="padding:0 0 0 0;" [series]="radialChartOptions6.series"
-                               [chart]="radialChartOptions6.chart" [plotOptions]="radialChartOptions6.plotOptions"
-                               [labels]="radialChartOptions6.labels"></apx-chart>
-                  </div>
-
                 </div>
               </div>
             </div>

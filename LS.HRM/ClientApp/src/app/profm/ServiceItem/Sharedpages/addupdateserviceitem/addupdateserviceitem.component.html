@@ -1,0 +1,299 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{modalTitle}}</h3>
+    <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4 col-lg-4">
+          <div class="form-group">
+            <label for="serviceCode">{{'Services Code' | translate}}</label>
+            <input class="form-control" id="serviceCode" type="text"
+                   placeholder="{{'Please_Enter' | translate}} {{'Services Code' | translate}}"
+                   formControlName="serviceCode">
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <label for="deptCode" class="mr-sm-2">{{'Discipline' | translate}}</label>
+          <select class="custom-select mr-sm-2" formControlName="deptCode">
+            <option value="">{{'Discipline' | translate}}</option>
+            <option>ABC</option>
+            <option>ABC</option>
+            <option>ABC</option>
+            <option>ABC</option>
+          </select>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <label for="activityCode" class="mr-sm-2">{{'Activity Code' | translate}}</label>
+          <select class="custom-select mr-sm-2" formControlName="activityCode">
+            <option value="">{{'Activity Code' | translate}}</option>
+            <option>XYZ</option>
+            <option>XYZ</option>
+            <option>XYZ</option>
+            <option>XYZ</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="serviceShortDesc">{{'Short Name (EN)' | translate}}</label>
+            <input class="form-control" id="serviceShortDesc" type="text"
+                   placeholder="{{'Please_Enter' | translate}} {{'Short Name (EN)' | translate}}"
+                   formControlName="serviceShortDesc">
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="serviceShortDescAr">{{'Short name (AR)' | translate}}</label>
+            <input class="form-control" id="serviceShortDescAr" type="text"
+                   placeholder="{{'Please_Enter' | translate}} {{'Short name (AR)' | translate}}"
+                   formControlName="serviceShortDescAr">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="serviceDetails">{{'Service Details (EN)' | translate}}</label>
+            <textarea class="form-control"
+                      placeholder="{{'Please_Select' | translate}} {{'Service Details (EN)' | translate}}"
+                      formControlName="serviceDetails"> </textarea>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="serviceDetailsAr">{{'Service Details (AR)' | translate}}</label>
+            <textarea class="form-control"
+                      placeholder="{{'Please_Select' | translate}} {{'Service Details (AR)' | translate}}"
+                      formControlName="serviceDetailsAr"> </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="timeUnitPrimary">{{'Unit Time' | translate}}</label>
+            <input class="form-control" id="timeUnitPrimary" type="time"
+                   placeholder="{{'Please_Enter' | translate}} {{'Unit Time' | translate}}"
+                   formControlName="timeUnitPrimary">
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="resourceUnitPrimary">{{'Unit Resource' | translate}}</label>
+            <input class="form-control" id="resourceUnitPrimary" type="number" step=".01"
+                   placeholder="{{'Please_Enter' | translate}} {{'Unit Resource' | translate}}"
+                   formControlName="resourceUnitPrimary">
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <label for="potentialCost" class="mr-sm-2">
+            {{
+'Potential Cost / Unit Service' |
+                        translate
+            }}
+          </label>
+          <input class="form-control" id="potentialCost" type="number" step=".01"
+                 placeholder="{{'Please_Enter' | translate}} {{'Potential Cost / Unit Service' | translate}}"
+                 formControlName="potentialCost">
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group d-flex mt-4">
+            <div class="form-group">
+              <mat-slide-toggle color="primary" formControlName="applicableDiscount"></mat-slide-toggle>
+            </div>
+            &nbsp;
+            <label for="applicableDiscount" class="mr-sm-2">
+              {{'Applicable Discount' | translate}}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="minRequiredHrs">{{'Min Service Time' | translate}}</label>
+            <input class="form-control" id="minRequiredHrs" type="time"
+                   placeholder="{{'Please_Enter' | translate}} {{'Unit Time' | translate}}"
+                   formControlName="minRequiredHrs">
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="minReqResource">{{'Min Resource' | translate}}</label>
+            <input class="form-control" id="minReqResource" type="number"
+                   placeholder="{{'Please_Enter' | translate}} {{'Unit Resource' | translate}}"
+                   formControlName="minReqResource">
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <label for="primaryUnitPrice" class="mr-sm-2">{{'Unit Price To Customer' | translate}}</label>
+          <input class="form-control" id="primaryUnitPrice" type="number"
+                 placeholder="{{'Please_Enter' | translate}} {{'Unit Resource' | translate}}"
+                 formControlName="primaryUnitPrice">
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group d-flex mt-4">
+            <div class="form-group">
+              <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
+            </div>
+            &nbsp;&nbsp;
+            <label class="mr-sm-2">
+              {{'Active For Transaction' | translate}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group d-flex mt-4">
+            <div class="form-group">
+              <mat-slide-toggle color="primary" formControlName="isOnOffer"></mat-slide-toggle>
+            </div>
+            &nbsp;&nbsp;
+            <label for="isOnOffer" class="mr-sm-2">
+              {{'On Offer' | translate}}
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <label for="offerPrice" class="mr-sm-2">{{'Offer Price' | translate}}</label>
+          <input class="form-control" id="offerPrice" type="number"
+                 placeholder="{{'Please_Enter' | translate}} {{'Offer Price' | translate}}"
+                 formControlName="offerPrice">
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group ">
+            <label for="offerStartDate" class="mr-sm-2">
+              {{'Offer From' | translate}}
+            </label>
+            <div class="input-group ">
+              <input class="form-control input-mandatory"
+                     placeholder=" {{'Please_Enter' | translate}} {{'Offer From' | translate}}"
+                     formControlName="offerStartDate" [matDatepicker]="dateOfBirthpicker1">
+              <div class="input-group-prepend datapickericon">
+                <mat-datepicker-toggle matSuffix [for]="dateOfBirthpicker1"></mat-datepicker-toggle>
+                <mat-datepicker #dateOfBirthpicker1></mat-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group ">
+            <label for="offerEndDate" class="mr-sm-2">
+              {{'Offer To' | translate}}
+            </label>
+            <div class="input-group ">
+              <input class="form-control input-mandatory"
+                     placeholder=" {{'Please_Enter' | translate}} {{'Offer To' | translate}}"
+                     formControlName="offerEndDate" [matDatepicker]="dateOfBirthpicker">
+              <div class="input-group-prepend datapickericon">
+                <mat-datepicker-toggle matSuffix [for]="dateOfBirthpicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateOfBirthpicker></mat-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="remarks1">{{'Notes / Remarks (1)' | translate}}</label>
+            <textarea class="form-control"
+                      placeholder="{{'Please_Select' | translate}} {{'Notes / Remarks (1)' | translate}}"
+                      formControlName="remarks1"> </textarea>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="remarks2">{{'Notes / Remarks (2)' | translate}}</label>
+            <textarea class="form-control"
+                      placeholder="{{'Please_Select' | translate}} {{'Notes / Remarks (2)' | translate}}"
+                      formControlName="remarks2"> </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="deptCodes">{{'Services' | translate}}</label>
+            <ng-select [multiple]="true" [(ngModel)]="selectedCars">
+              <ng-option *ngFor="let car of cars" [value]="car.id"
+                         [disabled]="car?.disabled">{{car.name}}</ng-option>
+            </ng-select>
+            <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-6 text-center">
+              <div class="form-group">
+                <div class="col-md-6 col-lg-6">
+                  <!-- <img *ngIf="image1Src!=''" [src]="image1Src" style="height: 200px;" /> -->
+                  <label for="thumbNailImagePath">{{'Thumbnail Image' | translate}}</label>
+                  <input type="file" accept="image/*">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6 text-center">
+              <div class="form-group">
+                <div class="col-md-6 col-lg-6">
+                  <!-- <img *ngIf="image1Src!=''" [src]="image1Src" style="height: 200px;" /> -->
+                  <label for="fullImagePath">{{'Item Image' | translate}}</label>
+                  <input type="file" accept="image/*">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="isActive">{{'Is_Active' | translate}}</label>
+            <br />
+            <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 ">
+        <div class="col-md-12 col-lg-12 text-center">
+          <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+                 value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+          <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                 value="{{'Save' | translate}}" />
+        </div>
+      </div>
+</form>

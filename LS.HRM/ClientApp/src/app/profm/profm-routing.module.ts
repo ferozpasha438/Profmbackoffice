@@ -12,6 +12,7 @@ import { GetitemcategoriesComponent } from './ItemCategories/GetItemCategories/g
 import { GetitemsubcategoriesComponent } from './ItemSubCategories/GetItemSubCategories/getitemsubcategories.component';
 import { GetresourceslistComponent } from './Resources/GetResources/getresourceslist.component';
 import { GetresourcetypeslistComponent } from './ResourceTypes/GetResourceTypes/getresourcetypeslist.component';
+import { GetserviceitemComponent } from './ServiceItem/GetServiceItem/getserviceitem/getserviceitem.component';
 import { GetsubcontractorslistComponent } from './SubContractors/GetSubContractors/getsubcontractorslist.component';
 import { TicketdetailComponent } from './Tickets/ticketdetail/ticketdetail.component';
 import { TicketsComponent } from './Tickets/tickets/tickets.component';
@@ -39,6 +40,7 @@ const routes: Routes = [
   { path: 'ticketdetail', component: TicketdetailComponent },
   { path: 'getworkorders', component: WorkOrdersComponent },
   { path: 'workorderdetail', component: WorkOrderDetailComponent },
+  { path: 'getserviceitems', component: GetserviceitemComponent },
 
   { path: 'btcscheduleslist', component: BtcschedulelistComponent },
   { path: 'btctickets', component: BtcTicketsComponent },

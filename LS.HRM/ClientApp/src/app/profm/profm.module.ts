@@ -47,6 +47,8 @@ import { WorkOrdersComponent } from './WorkOrders/workOrders/workOrders.componen
 import { AllschedulecalendarComponent } from './GetScheduling/SharedPages/allschedulecalendar.component';
 import { TicketdetailComponent } from './Tickets/ticketdetail/ticketdetail.component';
 import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorderdetail.component';
+import { GetserviceitemComponent } from './ServiceItem/GetServiceItem/getserviceitem/getserviceitem.component';
+import { AddupdateserviceitemComponent } from './ServiceItem/Sharedpages/addupdateserviceitem/addupdateserviceitem.component';
 import { BtcTicketsComponent } from './B2C/btctickets.component';
 import { CommonRemarkComponent } from './B2C/commonremark.component';
 import { BtcschedulelistComponent } from './B2C/btcschedulelist.component';
@@ -92,6 +94,9 @@ import { BtcschedulecalendarComponent } from './B2C/btcschedulecalendar.componen
     WorkOrdersComponent,
     AllschedulecalendarComponent,
     TicketdetailComponent,
+    WorkOrderDetailComponent,
+    GetserviceitemComponent,
+    AddupdateserviceitemComponent
     WorkOrderDetailComponent,
     BtcTicketsComponent,
     CommonRemarkComponent,
