@@ -96,7 +96,7 @@ import { BtcschedulecalendarComponent } from './B2C/btcschedulecalendar.componen
     TicketdetailComponent,
     WorkOrderDetailComponent,
     GetserviceitemComponent,
-    AddupdateserviceitemComponent
+    AddupdateserviceitemComponent,
     WorkOrderDetailComponent,
     BtcTicketsComponent,
     CommonRemarkComponent,

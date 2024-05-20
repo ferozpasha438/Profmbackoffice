@@ -12,27 +12,24 @@
             <input class="form-control" id="serviceCode" type="text"
                    placeholder="{{'Please_Enter' | translate}} {{'Services Code' | translate}}"
                    formControlName="serviceCode">
+            <validation-message [control]="form.controls.serviceCode"></validation-message>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <label for="deptCode" class="mr-sm-2">{{'Discipline' | translate}}</label>
-          <select class="custom-select mr-sm-2" formControlName="deptCode">
+          <select class="custom-select mr-sm-2" formControlName="deptCode" (change)="loadActivitiesForDept($event)">
             <option value="">{{'Discipline' | translate}}</option>
-            <option>ABC</option>
-            <option>ABC</option>
-            <option>ABC</option>
-            <option>ABC</option>
+            <option *ngFor="let desc of disciplineList" value="{{desc.deptCode}}">{{desc.nameEng}}</option>
           </select>
+          <validation-message [control]="form.controls.deptCode"></validation-message>
         </div>
         <div class="col-md-4 col-lg-4">
           <label for="activityCode" class="mr-sm-2">{{'Activity Code' | translate}}</label>
           <select class="custom-select mr-sm-2" formControlName="activityCode">
             <option value="">{{'Activity Code' | translate}}</option>
-            <option>XYZ</option>
-            <option>XYZ</option>
-            <option>XYZ</option>
-            <option>XYZ</option>
+            <option *ngFor="let desc of activitesList" value="{{desc.actCode}}">{{desc.actName}}</option>          
           </select>
+          <validation-message [control]="form.controls.activityCode"></validation-message>
         </div>
       </div>
       <div class="row">
@@ -42,6 +39,7 @@
             <input class="form-control" id="serviceShortDesc" type="text"
                    placeholder="{{'Please_Enter' | translate}} {{'Short Name (EN)' | translate}}"
                    formControlName="serviceShortDesc">
+          <validation-message [control]="form.controls.serviceShortDesc"></validation-message>
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
@@ -60,6 +58,7 @@
             <textarea class="form-control"
                       placeholder="{{'Please_Select' | translate}} {{'Service Details (EN)' | translate}}"
                       formControlName="serviceDetails"> </textarea>
+          <validation-message [control]="form.controls.serviceDetails"></validation-message>
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
@@ -82,6 +81,7 @@
             <input class="form-control" id="timeUnitPrimary" type="time"
                    placeholder="{{'Please_Enter' | translate}} {{'Unit Time' | translate}}"
                    formControlName="timeUnitPrimary">
+          <validation-message [control]="form.controls.timeUnitPrimary"></validation-message>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
@@ -90,20 +90,26 @@
             <input class="form-control" id="resourceUnitPrimary" type="number" step=".01"
                    placeholder="{{'Please_Enter' | translate}} {{'Unit Resource' | translate}}"
                    formControlName="resourceUnitPrimary">
+          <validation-message [control]="form.controls.resourceUnitPrimary"></validation-message>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <label for="potentialCost" class="mr-sm-2">
-            {{
-'Potential Cost / Unit Service' |
-                        translate
-            }}
+            {{'Potential Cost / Unit Service' | translate}}
           </label>
           <input class="form-control" id="potentialCost" type="number" step=".01"
                  placeholder="{{'Please_Enter' | translate}} {{'Potential Cost / Unit Service' | translate}}"
-                 formControlName="potentialCost">
+                 formControlName="potentialCost">          
         </div>
         <div class="col-md-3 col-lg-3">
+          <label for="applicableDiscount" class="mr-sm-2">
+            {{'Applicable Discount' | translate}}
+          </label>
+          <input class="form-control" id="applicableDiscount" type="number" step=".01"
+                 placeholder="{{'Please_Enter' | translate}} {{'Applicable Discount' | translate}}"
+                 formControlName="applicableDiscount">
+        </div>
+        <!--<div class="col-md-3 col-lg-3">
           <div class="form-group d-flex mt-4">
             <div class="form-group">
               <mat-slide-toggle color="primary" formControlName="applicableDiscount"></mat-slide-toggle>
@@ -113,7 +119,7 @@
               {{'Applicable Discount' | translate}}
             </label>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="row">
         <div class="col-md-3 col-lg-3">
@@ -122,6 +128,7 @@
             <input class="form-control" id="minRequiredHrs" type="time"
                    placeholder="{{'Please_Enter' | translate}} {{'Unit Time' | translate}}"
                    formControlName="minRequiredHrs">
+            <validation-message [control]="form.controls.minRequiredHrs"></validation-message>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
@@ -171,6 +178,7 @@
           <input class="form-control" id="offerPrice" type="number"
                  placeholder="{{'Please_Enter' | translate}} {{'Offer Price' | translate}}"
                  formControlName="offerPrice">
+          <validation-message [control]="form.controls.offerPrice"></validation-message>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-group ">
@@ -185,6 +193,7 @@
                 <mat-datepicker-toggle matSuffix [for]="dateOfBirthpicker1"></mat-datepicker-toggle>
                 <mat-datepicker #dateOfBirthpicker1></mat-datepicker>
               </div>
+          <validation-message [control]="form.controls.offerStartDate"></validation-message>
             </div>
           </div>
         </div>
@@ -201,6 +210,7 @@
                 <mat-datepicker-toggle matSuffix [for]="dateOfBirthpicker"></mat-datepicker-toggle>
                 <mat-datepicker #dateOfBirthpicker></mat-datepicker>
               </div>
+          <validation-message [control]="form.controls.offerEndDate"></validation-message>
             </div>
           </div>
         </div>
@@ -215,7 +225,7 @@
             <label for="remarks1">{{'Notes / Remarks (1)' | translate}}</label>
             <textarea class="form-control"
                       placeholder="{{'Please_Select' | translate}} {{'Notes / Remarks (1)' | translate}}"
-                      formControlName="remarks1"> </textarea>
+                      formControlName="remarks1"> </textarea>          
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
@@ -235,10 +245,11 @@
         <div class="col-md-6 col-lg-6">
           <div class="form-group">
             <label for="deptCodes">{{'Services' | translate}}</label>
-            <ng-select [multiple]="true" [(ngModel)]="selectedCars">
-              <ng-option *ngFor="let car of cars" [value]="car.id"
-                         [disabled]="car?.disabled">{{car.name}}</ng-option>
+            <ng-select [multiple]="true" formControlName="selectedServices">
+              <ng-option *ngFor="let service of serviceList" [value]="service.id"
+                         [disabled]="service?.disabled">{{service.name}}</ng-option>
             </ng-select>
+            <validation-message [control]="form.controls.selectedServices"></validation-message>
             <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
           </div>
         </div>
@@ -254,7 +265,7 @@
                 <div class="col-md-6 col-lg-6">
                   <!-- <img *ngIf="image1Src!=''" [src]="image1Src" style="height: 200px;" /> -->
                   <label for="thumbNailImagePath">{{'Thumbnail Image' | translate}}</label>
-                  <input type="file" accept="image/*">
+                  <input type="file" (change)="onSelectFile1($event)" accept="image/*">
                 </div>
               </div>
             </div>
@@ -263,21 +274,13 @@
                 <div class="col-md-6 col-lg-6">
                   <!-- <img *ngIf="image1Src!=''" [src]="image1Src" style="height: 200px;" /> -->
                   <label for="fullImagePath">{{'Item Image' | translate}}</label>
-                  <input type="file" accept="image/*">
+                  <input type="file" (change)="onSelectFile2($event)" accept="image/*">
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-
-
-
-
-
-
-
 
       <div class="row">
         <div class="col-md-6 col-lg-6">

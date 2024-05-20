@@ -61,7 +61,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
                       {{'Time Unit Primary' | translate}}
                     </th>
-                    <td mat-cell *matCellDef="let row">{{ row.timeUnitPrimary }}</td>
+                    <td mat-cell *matCellDef="let row">{{ utilService.formatToTimeSpanTime(row.timeUnitPrimary)}}</td>
                   </ng-container>
                   <ng-container matColumnDef="resourceUnitPrimary">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>

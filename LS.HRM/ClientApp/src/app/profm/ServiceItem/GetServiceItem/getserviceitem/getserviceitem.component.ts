@@ -13,12 +13,13 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { DeleteConfirmDialogComponent } from 'src/app/sharedcomponent/delete-confirm-dialog';
 import { PaginationService } from 'src/app/sharedcomponent/pagination.service';
 import { ParentFomMgtComponent } from 'src/app/sharedcomponent/parentfommgt.component';
+import { ParentB2CComponent } from '../../../../sharedcomponent/parentb2c.component';
 
 @Component({
   selector: 'app-getserviceitem',
   templateUrl: './getserviceitem.component.html',
 })
-export class GetserviceitemComponent extends ParentFomMgtComponent implements OnInit {
+export class GetserviceitemComponent extends ParentB2CComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
@@ -32,7 +33,7 @@ export class GetserviceitemComponent extends ParentFomMgtComponent implements On
   isArab: boolean = false;
 
   constructor(private apiService: ApiService, private authService: AuthorizeService, private translate: TranslateService,
-    private utilService: UtilityService, private notifyService: NotificationService, public dialog: MatDialog,
+    public utilService: UtilityService, private notifyService: NotificationService, public dialog: MatDialog,
     public pageService: PaginationService) {
     super(authService);
   }
@@ -54,7 +55,7 @@ export class GetserviceitemComponent extends ParentFomMgtComponent implements On
   private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
     this.isLoading = true;
 
-    this.apiService.getPagination('', this.utilService.getQueryString(page, pageCount, query, orderBy)).subscribe(result => {
+    this.apiService.getPagination('fomMobB2CService/getServiceItemsList', this.utilService.getQueryString(page, pageCount, query, orderBy)).subscribe(result => {
       this.totalItemsCount = 0;
       this.data = new MatTableDataSource(result.items);
 

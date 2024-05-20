@@ -8,19 +8,27 @@ import { DBOperation } from 'src/app/services/utility.constants';
 import { UtilityService } from 'src/app/services/utility.service';
 import { ValidationService } from 'src/app/sharedcomponent/ValidationService';
 import { ParentFomMgtComponent } from 'src/app/sharedcomponent/parentfommgt.component';
+import { ParentB2CComponent } from '../../../../sharedcomponent/parentb2c.component';
+import Validation from '../../../../Operationalmgt/Validators/custom.validators/custom.validators.component';
 
 @Component({
   selector: 'app-addupdateserviceitem',
   templateUrl: './addupdateserviceitem.component.html',
 })
-export class AddupdateserviceitemComponent extends ParentFomMgtComponent implements OnInit {
+export class AddupdateserviceitemComponent extends ParentB2CComponent implements OnInit {
   modalTitle!: string;
   modalBtnTitle!: string;
   dbops!: DBOperation;
   form!: FormGroup;
   id: number = 0;
   isReadOnly: boolean = false;
-
+  fileUploadone!: File;
+  fileUploadtwo!: File;
+  formData!: FormData;
+  disciplineList!: Array<any>;
+  activitesList!: Array<any>;
+  selectedServices: any;
+  serviceList: any;
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdateserviceitemComponent>,
     private notifyService: NotificationService, private validationService: ValidationService) {
@@ -28,45 +36,59 @@ export class AddupdateserviceitemComponent extends ParentFomMgtComponent impleme
   };
 
   ngOnInit(): void {
+    this.loadFormData();
+
     this.setForm();
     if (this.id > 0)
       this.setEditForm();
   }
 
-  selectedCars = [2];
-  cars = [
-        { id: 1, name: 'Daily Service'},
-        { id: 2, name: 'Monthly Service' },
-        { id: 3, name: 'Yearly Service' },
+  loadFormData() {
+
+    this.serviceList = [
+      { id: "Daily", name: 'Daily Service', },
+      { id: "Monthly", name: 'Monthly Service' },
+      { id: "Yearly", name: 'Yearly Service' },
     ];
 
+    this.apiService.getall('fomMobB2CService/getDepartmentList').subscribe(result => {
+      this.disciplineList = result;
+    });
+  }
+  loadActivitiesForDept(evt: any) {
+    this.apiService.getall('fomMobB2CService/getActivitiesByDepartmentList?deptCode=' + evt.target.value).subscribe(result => {
+      this.activitesList = result;
+    });
+
+  }
 
   setForm() {
     this.form = this.fb.group(
       {
-        'serviceCode': [''],
-        'deptCode': [''],
-        'activityCode': [''],
-        'serviceShortDesc': [''],
-        'serviceShortDescAr': [''],
-        'serviceDetails': [''],
+        'serviceCode': ['', Validators.required],
+        'deptCode': ['', Validators.required],
+        'activityCode': ['', Validators.required],
+        'serviceShortDesc': ['', Validators.required],
+        'serviceShortDescAr': ['', Validators.required],
+        'serviceDetails': ['', Validators.required],
         'serviceDetailsAr': [''],
-        'timeUnitPrimary': [''],
-        'resourceUnitPrimary': [''],
-        'potentialCost': [''],
-        'applicableDiscount': [''],
-        'isOnOffer': [''],
-        'offerPrice': [''],
-        'offerStartDate': [''],
-        'offerEndDate': [''],
+        'timeUnitPrimary': ['', Validators.required],
+        'resourceUnitPrimary': [0, Validators.required],
+        'potentialCost': [0],
+        'applicableDiscount': [0],
+        'isOnOffer': [false],
+        'offerPrice': [0, Validators.required],
+        'offerStartDate': [null, Validators.required],
+        'offerEndDate': [null, Validators.required],
         'remarks1': [''],
         'remarks2': [''],
         'thumbNailImagePath': [''],
-        'minRequiredHrs': [''],
-        'minReqResource': [''],
-        'primaryUnitPrice': [''],
+        'minRequiredHrs': ['', Validators.required],
+        'minReqResource': [0],
+        'primaryUnitPrice': [0],
         'fullImagePath': [''],
-        'isActive': [false],
+        'selectedServices': ['', Validators.required],
+        'isActive': [true],
       }
     );
     this.isReadOnly = false;
@@ -79,15 +101,43 @@ export class AddupdateserviceitemComponent extends ParentFomMgtComponent impleme
       }
     });
   }
+
+
+  onSelectFile1(fileInput: any) {
+    this.fileUploadone = <File>fileInput.target.files[0];
+  }
+  onSelectFile2(fileInput: any) {
+    this.fileUploadtwo = <File>fileInput.target.files[0];
+
+  }
+
   closeModel() {
     this.dialogRef.close();
   }
 
   submit() {
     if (this.form.valid) {
+
       if (this.id > 0)
         this.form.value['id'] = this.id;
-      this.apiService.post('', this.form.value)
+
+      this.formData = new FormData();
+
+      this.form.value['offerStartDate'] = this.utilService.selectedDateTime(this.form.controls['offerStartDate'].value);
+      this.form.value['offerEndDate'] = this.utilService.selectedDateTime(this.form.controls['offerEndDate'].value);
+
+      this.formData.append("input", JSON.stringify(this.form.value));
+
+      if (this.fileUploadone) {
+        this.formData.append("fileone", this.fileUploadone, this.fileUploadone.name);
+        this.formData.append("fileone_", 'thumb');
+      }
+      if (this.fileUploadtwo) {
+        this.formData.append("filetwo", this.fileUploadtwo, this.fileUploadtwo.name);
+        this.formData.append("filetwo_", 'item');
+      }
+
+      this.apiService.post('fomMobB2CService/createUpdateServiceItems', this.formData)
         .subscribe(res => {
           this.utilService.OkMessage();
           this.reset();

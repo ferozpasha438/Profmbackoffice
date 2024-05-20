@@ -314,7 +314,7 @@ export class BtcschedulecalendarComponent extends ParentB2CComponent implements 
     if (this.selectedDate) {
       this.scheduleData = [];
       this.scheduleDays = [];
-      this.apiService.getall(`fomCustomerContract/allB2CFomCalenderScheduleList1`).subscribe(result => {
+      this.apiService.getall(`fomCustomerContract/allB2CFomCalenderScheduleList`).subscribe(result => {
         this.totalItemsCount = 0;
         if (result) {
           this.scheduleData = result;
