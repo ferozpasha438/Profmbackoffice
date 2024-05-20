@@ -55,11 +55,15 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
       this.disciplineList = result;
     });
   }
-  loadActivitiesForDept(evt: any) {
-    this.apiService.getall('fomMobB2CService/getActivitiesByDepartmentList?deptCode=' + evt.target.value).subscribe(result => {
+
+  loadActivitiesForDeptEvent(evt: any) {
+    this.loadActivitiesForDept(evt.target.value);
+  }
+  loadActivitiesForDept(dept: any) {
+
+    this.apiService.getall('fomMobB2CService/getActivitiesByDepartmentList?deptCode=' + dept).subscribe(result => {
       this.activitesList = result;
     });
-
   }
 
   setForm() {
@@ -94,10 +98,13 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
     this.isReadOnly = false;
   }
   setEditForm() {
-    this.apiService.get('', this.id).subscribe(res => {
+    this.apiService.get('fomMobB2CService/getServiceItemById', this.id).subscribe(res => {
       if (res) {
         this.isReadOnly = true;
+        this.loadActivitiesForDept(res.deptCode)
         this.form.patchValue(res);
+        this.form.controls['timeUnitPrimary'].setValue(this.utilService.formatToTimeSpanTime(res.timeUnitPrimary));
+        this.form.controls['minRequiredHrs'].setValue(this.utilService.formatToTimeSpanTime(res.minRequiredHrs));
       }
     });
   }

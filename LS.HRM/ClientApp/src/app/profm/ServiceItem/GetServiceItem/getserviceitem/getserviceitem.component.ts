@@ -29,7 +29,7 @@ export class GetserviceitemComponent extends ParentB2CComponent implements OnIni
   isLoading: boolean = false;
   totalItemsCount: number = 0;
   data: MatTableDataSource<any> = new MatTableDataSource();
-  displayedColumns: string[] = ['serviceCode', 'serviceShortDesc', 'timeUnitPrimary', 'resourceUnitPrimary', 'potentialCost', 'primaryUnitPrice', 'isActive'];
+  displayedColumns: string[] = ['serviceCode', 'serviceShortDesc', 'timeUnitPrimary', 'resourceUnitPrimary', 'potentialCost', 'primaryUnitPrice', 'isActive', 'Actions'];
   isArab: boolean = false;
 
   constructor(private apiService: ApiService, private authService: AuthorizeService, private translate: TranslateService,
