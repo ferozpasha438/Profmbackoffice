@@ -1,15 +1,17 @@
 {
-  "financeurl": "http://localhost:65356/api",
-  "financemgtapiurl": "http://localhost:13462/api",
-  "operationapiurl": "http://localhost:60186/api",
-  "inventoryapiurl": "http://localhost:65356/api",
-  "inventorymgtapiurl": "http://localhost:65356/api",
-  "salesapiurl": "http://localhost:3788/api",
-  "purchaseapiurl": "http://localhost:65356/api",
-  "schoolapiurl": "http://localhost:16039/api",
-  "schoolmgtapiurl": "http://20.68.125.92/hvsapi/api",
-  "schooltestapiurl": "http://20.68.125.92/HVSTestMgt/api",
-  "fleetapiurl": "http://localhost:13427/api",
-  "fomapiurl": "http://localhost:13427/api",
-  "fomb2capiurl": "http://localhost:44350/api"
+  "financeurl": "https://13.69.11.184/commonapi/api",
+  "financemgtapiurl": "https://13.69.11.184/commonapi/api",
+  "operationapiurl": "https://13.69.11.184/commonapi/api",
+  "inventoryapiurl": "https://13.69.11.184/commonapi/api",
+  "inventorymgtapiurl": "https://13.69.11.184/commonapi/api",
+  "salesapiurl": "https://13.69.11.184/commonapi/api",
+  "purchaseapiurl": "https://13.69.11.184/commonapi/api",
+  "schoolapiurl": "https://13.69.11.184/commonapi/api",
+  "schoolmgtapiurl": "https://13.69.11.184/commonapi/api",
+  "schooltestapiurl": "https://13.69.11.184/commonapi/api",
+  "fleetapiurl": "https://13.69.11.184/commonapi/api",
+  "fomapiurl": "https://13.69.11.184/fomapi/api",
+  "fomb2capiurl": "https://13.69.11.184/fomapi/api"
 }
+
+

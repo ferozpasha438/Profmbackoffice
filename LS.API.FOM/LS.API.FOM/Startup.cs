@@ -279,6 +279,11 @@ namespace LS.API.FOM
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"CustomerContractfiles")),
+                RequestPath = new PathString("/CustomerContractfiles")
+            });
+            app.UseStaticFiles(new StaticFileOptions()
+            {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Customerfiles")),
                 RequestPath = new PathString("/Customerfiles")
             });

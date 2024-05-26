@@ -3,6 +3,7 @@ using CIN.Application.Common;
 using CIN.Application.FomMgtDtos;
 using CIN.Application.FomMgtQuery;
 using CIN.Application.FomMgtQuery.ProfmQuery;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,10 +19,12 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
     public class FomCustomerContractController : BaseController
     {
         private IConfiguration _Config;
+        private readonly IWebHostEnvironment _env;
 
-        public FomCustomerContractController(IOptions<AppSettingsJson> appSettings, IConfiguration config) : base(appSettings)
+        public FomCustomerContractController(IOptions<AppSettingsJson> appSettings, IConfiguration config, IWebHostEnvironment env) : base(appSettings)
         {
             _Config = config;
+            _env = env;
         }
 
 
@@ -58,7 +61,10 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         {
             var id = await Mediator.Send(new CreateUpdateFomCustomerContract() { CustomerContractDto = dTO, User = UserInfo() });
             if (id > 0)
+            {
+                dTO.Id = id;
                 return Created($"get/{id}", dTO);
+            }                
             else if (id == -1)
             {
                 return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Duplicate(nameof(dTO.Id)) });
@@ -228,6 +234,22 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             //}
             return tckt is not null ? Ok(tckt) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
         }
+
+
+        [HttpPost("UploadCustomerContractFiles")]
+        public async Task<ActionResult> UploadCustomerContractFiles([FromForm] InputImageFromCustomerDto dTO)
+        {
+            var webRoot = $"{_env.ContentRootPath}/CustomerContractfiles";
+            bool exists = System.IO.Directory.Exists(webRoot);
+            if (!exists)
+                System.IO.Directory.CreateDirectory(webRoot);
+            var (res, message) = await Mediator.Send(new UploadCustomerContractFiles() { Input = dTO, WebRoot = webRoot, User = UserInfo() });
+            if (res)
+                return Ok(new ApiMessageDto { Message = ApiMessageInfo.Success });
+            else
+                return BadRequest(new ApiMessageDto { Message = message });
+        }
+
     }
 }
 

@@ -1,17 +1,23 @@
+import { Platform } from '@angular/cdk/platform';
 import { HttpClient } from '@angular/common/http';
 import { I18nMeta } from '@angular/compiler/src/render3/view/i18n/meta';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Data, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { DateAdapter } from 'angular-calendar';
 import { AuthorizeService } from '../api-authorization/AuthorizeService';
 import { CINServerMetaDataDto } from '../models/CINServerMetaDataDto';
 import { ApiService } from '../services/api.service';
 import { NotificationService } from '../services/notification.service';
 
+
+
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.scss']
+  styleUrls: ['./nav-menu.component.scss'],
 })
 
 export class NavMenuComponent implements OnInit {
@@ -25,6 +31,9 @@ export class NavMenuComponent implements OnInit {
   notificationCount: number = 0;
   notificationLink: string = '';
 
+  //@ViewChild('picker') picker!: MatDatepicker<Date>;
+
+  
   constructor(private authService: AuthorizeService, private notifyService: NotificationService,
     private http: HttpClient, private router: Router, private translate: TranslateService, private apiService: ApiService)
   {
@@ -89,6 +98,7 @@ export class NavMenuComponent implements OnInit {
     }
    
   }
+
 
   getNotificationData() {
     //this.apiService.getSchoolUrl('WebNotification/GetWebTopNotifications')
