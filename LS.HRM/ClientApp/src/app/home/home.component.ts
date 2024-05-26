@@ -553,7 +553,9 @@ export class HomeComponent implements OnInit {
     }
     if (this.form.controls['userDate'].value != '') {
       let sd = new Date(this.form.controls['userDate'].value);
-      this.form.value['userDate']=new Date(sd.getFullYear(), sd.getMonth(), sd.getDate() + 1);
+      this.form.value['userDate'] = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate() + 1);
+    } else {
+      this.form.value['userDate'] = null;
     }
     this.apiService.postFomUrl('FomWebDashboard/GetWebDashboardDataWithFilters', this.form.value).subscribe((res: any) => {
       this.profmDashboard = res;
