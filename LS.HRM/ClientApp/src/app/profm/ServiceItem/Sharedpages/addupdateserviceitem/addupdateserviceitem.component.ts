@@ -29,6 +29,9 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
   activitesList!: Array<any>;
   selectedServices: any;
   serviceList: any;
+  thumbNailImagePath: string='';
+  fullImagePath: string='';
+
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdateserviceitemComponent>,
     private notifyService: NotificationService, private validationService: ValidationService) {
@@ -36,8 +39,7 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
   };
 
   ngOnInit(): void {
-    this.loadFormData();
-
+    this.loadFormData();    
     this.setForm();
     if (this.id > 0)
       this.setEditForm();
@@ -56,7 +58,7 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
     });
   }
 
-  loadActivitiesForDeptEvent(evt: any) {
+  loadActivitiesForDeptEvent(evt: any) {   
     this.loadActivitiesForDept(evt.target.value);
   }
   loadActivitiesForDept(dept: any) {
@@ -100,6 +102,10 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
   setEditForm() {
     this.apiService.get('fomMobB2CService/getServiceItemById', this.id).subscribe(res => {
       if (res) {
+
+        let url = this.getCurrentUrl().replace('/api', '');
+        this.thumbNailImagePath = this.utilService.hasValue(res['thumbNailImagePath']) ? `${url}/files/${res['thumbNailImagePath']}` : ''
+        this.fullImagePath = this.utilService.hasValue(res['fullImagePath']) ? `${url}/files/${res['fullImagePath']}` : ''        
         this.isReadOnly = true;
         this.loadActivitiesForDept(res.deptCode)
         this.form.patchValue(res);

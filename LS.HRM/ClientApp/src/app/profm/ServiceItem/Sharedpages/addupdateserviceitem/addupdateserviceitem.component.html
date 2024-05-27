@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-4 col-lg-4">
           <label for="deptCode" class="mr-sm-2">{{'Discipline' | translate}}</label>
-          <select class="custom-select mr-sm-2" formControlName="deptCode" (change)="loadActivitiesForDept($event)">
+          <select class="custom-select mr-sm-2" formControlName="deptCode" (change)="loadActivitiesForDeptEvent($event)">
             <option value="">{{'Discipline' | translate}}</option>
             <option *ngFor="let desc of disciplineList" value="{{desc.deptCode}}">{{desc.nameEng}}</option>
           </select>
@@ -266,6 +266,8 @@
                   <!-- <img *ngIf="image1Src!=''" [src]="image1Src" style="height: 200px;" /> -->
                   <label for="thumbNailImagePath">{{'Thumbnail Image' | translate}}</label>
                   <input type="file" (change)="onSelectFile1($event)" accept="image/*">
+                  <br />
+                  <!--<a href="{{thumbNailImagePath}}" target="_blank">{{thumbNailImagePath}}</a>-->
                 </div>
               </div>
             </div>
@@ -275,6 +277,8 @@
                   <!-- <img *ngIf="image1Src!=''" [src]="image1Src" style="height: 200px;" /> -->
                   <label for="fullImagePath">{{'Item Image' | translate}}</label>
                   <input type="file" (change)="onSelectFile2($event)" accept="image/*">
+                  <br />
+                  <!--<a href="{{fullImagePath}}" target="_blank">{{fullImagePath}}</a>-->
                 </div>
               </div>
             </div>

@@ -107,7 +107,7 @@ export class GetserviceitemComponent extends ParentB2CComponent implements OnIni
     const dialogRef = this.utilService.openDeleteConfirmDialog(this.dialog, DeleteConfirmDialogComponent);
     dialogRef.afterClosed().subscribe(canDelete => {
       if (canDelete && id > 0) {
-        this.apiService.delete('', id).subscribe(res => {
+        this.apiService.delete('fomMobB2CService', id).subscribe(res => {
           this.refresh();
           this.utilService.OkMessage();
         },
