@@ -866,6 +866,9 @@ namespace CIN.Application.FomMgtDtos
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string File1 { get; set; }
+        public string File2 { get; set; }
+        public string File3 { get; set; }
 
 
     }
@@ -885,7 +888,8 @@ namespace CIN.Application.FomMgtDtos
         public DateTime ContEndDate { get; set; }
         public string[] ContDeptCode { get; set; }           //multiple Codes separated by ,(comma)
 
-      //  public string ContDeptCode { get; set; }
+
+        //  public string ContDeptCode { get; set; }
         public string ContProjManager { get; set; }
         public string ContProjSupervisor { get; set; }
         public string ContApprAuthorities { get; set; }
@@ -1404,6 +1408,14 @@ namespace CIN.Application.FomMgtDtos
         public string ContractCode { get; set; }
     }
 
+    public class RQDashBoardFiltersDto
+    {
+        public int? ContractId { get; set; }
+        public string CustomerCode { get; set; }
+        public DateTime? UserDate { get; set; }
+
+
+    }
     public class RQCalenderScheduleListDto
     {
         public int? ContractId { get; set; }
@@ -1607,6 +1619,77 @@ namespace CIN.Application.FomMgtDtos
 
 
 
+    }
+
+
+    public class Out_FomWebDashBoardTicketsData
+    {
+        public int TotalTickets { get; set; } = 0;
+        public int ClosedTickets { get; set; } = 0;
+        public int PendingTickets { get; set; } = 0;
+        public Out_FomWebDashBoardLast30DaysData Last30DaysData { get; set; } = new();
+        public List<Out_FomWebDashBoardDepWiseTicketsData> DepWiseData { get; set; } = new();
+        public List<Out_FomWebDashBoardMonthWiseTicketsData> MonthWiseData { get; set; } = new();
+        public List<Out_FomWebDashBoardDepAndStatusWiseTicketsData> DepAndStatusWiseData { get; set; } = new();
+
+        public List<string> MonthsNames { get; set; } = new();
+        public List<int> MonthlyTotalTickets { get; set; } = new();
+        public List<Out_FomWebDashBoardRecenetTickets> RecentTickets { get; set; } = new();
+    }
+
+    public class Out_FomWebDashBoardLast30DaysData
+    {
+        public int TotalTickets { get; set; } = 0;
+        public int ClosedTickets { get; set; } = 0;
+        public int PendingTickets { get; set; } = 0;
+
+
+    }
+
+
+
+
+    public class Out_FomWebDashBoardDepWiseTicketsData
+    {
+        public int TotalTickets { get; set; } = 0;
+        public int ClosedTickets { get; set; } = 0;
+        public int PendingTickets { get; set; } = 0;
+        public string Department { get; set; }
+        public string DepartmentNameEng { get; set; }
+        public string DepartmentNameArb { get; set; }
+    }
+    public class Out_FomWebDashBoardDepAndStatusWiseTicketsData
+    {
+        public List<Out_FomWebDashBoardDepStatusWiseTicketsCount> DepsDataList { get; set; } = new();
+        public string StatusStr { get; set; }
+    }
+
+    public class Out_FomWebDashBoardDepStatusWiseTicketsCount
+    {
+        public string Department { get; set; }
+        public string DepartmentNameEng { get; set; }
+        public string DepartmentNameArb { get; set; }
+        public int Count { get; set; }
+    }
+
+
+
+
+    public class Out_FomWebDashBoardMonthWiseTicketsData
+    {
+        public int TotalTickets { get; set; } = 0;
+        public int ClosedTickets { get; set; } = 0;
+        public int PendingTickets { get; set; } = 0;
+        public string Month { get; set; }
+    }
+    public class Out_FomWebDashBoardRecenetTickets
+    {
+        public string ProjectNameEng { get; set; }
+        public string ProjectNameArb { get; set; }
+        public DateTime Date { get; set; }
+        public string TicketNumber { get; set; }
+        public string MaintananceType { get; set; }
+        public string StatusStr { get; set; }
     }
 
 }

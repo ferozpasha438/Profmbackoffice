@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 using System.Linq.Dynamic.Core;
 using CIN.Domain.SalesSetup;
 using CIN.Domain.FomMgt;
+using CIN.Application.ProfmQuery;
 
 namespace CIN.Application.FomMgtQuery.ProfmQuery
 {
@@ -1928,5 +1929,81 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
         }
     }
+    #endregion
+
+
+
+    #region UploadCustomerContractFiles       
+
+    public class UploadCustomerContractFiles : IRequest<(bool, string)>
+    {
+        public UserIdentityDto User { get; set; }
+        public InputImageFromCustomerDto Input { get; set; }
+        public string WebRoot { get; set; }
+    }
+
+    public class UploadCustomerContractFilesHandler : IRequestHandler<UploadCustomerContractFiles, (bool, string)>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public UploadCustomerContractFilesHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<(bool, string)> Handle(UploadCustomerContractFiles request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var obj = request.Input;
+                TblErpFomCustomerContract CustomerContract = new();
+                if (obj.Id > 0)
+                    CustomerContract = await _context.FomCustomerContracts.AsNoTracking().FirstOrDefaultAsync(e => e.Id == obj.Id);
+
+                if (request.Input.Image1IForm != null && request.Input.Image1IForm.Length > 0)
+                {
+                    var (res, fileName) = FileUploads.FileUploadWithIform(CustomerContract.ContractCode, request.WebRoot, request.Input.Image1IForm);
+                    if (res)
+                    {
+                        CustomerContract.File1 = obj.WebRoot + fileName;
+                    }
+                }
+                if (request.Input.Image2IForm != null && request.Input.Image2IForm.Length > 0)
+                {
+                    var (res, fileName) = FileUploads.FileUploadWithIform(CustomerContract.ContractCode, request.WebRoot, request.Input.Image2IForm);
+                    if (res)
+                    {
+                        CustomerContract.File2 = obj.WebRoot + fileName;
+                    }
+                }
+                if (request.Input.Image3IForm != null && request.Input.Image3IForm.Length > 0)
+                {
+                    var (res, fileName) = FileUploads.FileUploadWithIform(CustomerContract.ContractCode, request.WebRoot, request.Input.Image3IForm);
+                    if (res)
+                    {
+                        CustomerContract.File3 = obj.WebRoot + fileName;
+                    }
+                }
+                _context.FomCustomerContracts.Update(CustomerContract);
+                await _context.SaveChangesAsync();
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in Create Upda te Profm JobTicketHead Method");
+                Log.Error("Error occured time : " + DateTime.UtcNow);
+                Log.Error("Error message : " + ex.Message);
+                Log.Error("Error StackTrace : " + ex.StackTrace);
+                return (false, ex.Message);
+            }
+
+        }
+
+    }
+
+
+
     #endregion
 }

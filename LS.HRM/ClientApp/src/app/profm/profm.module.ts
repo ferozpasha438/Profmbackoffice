@@ -114,7 +114,7 @@ import { BtcschedulecalendarComponent } from './B2C/btcschedulecalendar.componen
     MatTooltipModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    NgSelectModule
+    NgSelectModule,
   ],
 
   exports: [CommonModule],
