@@ -4,68 +4,36 @@
       <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
         <i class="ti-menu ti-close"></i>
       </a>
-    
+
       <div class="navbar-brand">
         <a href="index.html">
           <b class="logo-icon">
             <img src="../../assets/images/newlogo.png" alt="homepage" class="dark-logo"
-              style="width: 100%; height: 100%;padding: 0% 17% 3% 8%;" />
+                 style="width: 100%; height: 100%;padding: 0% 17% 3% 8%;" />
             <img src="../../assets/images/newlogo.png" alt="homepage" class="light-logo"
-              style="width: 100%; height: 100%;padding: 0% 17% 3% 8%;" />
+                 style="width: 100%; height: 100%;padding: 0% 17% 3% 8%;" />
           </b>
           <span class="logo-text">
-          
+
           </span>
         </a>
       </div>
-    
+
       <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
          data-toggle="collapse" data-target="#navbarSupportedContent"
          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="ti-more"></i>
       </a>
-      
+
     </div>
     <div class="navbar-collapse collapse" id="navbarSupportedContent">
-     
+
       <br>
       <br>
       <br>
-      <ul class="navbar-nav float-right mr-auto " style="gap: 10px;padding-left: 2%;">
-      
+      <!--<ul class="navbar-nav float-right mr-auto " style="gap: 10px;padding-left: 2%;">
         &nbsp;
         &nbsp;
-
-
-        <!--<li class="nav-item d-none d-md-block">
-          <a class="nav-link d-flex" href="javascript:void(0)">
-            <div class="frame-parent">
-              <div class="project-name-parent">
-                <div class="project-name">project name</div>
-                <div class="jeddah-yacht-club">Jeddah Yacht Club</div>
-              </div>
-              <img class="vector-icon" alt="" src="../../assets/images/Vectormain.svg">
-            </div>
-          </a>
-        </li>-->
-
-        <!--&nbsp;
-        &nbsp;
-        <br>
-        
-        <li class="nav-item d-none d-md-block">
-          <a class="nav-link d-flex" href="javascript:void(0)">
-            <div class="input-group">
-              <i class="fa fa-search"></i>
-              <input type="text" placeholder="Search By Project Name"
-                     style="border: 1px solid #5f76e8; width: 24em; height: 5em;border-radius: 10px;">
-            </div>
-          </a>
-        </li>
-       
-        &nbsp;
-        
-        &nbsp;-->
         <li class="nav-item d-none d-md-block">
           <a class="nav-link dropdown-toggle" href="javascript:void(0)">
             <i data-feather="bell"></i>
@@ -91,21 +59,11 @@
           </a>
         </li>
         &nbsp;
-          &nbsp;
-        <!--<li class="nav-item d-none d-md-block">
-          <a class="nav-link" href="javascript:void(0)">
-            <div class="customize-input">
-              <select class="custom-select form-control bg-white" style="border: 1px solid #5f76e8;border-radius: 10px;"
-                      (change)="selectLan($event)" [(ngModel)]="SelectedLanguage">
-                <option value="en" selected>EN</option>
-                <option value="ar">AR</option>
-              </select>
-            </div>
-          </a>
-        </li>-->
-       
-      </ul>
-     
+        &nbsp;
+      </ul>-->
+
+      
+
       <ul class="navbar-nav float-right">
         <!-- ============================================================== -->
         <!-- Search -->
@@ -129,11 +87,11 @@
         <!-- ============================================================== -->
         <li class="nav-item dropdown d-none d-md-block">
           <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
+             aria-expanded="false">
             <img src="assets/images/users/profile-pic.jpg" alt="user" class="rounded-circle" width="40">
             <span class="ml-2 d-none d-lg-inline-block">
               <span>Hello,</span> <span class="text-dark">{{userName}}</span> <i data-feather="chevron-down"
-                class="svg-icon" id="svgIconId"></i>
+                                                                                 class="svg-icon" id="svgIconId"></i>
             </span>
           </a>
           <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
@@ -197,22 +155,293 @@
     width: 124%;
   }
 
-  .input-group i {
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 10px;
+      /* Adjust the left position as needed */
+    }
+
+    .input-group input {
+      padding-left: 12%;
+      font-size: 13px;
+      /* Adjust the padding to make space for the icon */
+    }
+
+    .input-group ::placeholder {
+      font-size: 15px;
+      /* Adjust the padding to make space for the icon */
+    }
+
+
+
+  .rectangle-parent18 {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 10px;
-    /* Adjust the left position as needed */
+    top: -5px;
+    left: 18%;
+    width: 70%;
+    height: 119px;
+    font-size: var(--font-size-sm);
+    color: var(--praimary);
+    float: left;
+    display: inline;
   }
 
-  .input-group input {
-    padding-left: 12%;
-    font-size: 13px;
-    /* Adjust the padding to make space for the icon */
+  .group-child21 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--br-xl);
+    background-color: var(--with);
+    border: 1px solid var(--color-lightgray-100);
+    box-sizing: border-box;
+    width: 1085px;
+    height: 119px;
   }
 
-  .input-group ::placeholder {
-    font-size: 15px;
-    /* Adjust the padding to make space for the icon */
+  .frame-parent8 {
+    position: absolute;
+    top: 31px;
+    left: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-5xl);
+    font-size: var(--font-size-5xl);
+  }
+
+  .project-name-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--gap-5xs);
+  }
+
+  .project-name1 {
+    font-weight: 600;
+  }
+
+  .all-projects, .project-name1 {
+    width: 162px;
+    position: relative;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .all-projects {
+    font-size: var(--font-size-lg);
+    color: var(--dark);
+  }
+
+  .all-projects, .project-name1 {
+    width: 162px;
+    position: relative;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .vector-icon3 {
+    width: 14px;
+    position: relative;
+    height: 8px;
+  }
+
+  .rectangle-parent19 {
+    position: absolute;
+    top: 31px;
+    left: 257px;
+    width: 281px;
+    height: 56px;
+    color: var(--gray-dark);
+  }
+
+  .group-child22 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.05));
+    border-radius: var(--br-xl);
+    border: 1px solid var(--praimary);
+    box-sizing: border-box;
+    width: 281px;
+    height: 56px;
+  }
+
+  .svgexport-17-25-1-parent {
+    position: absolute;
+    top: 20px;
+    left: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-5xs);
+  }
+
+  .svgexport-17-25-1 {
+    width: 15px;
+    position: relative;
+    height: 15px;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .search-by-project {
+    width: 234px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 11px;
+    flex-shrink: 0;
+  }
+
+  .frame-parent9 {
+    position: absolute;
+    top: 36px;
+    left: 570px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-5xl);
+    text-align: right;
+    font-size: var(--font-size-base);
+    color: var(--dark);
+    font-family: var(--font-dg-baysan);
+  }
+
+  .frame-parent10 {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 30px;
+  }
+
+  .frame-icon {
+    width: 24px;
+    position: relative;
+    height: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .rectangle-parent20 {
+    width: 96px;
+    position: relative;
+    height: 46px;
+  }
+
+  .group-child23 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+    border-radius: var(--br-xl);
+    border: 1px solid var(--praimary);
+    box-sizing: border-box;
+    width: 96px;
+    height: 46px;
+  }
+
+  .frame-parent11 {
+    position: absolute;
+    top: 13px;
+    left: 11px;
+    width: 74px;
+    height: 21px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .frame-parent12 {
+    width: 48px;
+    height: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-7xs);
+  }
+
+  .frame-icon12 {
+    width: 18px;
+    position: relative;
+    height: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .en {
+    position: relative;
+    font-weight: 600;
+  }
+
+  .vector-icon4 {
+    width: 11px;
+    position: relative;
+    height: 7px;
+  }
+
+  .filter {
+    position: absolute;
+    top: 36px;
+    left: 908px;
+    width: 153px;
+    height: 46px;
+    color: var(--with);
+  }
+
+  .filter-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--br-xl);
+    background-color: var(--praimary);
+    width: 153px;
+    height: 46px;
+  }
+
+  .group-parent8 {
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    width: 125px;
+    height: 25px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--gap-5xs);
+  }
+
+  .group-icon6 {
+    width: 20px;
+    position: relative;
+    height: 20px;
+  }
+
+  .open-a-ticket {
+    width: 101px;
+    position: relative;
+    font-weight: 600;
+    height: 11px;
+    flex-shrink: 0;
+  }
+
+  .float-right {
+    right: 0;
+    position: absolute;
   }
 </style>

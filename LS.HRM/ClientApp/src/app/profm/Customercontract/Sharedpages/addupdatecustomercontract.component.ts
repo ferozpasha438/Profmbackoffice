@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 //import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -36,6 +36,7 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
   catSuperVisorCodeControl = new FormControl('', Validators.required);
   catApproveAuthControl = new FormControl('', Validators.required);
   DepartmentCodeList: Array<CustomSelectListItem> = [];
+  DepartmentSoftCodeList: Array<CustomSelectListItem> = [];
   CustomerCodeList: Array<CustomSelectListItem> = [];
   SiteCodeList: Array<CustomSelectListItem> = [];
   selectedCars = [2];
@@ -48,7 +49,14 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         { id: 4, name: 'A/C Department' },
         { id: 5, name: 'Refrigator Service Department' },
 
-    ];
+  ];
+  fileUploadone!: File;
+  fileUploadtwo!: File;
+  fileUploadthree!: File;
+  file1Url: string = '';
+  file2Url: string = '';
+  file3Url: string = '';
+
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdatecustomercontractComponent>,
     private notifyService: NotificationService, private validationService: ValidationService) {
@@ -90,6 +98,20 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
  
   };
 
+  
+  onSelectFiles(fileInput: any) {
+    if (fileInput.target.files.length > 3) {
+      this.notifyService.showWarning("Select Maximum 3 Images");
+    } else if (fileInput.target.files.length > 0) {
+      this.fileUploadone = <File>fileInput.target.files[0];
+      if (fileInput.target.files.length > 1) {
+        this.fileUploadtwo = <File>fileInput.target.files[1];
+      }
+      if (fileInput.target.files.length > 2) {
+        this.fileUploadthree = <File>fileInput.target.files[2];
+      }
+    }
+  }
 
   ngOnInit(): void {
     //this.form = this.fb.group({
@@ -113,6 +135,7 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         'contStartDate': ['', Validators.required],
         'contEndDate': ['', Validators.required ],
         'contDeptCode': [[], Validators.required],
+        'contDeptSoftCode': [[], Validators.required],
         'contProjManager': ['', Validators.required],
         'contProjSupervisor': ['', Validators.required],
         'remarks': ['', Validators.required],
@@ -138,7 +161,12 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
                 const filterArray = res['contDeptCode'].split(',');
                 var deptdata = this.DepartmentCodeList as Array<any>;
                 res['contDeptCode'] = deptdata.filter(item => filterArray.includes(item.deptCode));
-                this.form.patchValue(res);
+                var deptSoftData = this.DepartmentSoftCodeList as Array<any>;
+                res['contDeptSoftCode'] = deptSoftData.filter(item => filterArray.includes(item.deptCode));
+            this.form.patchValue(res);
+            this.file1Url = res.file1;
+            this.file2Url = res.file2;
+            this.file3Url = res.file3;
       }
     });
   }
@@ -181,7 +209,9 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
 
     this.apiService.getPagination('fomDiscipline', this.utilService.getQueryString(0, 1000, '', '')).subscribe(res => {
       if (res) {
-        this.DepartmentCodeList = res['items'];
+        var deptdata = res['items'] as Array<any>;
+        this.DepartmentCodeList = deptdata.filter(item => item.deptServType == 'Hard Services');
+        this.DepartmentSoftCodeList = deptdata.filter(item => item.deptServType == 'Soft Services');
         if (this.id > 0)
           this.setEditForm();
       }
@@ -197,14 +227,10 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
 
     submit() {
         console.log(this.id);
-
         this.form.value['id'] = this.id;
-
-
         let contApprAuthorities = this.catApproveAuthControl.value as string;
         let contProjManager = this.catProjectManagerControl.value as string;
         let contProjSupervisor = this.catSuperVisorCodeControl.value as string;
-
         if (this.utilService.hasValue(contApprAuthorities)) {
             this.form.value['contApprAuthorities'] = contApprAuthorities;
             this.form.controls['contApprAuthorities'].setValue(this.utilService.removeSqueres(contApprAuthorities));
@@ -213,7 +239,6 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         else {
             console.log("contApprAuthorities-");
         }
-
         if (this.utilService.hasValue(contProjManager)) {
             this.form.value['contProjManager'] = contProjManager;
             this.form.controls['contProjManager'].setValue(this.utilService.removeSqueres(contProjManager));
@@ -222,7 +247,6 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         else {
             console.log("contProjManager-");
         }
-
         if (this.utilService.hasValue(contProjSupervisor)) {
             this.form.value['contProjSupervisor'] = contProjSupervisor;
             this.form.controls['contProjSupervisor'].setValue(this.utilService.removeSqueres(contProjSupervisor));
@@ -231,22 +255,45 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         else {
             console.log("contProjSupervisor-");
         }
+      console.log(this.form);
 
-         console.log(this.form);
     if (this.form.valid) {
       if (this.id > 0)
             this.form.value['id'] = this.id;
         
       var deptdata = this.form.value['contDeptCode'] as Array<any>;
+      var deptSoftData = this.form.value['contDeptSoftCode'] as Array<any>;
+      deptdata = [...deptdata, ...deptSoftData];
       this.form.value['contDeptCode'] = deptdata.map(item => item.deptCode);
       this.form.value['contStartDate'] = this.utilService.selectedDateTime(this.form.value['contStartDate']);
       this.form.value['contEndDate'] = this.utilService.selectedDateTime(this.form.value['contEndDate']);
       this.form.value['approvedDate'] = this.utilService.selectedDateTime(this.form.value['approvedDate']);
       this.apiService.post('FomCustomerContract', this.form.value)
         .subscribe(res => {
-          this.utilService.OkMessage();
-          this.dialogRef.close(true);
-          this.reset();
+          if (res && this.fileUploadone != null && this.fileUploadone != undefined) {
+            const custContractRes = res as any;
+            const formData = new FormData();
+            formData.append("id", custContractRes.id.toString());
+            formData.append("WebRoot", this.authService.ApiEndPoint().replace("api", "") + 'CustomerContractfiles/');
+            formData.append("Image1IForm", this.fileUploadone);
+            formData.append("Image2IForm", this.fileUploadtwo);
+            formData.append("Image3IForm", this.fileUploadthree);
+            this.apiService.post('FomCustomerContract/UploadCustomerContractFiles', formData)
+              .subscribe(res => {
+                this.utilService.OkMessage();
+                this.dialogRef.close(true);
+              },
+                error => {
+                  console.error(error);
+                  this.utilService.ShowApiErrorMessage(error);
+                });
+          } else if (res) {
+            this.utilService.OkMessage();
+            this.dialogRef.close(true);
+            this.reset();
+          } else {
+            this.notifyService.showWarning("error");
+          }
         },
           error => {
             this.utilService.ShowApiErrorMessage(error);
@@ -263,14 +310,15 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
     this.form.controls['contStartDate'].setValue('');
     this.form.controls['contEndDate'].setValue(''); 
     this.form.controls['contDeptCode'].setValue('');
+    this.form.controls['contDeptSoftCode'].setValue('');
     this.form.controls['contProjManager'].setValue('');
     this.form.controls['contProjSupervisor'].setValue('');
     this.form.controls['remarks'].setValue('');
     this.form.controls['contApprAuthorities'].setValue('');
-    this.form.controls['IsAppreoved'].setValue(false);
-    this.form.controls['IsSheduleRequired'].setValue(false);
+    //this.form.controls['IsAppreoved'].setValue(false);
+    //this.form.controls['IsSheduleRequired'].setValue(false);
     this.form.controls['approvedDate'].setValue('');
-    this.form.controls['isActive'].setValue(false);
+    //this.form.controls['isActive'].setValue(false);
 
   }
 

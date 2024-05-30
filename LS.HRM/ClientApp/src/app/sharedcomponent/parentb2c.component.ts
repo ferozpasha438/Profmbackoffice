@@ -15,6 +15,10 @@ export class ParentB2CComponent {
     authService.SetApiEndPoint(data.fomb2capiurl);
     //authService.SetApiEndPoint(authService.getUser()?.fltUrl);
   }
+  public getCurrentUrl(): string {
+    return data.fomb2capiurl
+  };
+
 }
 
 

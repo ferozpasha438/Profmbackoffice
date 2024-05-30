@@ -62,6 +62,10 @@ export class BtcschedulelistComponent extends ParentB2CComponent implements OnIn
   // }
 
   refresh() {
+    this.form.controls['startDate'].setValue(null);
+    this.form.controls['endDate'].setValue(null);
+    this.form.controls['contractId'].setValue(null);
+
     this.searchValue = '';
     this.initialLoading();
   }
@@ -76,12 +80,12 @@ export class BtcschedulelistComponent extends ParentB2CComponent implements OnIn
     this.loadListMain(event.pageIndex, event.pageSize, "", this.sortingOrder);
   }
 
-  formatTime(timeObj: any): string {
-    const hours = timeObj.hours < 10 ? '0' + timeObj.hours : timeObj.hours;
-    const minutes = timeObj.minutes < 10 ? '0' + timeObj.minutes : timeObj.minutes;
-    // const seconds = timeObj.seconds < 10 ? '0' + timeObj.seconds : timeObj.seconds;
-    return hours + ':' + minutes;
-  }
+  //formatTime(timeObj: any): string {
+  //  const hours = timeObj.hours < 10 ? '0' + timeObj.hours : timeObj.hours;
+  //  const minutes = timeObj.minutes < 10 ? '0' + timeObj.minutes : timeObj.minutes;
+  //  // const seconds = timeObj.seconds < 10 ? '0' + timeObj.seconds : timeObj.seconds;
+  //  return hours + ':' + minutes;
+  //}
 
   private loadListMain(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
     this.isLoading = true;
@@ -135,7 +139,7 @@ export class BtcschedulelistComponent extends ParentB2CComponent implements OnIn
   //}
 
   loadCustomerContract() {
-    this.apiService.getall('FomCustomerContract/GetCustomerContractSelectList').subscribe(res => {
+    this.apiService.getall('fomCustomerContract/getCustomerContractSelectList').subscribe(res => {
       if (res) {
         this.CustomerContractList = res;
       }

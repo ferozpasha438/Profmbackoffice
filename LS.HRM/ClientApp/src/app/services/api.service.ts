@@ -48,7 +48,14 @@ export class ApiService {
         catchError(this.handleError)
       )
   }
-
+  getFomUrlPagination(url: string, queryParams: string): Observable<any> {
+    this.apiURL = this.authService.GetFomApiEndPoint();
+    return this.http.get<any>(`${this.apiURL}/${url}?${queryParams}`)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      )
+  }
 
   getPagination(url: string, queryParams: string): Observable<any> {
     this.apiURL = this.authService.ApiEndPoint();

@@ -879,10 +879,10 @@ namespace CIN.Domain.FomMgt
         [Key]
         [StringLength(20)]
         public string ContractCode { get; set; }
-        
+
         // [Required]
         public string CustCode { get; set; }
-        
+
         // [Required]
         public string CustSiteCode { get; set; }
         public string CustContNumber { get; set; }
@@ -900,6 +900,9 @@ namespace CIN.Domain.FomMgt
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string File1 { get; set; }
+        public string File2 { get; set; }
+        public string File3 { get; set; }
 
 
     }
@@ -965,7 +968,7 @@ namespace CIN.Domain.FomMgt
         public int Id { get; set; }
         [Key]
         [StringLength(20)]
-        public string ActCode { get; set; }         
+        public string ActCode { get; set; }
         [ForeignKey(nameof(DeptCode))]
         public TblErpFomDepartment ErpDeptCode { get; set; }
         public string DeptCode { get; set; }
@@ -978,13 +981,13 @@ namespace CIN.Domain.FomMgt
         public bool IsB2C { get; set; }
         [Column(TypeName = "date")]
         public DateTime? CreatedOn { get; set; }
-        
+
         public string CreatedBy { get; set; }
-        
+
 
     }
 
-    [Table("tblErpFomSysLoginAuthority")] 
+    [Table("tblErpFomSysLoginAuthority")]
     public class TblErpFomSysLoginAuthority
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -1000,47 +1003,48 @@ namespace CIN.Domain.FomMgt
         public bool ModifyTicket { get; set; }
         public bool ModifyWO { get; set; }
         public bool VoidAfterApproval { get; set; }
-       
+
     }
 
     [Table("tblErpFomServiceItems")]
-    public class TblErpFomServiceItems {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public class TblErpFomServiceItems
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-    [Key]
-    [StringLength(20)]
-    public string ServiceCode { get; set; }
+        [Key]
+        [StringLength(20)]
+        public string ServiceCode { get; set; }
 
-    [ForeignKey(nameof(DeptCode))]
-    public TblErpFomDepartment ErpDeptCode { get; set; }
-    public string DeptCode { get; set; }
+        [ForeignKey(nameof(DeptCode))]
+        public TblErpFomDepartment ErpDeptCode { get; set; }
+        public string DeptCode { get; set; }
 
-    [ForeignKey(nameof(ActivityCode))]
-    public TblErpFomActivities ActCode { get; set; }
-    public string ActivityCode { get; set; } 
-    public string ServiceShortDesc { get; set; }
-    public string ServiceShortDescAr { get; set; }
-    public string ServiceDetails { get; set; }
-    public string ServiceDetailsAr { get; set; }
-    public TimeSpan TimeUnitPrimary { get; set; }
-    public int ResourceUnitPrimary { get; set; }
-    public int MinReqResource { get; set; }
-    public TimeSpan MinRequiredHrs { get; set; }
-    public Decimal PotentialCost { get; set; }
-    public Decimal PrimaryUnitPrice { get; set; }
-    public Decimal ApplicableDiscount { get; set; }
-    public bool IsOnOffer { get; set; }
-    public Decimal OfferPrice { get; set; }
-    public DateTime OfferStartDate { get; set; }
-    public DateTime OfferEndDate { get; set; }
-    public string Remarks1 { get; set; }
-    public string Remarks2 { get; set; }
-    public string FullImagePath { get; set; }
-    public string ThumbNailImagePath { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime DateCreated { get; set; }
-    public DateTime CreatedBy { get; set; }
+        [ForeignKey(nameof(ActivityCode))]
+        public TblErpFomActivities ActCode { get; set; }
+        public string ActivityCode { get; set; }
+        public string ServiceShortDesc { get; set; }
+        public string ServiceShortDescAr { get; set; }
+        public string ServiceDetails { get; set; }
+        public string ServiceDetailsAr { get; set; }
+        public TimeSpan TimeUnitPrimary { get; set; }
+        public int ResourceUnitPrimary { get; set; }
+        public int MinReqResource { get; set; }
+        public TimeSpan MinRequiredHrs { get; set; }
+        public Decimal PotentialCost { get; set; }
+        public Decimal PrimaryUnitPrice { get; set; }
+        public Decimal ApplicableDiscount { get; set; }
+        public bool IsOnOffer { get; set; }
+        public Decimal OfferPrice { get; set; }
+        public DateTime OfferStartDate { get; set; }
+        public DateTime OfferEndDate { get; set; }
+        public string Remarks1 { get; set; }
+        public string Remarks2 { get; set; }
+        public string FullImagePath { get; set; }
+        public string ThumbNailImagePath { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime CreatedBy { get; set; }
     }
 
     [Table("tblErpFomServiceUnitItems")]
@@ -1102,16 +1106,16 @@ namespace CIN.Domain.FomMgt
     [Table("tblErpFomScheduleSummary")]
     public class TblErpFomScheduleSummary
     {
-            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-            [Key]
-            public int Id { get; set; }
-            public int ContractId { get; set; }
-            public string DeptCode { get; set; }
-            public bool IsApproved { get; set; }
-            public DateTime ApproveDate { get; set; }
-            public string ApprovedBy { get; set; }
-            public bool IsSchGenerated { get; set; }
-        
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public int Id { get; set; }
+        public int ContractId { get; set; }
+        public string DeptCode { get; set; }
+        public bool IsApproved { get; set; }
+        public DateTime ApproveDate { get; set; }
+        public string ApprovedBy { get; set; }
+        public bool IsSchGenerated { get; set; }
+
 
     }
 
@@ -1292,7 +1296,7 @@ namespace CIN.Domain.FomMgt
 
     }
 
-    
+
 
     [Table("tblFomJobTicketPayment")]
     public class TblFomJobTicketPayment
@@ -1308,5 +1312,5 @@ namespace CIN.Domain.FomMgt
         public DateTime Date { get; set; }
     }
 
-    
+
 }

@@ -16,6 +16,13 @@ export class UtilityService {
 
   }
 
+  formatToTimeSpanTime(timeObj: any): string {
+    const hours = timeObj.hours < 10 ? '0' + timeObj.hours : timeObj.hours;
+    const minutes = timeObj.minutes < 10 ? '0' + timeObj.minutes : timeObj.minutes;
+    // const seconds = timeObj.seconds < 10 ? '0' + timeObj.seconds : timeObj.seconds;
+    return hours + ':' + minutes;
+  }
+
   getQueryString(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined, approval: string = "", statusId: string = "", id: number = 0, code: string = ""): string {
     let queryParam = `Page=${encodeURIComponent("" + page)}&PageCount=${encodeURIComponent("" + pageCount)}&Query=${encodeURIComponent("" + query)}&OrderBy=${encodeURIComponent("" + orderBy)}&Approval=${encodeURIComponent("" + approval)}&statusId=${encodeURIComponent("" + statusId)}&Id=${encodeURIComponent("" + id)}&code=${encodeURIComponent("" + code)}`;
     return queryParam;

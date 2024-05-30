@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCalendar, MatCalendarCellCssClasses } from '@angular/material/datepicker';
 import { MatTableDataSource } from '@angular/material/table';
 import { Moment } from 'moment';
@@ -20,6 +20,7 @@ import {
   ApexResponsive,
   ApexChart
 } from "ng-apexcharts";
+import { CustomSelectListItem } from '../models/MenuItemListDto';
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
   chart: ApexChart;
@@ -144,11 +145,25 @@ export class HomeComponent implements OnInit {
   employeesSelectionList: Array<any> = [];
   //#endregion Opr
 
+  CustomerContractList: Array<CustomSelectListItem> = [];
+  CustomerCodeList: Array<CustomSelectListItem> = [];
 
+  @Output() monthYearSelected = new EventEmitter<Date>();
+  userSelectedDate: Date = new Date();
+
+  chosenYearHandler(normalizedYear: Date) {
+    //const ctrlValue = new Date();
+    //ctrlValue.setFullYear(normalizedYear.getFullYear());
+    //this.selectedDate = ctrlValue;
+    //this.monthYearSelected.emit(this.selectedDate);
+  }
+
+  
   constructor(private authService: AuthorizeService, private http: HttpClient,
     private apiService: ApiService, private utilService: UtilityService
     //#start region Opr
     , private notifyService: NotificationService, public pageService: PaginationService, private translate: TranslateService,
+    private fb: FormBuilder
 
     //#end region Opr
 
@@ -157,7 +172,11 @@ export class HomeComponent implements OnInit {
     //end region profm
 
   ) {
-
+    this.form = this.fb.group({
+      contractId: [''],
+      customerCode: [''],
+      userDate: [''],
+    });
     this.radialChartOptions1 = {
       series: [100],
       chart: {
@@ -511,21 +530,117 @@ export class HomeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.loadProfmDashBoardData();
+    this.loadCustomerContract();
   }
-  loadProfmDashBoardData() {
-
-
-    /*this.http.get('http://localhost:60186/api/FomWebDashboard/getWebDashboardData').subscribe((res: any) => {*/
-    this.http.get('https://hvserp.com/FomMob/api/FomWebDashboard/getWebDashboardData').subscribe((res: any) => {
-   // this.http.get('https://hvserp.com/FomMob/api/FomWebDashboard/getWebDashboardData').subscribe((res: any) => {
-
+  formatDate(date: Date) {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    return monthNames[monthIndex] + ' ' + year;
+  }
+  chosenMonthHandler(monthDate: Date, picker: any) {
+    this.userSelectedDate = monthDate;
+    picker.close();
+    this.form.patchValue({
+      'userDate': monthDate
+    });
+    this.changeSelection();
+  }
+  changeSelection() {
+    if (this.form.controls['contractId'].value === '') {
+      this.form.value['contractId'] = 0;
+    }
+    if (this.form.controls['userDate'].value != '') {
+      let sd = new Date(this.form.controls['userDate'].value);
+      this.form.value['userDate'] = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate() + 1);
+    } else {
+      this.form.value['userDate'] = null;
+    }
+    this.apiService.postFomUrl('FomWebDashboard/GetWebDashboardDataWithFilters', this.form.value).subscribe((res: any) => {
       this.profmDashboard = res;
-
       this.profmDashboard.totalData = [] as Array<number>;
       this.profmDashboard.totalData.push(res.totalTickets);
       this.profmDashboard.totalData.push(res.closedTickets);
       this.profmDashboard.totalData.push(res.pendingTickets);
+      this.monthlyChartOptions = {
+        series: [
+          {
+            name: "Tickets",
+            data: res.monthlyTotalTickets
+            //[44, 55, 57, 56, 61, 58]
+          }
+        ],
+        chart: {
+          type: "bar",
+          height: 135
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "55%",
+            // endingShape: "rounded"
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"]
+        },
+        xaxis: {
+          categories: res.monthsNames
+        },
+        yaxis: {
+          title: {
+            text: "tickets"
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + " tickets";
+            }
+          }
+        }
+      };
 
+
+
+      this.semiRadialChartOptions1.series = [Math.round((res.closedTickets / res.totalTickets) * 100)];
+      this.semiRadialChartOptions2.series = [Math.round((res.last30DaysData?.closedTickets / res.last30DaysData?.totalTickets) * 100)];
+
+      this.radialChartOptions2.series = [Math.round((res.closedTickets / res?.totalTickets) * 100)];
+      this.radialChartOptions3.series = [Math.round((res.pendingTickets / res?.totalTickets) * 100)];
+      this.radialChartOptions5.series = [Math.round((res?.last30DaysData?.closedTickets / res?.last30DaysData?.totalTickets) * 100)];
+      this.radialChartOptions6.series = [Math.round((res?.last30DaysData?.pendingTickets / res?.last30DaysData?.totalTickets) * 100)];
+    });
+  }
+  loadCustomerContract() {
+    this.apiService.getFomUrl('FomCustomerContract/GetCustomerContractSelectList').subscribe(res => {
+      if (res) {
+        this.CustomerContractList = res;
+      }
+    });
+    this.apiService.getFomUrlPagination('FomCustomer', this.utilService.getQueryString(0, 1000, '', '')).subscribe(res => {
+      if (res)
+        this.CustomerCodeList = res['items'];
+    });
+  }
+  loadProfmDashBoardData() {
+    /*this.http.get('http://localhost:60186/api/FomWebDashboard/getWebDashboardData').subscribe((res: any) => {*/
+    this.apiService.getFomUrl('FomWebDashboard/getWebDashboardData').subscribe((res: any) => {
+   // this.http.get('https://hvserp.com/FomMob/api/FomWebDashboard/getWebDashboardData').subscribe((res: any) => {
+      this.profmDashboard = res;
+      this.profmDashboard.totalData = [] as Array<number>;
+      this.profmDashboard.totalData.push(res.totalTickets);
+      this.profmDashboard.totalData.push(res.closedTickets);
+      this.profmDashboard.totalData.push(res.pendingTickets);
       this.monthlyChartOptions = {
         series: [
           {
