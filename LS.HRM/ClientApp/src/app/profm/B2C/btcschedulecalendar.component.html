@@ -35,8 +35,6 @@
     <div class="calendar">
       <mat-calendar [selected]="selectedDate" [dateClass]="dateClass()" (activeDateChange)="onActiveDateChange($event)"
                     (monthSelected)="monthSelected($event)" (selectedChange)="dateSelected($event)" #calendar></mat-calendar>
-
-
     </div>
   </div>
   <div class="col-md-8 col-lg-8">
@@ -80,7 +78,6 @@
           </tr>
         </tbody>
       </table>
-
     </div>
   </div>
 </div>
@@ -132,7 +129,7 @@
     /* Set the desired height */
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1200px) {
     .calendar {
       padding: 10px;
       /* Add padding for smaller screens */
@@ -145,7 +142,7 @@
   }
 
   /* Adjust layout for screens larger than 600px */
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 1200px) {
     .calendar {
       justify-content: center;
       /* Center the calendar horizontally */
