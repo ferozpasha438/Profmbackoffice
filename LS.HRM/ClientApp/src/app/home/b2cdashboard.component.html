@@ -1,40 +1,40 @@
 
 <div class="p-4">
-  <a [routerLink]="['/dashboard/b2cdashboard']" class="btn btn-primary text-white font-weight-900">B2C Dashboard</a>
-</div>
+  <a [routerLink]="['/dashboard']" class="btn btn-primary text-white font-weight-900">B2B Dashboard</a>
+  </div>
 
-<div>
-  <form [formGroup]="form" novalidate class="mt-4">
-    <div class="row">
-      <div class="col-lg-3 col-md-3 col-sm-3">
-        <select class="custom-select mr-sm-2" (change)="changeSelection();" formControlName="contractId">
-          <option value="">Select Customer Contract</option>
-          <ng-container *ngIf="CustomerContractList">
-            <option *ngFor="let ccl of CustomerContractList" value="{{ccl.value}}">{{ccl.text}}</option>
-          </ng-container>
-        </select>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-3">
-        <select class="custom-select mr-sm-2" (change)="changeSelection();" formControlName="customerCode">
-          <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
-          <ng-container *ngIf="CustomerCodeList">
-            <option *ngFor="let item of CustomerCodeList" value="{{item.custCode}}">{{ isArab ? item.custCode : item.custCode  }}</option>
-          </ng-container>
-        </select>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-3">
-        <div class="form-group ">
-          <div class="mb-2">
-            <input class="form-control datapickerinput" placeholder="{{'Select_a_Date' | translate}}" 
-                   [matDatepicker]="picker" formControlName="userDate">
-            <div class="input-group-prepend datapickericon" style="float:right;position:absolute;right:-12%;top:0;">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker startView="multi-year" (monthSelected)="chosenMonthHandler($event,picker)" data-date-format="mm/yyyy"></mat-datepicker>
+  <div>
+    <form [formGroup]="form" novalidate class="mt-4">
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3">
+          <select class="custom-select mr-sm-2" (change)="changeSelection();" formControlName="contractId">
+            <option value="">Select Customer Contract</option>
+            <ng-container *ngIf="CustomerContractList">
+              <option *ngFor="let ccl of CustomerContractList" value="{{ccl.value}}">{{ccl.text}}</option>
+            </ng-container>
+          </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3">
+          <select class="custom-select mr-sm-2" (change)="changeSelection();" formControlName="customerCode">
+            <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
+            <ng-container *ngIf="CustomerCodeList">
+              <option *ngFor="let item of CustomerCodeList" value="{{item.custCode}}">{{ isArab ? item.custCode : item.custCode  }}</option>
+            </ng-container>
+          </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3">
+          <div class="form-group ">
+            <div class="mb-2">
+              <input class="form-control datapickerinput" placeholder="{{'Select_a_Date' | translate}}"
+                     [matDatepicker]="picker" formControlName="userDate">
+              <div class="input-group-prepend datapickericon" style="float:right;position:absolute;right:-12%;top:0;">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker startView="multi-year" (monthSelected)="chosenMonthHandler($event,picker)" data-date-format="mm/yyyy"></mat-datepicker>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </form>
     <div class="row" style="width: 122%;">
       <div class="col-md-8 col-lg-8">
@@ -552,28 +552,30 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 
-<style>
-    table {
-      border-collapse: separate;
-      border-spacing: 0;
-    }
 
-    /* table,tr {
-    border-bottom: 1px solid #d3e2cf;
-  } */
 
-    .table td {
-      border-top: 1px solid #d3e2cf;
+  <style>
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      /* table,tr {
       border-bottom: 1px solid #d3e2cf;
-      text-align: center;
-      color: black;
-      font-weight: 400;
-    }
+    } */
 
-    .table th {
-      text-align: center;
-      font-weight: 600;
-    }
-</style>
+      .table td {
+        border-top: 1px solid #d3e2cf;
+        border-bottom: 1px solid #d3e2cf;
+        text-align: center;
+        color: black;
+        font-weight: 400;
+      }
+
+      .table th {
+        text-align: center;
+        font-weight: 600;
+      }
+  </style>

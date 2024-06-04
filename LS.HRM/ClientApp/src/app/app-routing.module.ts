@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './account/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
+import { B2cdashboardComponent } from './home/b2cdashboard.component';
 
 
 //import { BranchesComponent } from './systemsetup/branches/branches.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
     children: [
 
       { path: '', component: HomeComponent },
+      { path: 'b2cdashboard', component: B2cdashboardComponent },
 
       //ADM
       //{ path: 'branchlist', component: BranchesComponent },

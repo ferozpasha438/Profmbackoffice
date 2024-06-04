@@ -37,6 +37,8 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
     supervisor: "",
     statusStr: '',
     serviceType: 'All',
+    status: 0,
+    fromDate: null,
   };
   totalItems = 0;
   search: string = '';
@@ -53,16 +55,26 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
   ngOnInit(): void {
     this.setForm();
     this.loadData();
-
+    this.statusSelectionList = [
+      { text: 'All', id: 0 },
+      { text: 'Approved', id: 5 },
+      { text: 'Closed', id: 9 },
+      { text: 'Completed', id: 11 },
+      { text: 'Void', id: 3 },
+    ];
   }
   setForm() {
     this.form = this.fb.group({});
-    // this.loadStatusSelectionList();
+    this.loadStatusSelectionList();
   }
 
   loadData() {
     this.isLoading = true;
+    if (this.filter.fromDate != null)
+      this.filter.fromDate = this.utilService.selectedDate(this.filter.fromDate);
+
     this.apiService.postFomCpUrl('fomMobJobTicketHead/getFrontOfficeB2CTicketsListPaginationWithFilter', this.filter).subscribe(result => {
+
       this.isLoading = false;
       this.totalItems = result?.totalCount ?? 0;
       this.data = result.items.slice();
@@ -76,7 +88,7 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
     });
   }
 
-  resetFilter(serviceType: string = 'All') {
+  resetFilter(serviceType: string = 'All', setstatus: number = 0, fromDate: any = null) {
     this.filter = {
       page: 0,
       pageCount: 10,
@@ -88,6 +100,8 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
       supervisor: "",
       serviceType: serviceType,
       statusStr: '',
+      status: setstatus,
+      fromDate: fromDate,
     };
     this.loadData();
   }
@@ -95,6 +109,12 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
   setServiceType(serviceType: string) {
     //this.filter.serviceType = serviceType;   
     this.resetFilter(serviceType);
+  }
+  setstatus(setstatus: any) {
+    this.resetFilter('All', setstatus);
+  }
+  changeDate(fromDate: any) {
+    this.resetFilter('All', 0, fromDate);
   }
 
   clickPaginationButton(buttonId: string) {

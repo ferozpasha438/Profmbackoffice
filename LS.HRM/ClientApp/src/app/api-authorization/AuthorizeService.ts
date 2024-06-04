@@ -74,6 +74,9 @@ export class AuthorizeService {
   public GetFomApiEndPoint(): string {
     return data.fomapiurl ?? ''
   };
+  public GetFomB2CApiEndPoint(): string {
+    return data.fomb2capiurl ?? ''
+  };
 
   public DbConnectionString(): string {
     return localStorage.getItem('dbConnectionString') ?? ''
