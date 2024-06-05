@@ -127,10 +127,10 @@
                                   <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="navbarDropdown" style="transform: translate3d(0px, -61px, 0px)!important;">
                                     <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'approve')" *ngIf="!row.isApproved">Approve</a>
                                     <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'void')" *ngIf="!row.isVoid">Void</a>-->
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'close')" *ngIf="!row.isClosed">Close</a>
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'complete')" *ngIf="!row.isCompleted">Complete</a>
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'cancel')" *ngIf="!row.isVoid">Void</a>
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'open')" *ngIf="!row.isOpen">Open</a>
+                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'close')" *ngIf="row.isApproved && !row.isClosed">Close</a>
+                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'complete')" *ngIf="row.isApproved && row.isClosed && !row.isCompleted">Complete</a>
+                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'cancel')" *ngIf="!row.isCompleted && !row.isVoid">Void</a>
+                                    <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'open')" *ngIf="!row.isOpen">Open</a>-->
                                   </div>
                                 </div>
                               </td>
