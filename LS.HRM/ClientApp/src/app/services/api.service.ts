@@ -40,16 +40,16 @@ export class ApiService {
   }
 
 
-  getFomUrl(url: string): Observable<any> {
-    this.apiURL = this.authService.GetFomApiEndPoint();
+  getFomUrl(url: string, isB2c: boolean = false): Observable<any> {    
+    this.apiURL = isB2c ? this.authService.GetFomB2CApiEndPoint() : this.authService.GetFomApiEndPoint();
     return this.http.get<any>(`${this.apiURL}/${url}`)
       .pipe(
         retry(1),
         catchError(this.handleError)
       )
   }
-  getFomUrlPagination(url: string, queryParams: string): Observable<any> {
-    this.apiURL = this.authService.GetFomApiEndPoint();
+  getFomUrlPagination(url: string, queryParams: string, isB2c: boolean = false): Observable<any> {
+    this.apiURL = isB2c ? this.authService.GetFomB2CApiEndPoint() : this.authService.GetFomApiEndPoint();
     return this.http.get<any>(`${this.apiURL}/${url}?${queryParams}`)
       .pipe(
         retry(1),
@@ -116,8 +116,8 @@ export class ApiService {
       )
   }
 
-  postFomUrl(url: string, objectItem: any): Observable<Object> {
-    this.apiURL = this.authService.GetFomApiEndPoint();
+  postFomUrl(url: string, objectItem: any, isB2c: boolean = false): Observable<Object> {
+    this.apiURL = isB2c ? this.authService.GetFomB2CApiEndPoint() : this.authService.GetFomApiEndPoint();
     return this.http.post(`${this.apiURL}/${url}`, objectItem);
   }
 

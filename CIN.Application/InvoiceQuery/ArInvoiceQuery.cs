@@ -587,7 +587,6 @@ namespace CIN.Application.InvoiceQuery
             _mapper = mapper;
             _context = context;
         }
-
         public async Task<bool> Handle(CreateInvoiceApproval request, CancellationToken cancellationToken)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())

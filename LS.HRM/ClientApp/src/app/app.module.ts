@@ -45,6 +45,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { PROfmModule } from './profm/profm.module';
+import { B2cdashboardComponent } from './home/b2cdashboard.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -93,6 +94,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PaymentComponent,
     DashboardComponent,
     LeftMenuComponent,
+    B2cdashboardComponent,
  
     //SubmitLoaderComponent,
     //SubmitSaveLoaderComponent,
