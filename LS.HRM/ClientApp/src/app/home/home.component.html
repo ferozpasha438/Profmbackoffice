@@ -4,10 +4,12 @@
 </div>
 
 <div>
+  <div class="card" style="border: 1px solid #c7d0de;border-radius: 17px;">
+    <div class="card-body">
   <form [formGroup]="form" novalidate class="mt-4">
     <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <select class="custom-select mr-sm-2" (change)="changeSelection();" formControlName="contractId">
+        <select class="custom-select mr-sm-2 p-2" (change)="changeSelection();" formControlName="contractId">
           <option value="">Select Customer Contract</option>
           <ng-container *ngIf="CustomerContractList">
             <option *ngFor="let ccl of CustomerContractList" value="{{ccl.value}}">{{ccl.text}}</option>
@@ -15,17 +17,17 @@
         </select>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <select class="custom-select mr-sm-2" (change)="changeSelection();" formControlName="customerCode">
-          <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
+        <select class="custom-select mr-sm-2 p-2" (change)="changeSelection();" formControlName="customerCode">
+          <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}}</option>
           <ng-container *ngIf="CustomerCodeList">
             <option *ngFor="let item of CustomerCodeList" value="{{item.custCode}}">{{ isArab ? item.custCode : item.custCode  }}</option>
           </ng-container>
         </select>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <div class="form-group ">
+        <div class="form-group">
           <div class="mb-2">
-            <input class="form-control datapickerinput" placeholder="{{'Select_a_Date' | translate}}" 
+            <input class="form-control datapickerinput p-2" placeholder="{{'Select_A_Date' | translate}}" 
                    [matDatepicker]="picker" formControlName="userDate">
             <div class="input-group-prepend datapickericon" style="float:right;position:absolute;right:-12%;top:0;">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -36,6 +38,8 @@
       </div>
     </div>
     </form>
+  </div>
+</div>
     <div class="row" style="width: 122%;">
       <div class="col-md-8 col-lg-8">
         <div class="card" style="border: 1px solid #c7d0de;border-radius: 17px;">
