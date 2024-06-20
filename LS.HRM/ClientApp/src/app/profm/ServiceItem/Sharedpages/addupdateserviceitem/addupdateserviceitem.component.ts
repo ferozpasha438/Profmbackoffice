@@ -29,9 +29,11 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
   activitesList!: Array<any>;
   selectedServices: any;
   serviceList: any;
-  thumbNailImagePath: string='';
-  fullImagePath: string='';
-
+  thumbNailImagePath: string = '';
+  fullImagePath: string = '';
+  isMonthly: boolean = false;
+  isYearly: boolean = false;
+  isEditMode: boolean = false;
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdateserviceitemComponent>,
     private notifyService: NotificationService, private validationService: ValidationService) {
@@ -39,7 +41,8 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
   };
 
   ngOnInit(): void {
-    this.loadFormData();    
+    this.isEditMode = false;
+    this.loadFormData();
     this.setForm();
     if (this.id > 0)
       this.setEditForm();
@@ -58,7 +61,7 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
     });
   }
 
-  loadActivitiesForDeptEvent(evt: any) {   
+  loadActivitiesForDeptEvent(evt: any) {
     this.loadActivitiesForDept(evt.target.value);
   }
   loadActivitiesForDept(dept: any) {
@@ -92,6 +95,8 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
         'minRequiredHrs': ['', Validators.required],
         'minReqResource': [0],
         'primaryUnitPrice': [0],
+        'monthlyPrice': [0],
+        'yearlyPrice': [0],
         'fullImagePath': [''],
         'selectedServices': ['', Validators.required],
         'isActive': [true],
@@ -105,17 +110,53 @@ export class AddupdateserviceitemComponent extends ParentB2CComponent implements
 
         let url = this.getCurrentUrl().replace('/api', '');
         this.thumbNailImagePath = this.utilService.hasValue(res['thumbNailImagePath']) ? `${url}/files/${res['thumbNailImagePath']}` : ''
-        this.fullImagePath = this.utilService.hasValue(res['fullImagePath']) ? `${url}/files/${res['fullImagePath']}` : ''        
+        this.fullImagePath = this.utilService.hasValue(res['fullImagePath']) ? `${url}/files/${res['fullImagePath']}` : ''
         this.isReadOnly = true;
         this.loadActivitiesForDept(res.deptCode)
         this.form.patchValue(res);
         this.form.controls['timeUnitPrimary'].setValue(this.utilService.formatToTimeSpanTime(res.timeUnitPrimary));
         this.form.controls['minRequiredHrs'].setValue(this.utilService.formatToTimeSpanTime(res.minRequiredHrs));
+        this.form.controls['selectedServices'].setValue((res.serviceitems as string).split(','));
+
+        this.isMonthly = res.isMonthlyPrice;
+        this.isYearly = res.isYearlyPrice;
+        this.isEditMode = true;
       }
     });
   }
 
+  checkDiscount(evt: any) {
+    let discount = parseFloat(evt.target.value);
+    if(discount > 100)
+      this.form.controls['applicableDiscount'].setValue(0);
+  }
 
+  clearService(evt: any) {
+    let item = evt.value.toLowerCase();
+    if (item.includes('month')) {
+      this.isMonthly = false;
+      this.form.controls['monthlyPrice'].setValue(0);
+    }
+    else if (item.includes('year')) {
+      this.isYearly = false;
+      this.form.controls['yearlyPrice'].setValue(0);
+    }
+
+  }
+  selectService(evt: any) {
+    if (evt && evt.length > 0) {
+      let services = evt as Array<string>;
+      services.forEach(item => {
+        item = item.toLowerCase();
+        //console.log(item.includes('month'));      
+        if (item.includes('month'))
+          this.isMonthly = true;
+        else if (item.includes('year'))
+          this.isYearly = true;
+      })
+
+    }
+  }
   onSelectFile1(fileInput: any) {
     this.fileUploadone = <File>fileInput.target.files[0];
   }

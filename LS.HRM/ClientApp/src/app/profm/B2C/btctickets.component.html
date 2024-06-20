@@ -125,11 +125,14 @@
                                 <div class="nav-item dropdown">
                                   <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-options-vertical"></i></a>
                                   <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="navbarDropdown" style="transform: translate3d(0px, -61px, 0px)!important;">
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'approve')" *ngIf="!row.isApproved">Approve</a>
+
+                                    <ng-container *ngIf="row.isOpen">
+                                      <a data-toggle="modal" class="dropdown-item" href="#" (click)="assignAndApprove(row, 'approve')">Assign & Approve</a>
+                                      <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'cancel')" >Cancel</a>
+                                    </ng-container>
                                     <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'void')" *ngIf="!row.isVoid">Void</a>-->
                                     <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'close')" *ngIf="row.isApproved && !row.isClosed">Close</a>
                                     <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'complete')" *ngIf="row.isApproved && row.isClosed && !row.isCompleted">Complete</a>
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'cancel')" *ngIf="!row.isCompleted && !row.isVoid">Void</a>
                                     <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'open')" *ngIf="!row.isOpen">Open</a>-->
                                   </div>
                                 </div>

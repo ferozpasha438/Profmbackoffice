@@ -105,7 +105,7 @@
           <label for="applicableDiscount" class="mr-sm-2">
             {{'Applicable Discount' | translate}}
           </label>
-          <input class="form-control" id="applicableDiscount" type="number" step=".01"
+          <input class="form-control" id="applicableDiscount" type="number" step=".01" (keyup)="checkDiscount($event)"
                  placeholder="{{'Please_Enter' | translate}} {{'Applicable Discount' | translate}}"
                  formControlName="applicableDiscount">
         </div>
@@ -245,7 +245,7 @@
         <div class="col-md-6 col-lg-6">
           <div class="form-group">
             <label for="deptCodes">{{'Services' | translate}}</label>
-            <ng-select [multiple]="true" formControlName="selectedServices">
+            <ng-select [multiple]="true" formControlName="selectedServices" (change)="selectService($event)" (remove)="clearService($event)">
               <ng-option *ngFor="let service of serviceList" [value]="service.id"
                          [disabled]="service?.disabled">{{service.name}}</ng-option>
             </ng-select>
@@ -253,8 +253,31 @@
             <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
           </div>
         </div>
+        <div class="col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-md-6 col-lg-6" *ngIf="isMonthly">
+              <div class="form-group">
+                <label for="deptCodes">{{'monthly price' | translate}}</label>
+                <input class="form-control" type="number"
+                       placeholder="{{'Please_Enter' | translate}} {{'monthly price' | translate}}"
+                       formControlName="monthlyPrice">
+              </div>
+            </div>
+          <div class="col-md-6 col-lg-6"  *ngIf="isYearly">
+            <div class="form-group">
+              <label for="deptCodes">{{'yearly price' | translate}}</label>
+              <input class="form-control" type="number"
+                     placeholder="{{'Please_Enter' | translate}} {{'yearly price' | translate}}"
+                     formControlName="yearlyPrice">
+            </div>
+          </div>
+
+            </div>
+
+          </div>
+
+        </div>
       </div>
-    </div>
     </div>
 
       <div class="card">

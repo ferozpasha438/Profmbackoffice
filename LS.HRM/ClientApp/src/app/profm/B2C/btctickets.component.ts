@@ -15,6 +15,7 @@ import { PaginationService } from 'src/app/sharedcomponent/pagination.service';
 import { ParentB2CComponent } from '../../sharedcomponent/parentb2c.component';
 import { FomSharedService } from '../../services/fomShared.service';
 import { CommonRemarkComponent } from './commonremark.component';
+import { BtcresourceallocateComponent } from './btcresourceallocate.component';
 
 
 @Component({
@@ -134,6 +135,22 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
       this.filter.orderBy = "id asc";
     }
     this.loadData();
+  }
+
+  private openResourceAllocation(row: any, modalTitle: string, modalBtnTitle: string) {
+    let dialogRef = this.utilService.openCrudDialog(this.dialog, BtcresourceallocateComponent,'50');
+    (dialogRef.componentInstance as any).modalTitle = modalTitle;
+    (dialogRef.componentInstance as any).modalBtnTitle = modalBtnTitle;
+    (dialogRef.componentInstance as any).row = row;
+    dialogRef.afterClosed().subscribe(res => {
+      //if (res && res === true)
+       // this.initialLoading();
+    });
+  }
+
+  assignAndApprove(item: any, actionType: string) {
+    this.openResourceAllocation(item, '', 'Assign & Approve');
+
   }
 
   ticketAction(item: any, actionType: string) {
