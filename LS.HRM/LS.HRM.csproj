@@ -125,6 +125,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\dashboard\" />
+    <Folder Include="ClientApp\src\app\profm\B2C\Reports\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,6 +20,10 @@ import { WorkOrderDetailComponent } from './WorkOrders/workOrderDetail/workorder
 import { WorkOrdersComponent } from './WorkOrders/workOrders/workOrders.component';
 import { BtcTicketsComponent } from './B2C/btctickets.component';
 import { BtcschedulelistComponent } from './B2C/btcschedulelist.component';
+import { LoginandsecurityComponent } from '../systemsetup/loginandsecurity/loginandsecurity.component';
+import { BtctickethistoryComponent } from './B2C/Reports/btctickethistory/btctickethistory.component';
+import { BtcticketsummarybycustComponent } from './B2C/Reports/btcticketsummarybycust/btcticketsummarybycust.component';
+import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btcticketsummarybyservicetype/btcticketsummarybyservicetype.component';
 
 const routes: Routes = [
   { path: 'getdisciplines', component: GetdisciplineslistComponent },
@@ -43,7 +47,9 @@ const routes: Routes = [
   { path: 'getserviceitems', component: GetserviceitemComponent },
 
   { path: 'btcscheduleslist', component: BtcschedulelistComponent },
-  { path: 'btctickets', component: BtcTicketsComponent },
+  { path: 'btctickethistory', component: BtctickethistoryComponent },
+  { path: 'btcticketsummarybycust', component: BtcticketsummarybycustComponent },
+  { path: 'btcticketsummarybyservicetype', component: BtcticketsummarybyservicetypeComponent },
 ];
 
 @NgModule({
@@ -51,3 +57,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class PROfmRoutingModule { }
+LoginandsecurityComponent

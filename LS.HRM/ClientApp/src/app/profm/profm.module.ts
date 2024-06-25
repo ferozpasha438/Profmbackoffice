@@ -54,6 +54,9 @@ import { CommonRemarkComponent } from './B2C/commonremark.component';
 import { BtcschedulelistComponent } from './B2C/btcschedulelist.component';
 import { BtcschedulecalendarComponent } from './B2C/btcschedulecalendar.component';
 import { BtcresourceallocateComponent } from './B2C/btcresourceallocate.component';
+import { BtctickethistoryComponent } from './B2C/Reports/btctickethistory/btctickethistory.component';
+import { BtcticketsummarybycustComponent } from './B2C/Reports/btcticketsummarybycust/btcticketsummarybycust.component';
+import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btcticketsummarybyservicetype/btcticketsummarybyservicetype.component';
 
 
 
@@ -103,7 +106,10 @@ import { BtcresourceallocateComponent } from './B2C/btcresourceallocate.componen
     CommonRemarkComponent,
     BtcschedulelistComponent,
     BtcschedulecalendarComponent,
-    BtcresourceallocateComponent
+    BtcresourceallocateComponent,
+    BtctickethistoryComponent,
+    BtcticketsummarybycustComponent,
+    BtcticketsummarybyservicetypeComponent,
   ],
 
   imports: [
