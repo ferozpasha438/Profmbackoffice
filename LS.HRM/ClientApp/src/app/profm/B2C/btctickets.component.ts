@@ -143,8 +143,8 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
     (dialogRef.componentInstance as any).modalBtnTitle = modalBtnTitle;
     (dialogRef.componentInstance as any).row = row;
     dialogRef.afterClosed().subscribe(res => {
-      //if (res && res === true)
-       // this.initialLoading();
+      if (res && res === true)
+        this.loadData();
     });
   }
 
@@ -154,10 +154,11 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
   }
 
   ticketAction(item: any, actionType: string) {
+   
     let reqObj = { ticketNumber: item.ticketNumber, actionType: actionType, reasonCode: '' }
-    if (actionType == 'cancel' || actionType == 'foreclose') {
-      let dialogRef = this.utilService.openCrudDialog(this.dialog, CommonRemarkComponent);
-      (dialogRef.componentInstance as any).title = 'Reason Text';
+    if (actionType == 'cancel' || actionType == 'complete' || actionType == 'close' || actionType == 'note') {
+      let dialogRef = this.utilService.openCrudDialog(this.dialog, CommonRemarkComponent,'40');
+      (dialogRef.componentInstance as any).title = actionType + " remarks" ;// (actionType == 'cancel' ? 'Reason Text' : 'Feed Back');
       dialogRef.afterClosed().subscribe(remark => {
         if (remark) {
           reqObj.reasonCode = remark;
@@ -171,7 +172,7 @@ export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
   }
 
   ticketActionRequest(reqObj: any) {
-    //console.log(reqObj);
+    //console.log(reqObj);    
     this.apiService.post('fomMobJobTicketHead/frontOfficeB2CTicketAction', reqObj)
       .subscribe(res => {
         this.utilService.OkMessage();

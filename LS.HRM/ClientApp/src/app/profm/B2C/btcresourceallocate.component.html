@@ -1,11 +1,12 @@
 
 
 <div class="page-breadcrumb">
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
   <div class="row">
     <div class="col-12 align-self-center">
       <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
         {{'Assign Resource & Approve' | translate}}
-      </h3>      
+      </h3>
     </div>
 
     <div class="col-md-6">
@@ -22,12 +23,12 @@
         <div class="input-group ">
           <input class="form-control input-mandatory"
                  placeholder=" {{'Please_Enter' | translate}} {{'Date' | translate}}"
-                [(ngModel)]="approvedDate" [matDatepicker]="dateOf1">
+                 [(ngModel)]="approvedDate" [matDatepicker]="dateOf1">
           <div class="input-group-prepend datapickericon">
             <mat-datepicker-toggle matSuffix [for]="dateOf1"></mat-datepicker-toggle>
             <mat-datepicker #dateOf1></mat-datepicker>
-          </div>         
-        </div>       
+          </div>
+        </div>
       </div>
     </div>
 
@@ -42,6 +43,7 @@
     </div>
 
     <div class="col-md-12 text-center">
+      <input type="button" class="btn btn-secondary" value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;&nbsp;
       <button class="btn btn-primary" type="button" (click)="Submit()">{{'Submit' | translate}}</button>
     </div>
   </div>

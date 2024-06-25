@@ -31,135 +31,138 @@
               </select>
             </div>
             <div class="col-md-3 col-lg-3">
-              <div class="form-group ">                               
-                  <div class="input-group ">
-                    <input class="form-control datapickerinput" placeholder="{{'select_Date' | translate}}" [(ngModel)]="filter.fromDate" (dateChange)="changeDate(filter.fromDate)"
-                           [matDatepicker]="picker2">                   
-                    <div class="input-group-prepend datapickericon">
-                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                      <mat-datepicker #picker2></mat-datepicker>
-                    </div>
+              <div class="form-group ">
+                <div class="input-group ">
+                  <input class="form-control datapickerinput" placeholder="{{'select_Date' | translate}}" [(ngModel)]="filter.fromDate" (dateChange)="changeDate(filter.fromDate)"
+                         [matDatepicker]="picker2">
+                  <div class="input-group-prepend datapickericon">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </div>
                 </div>
 
               </div>
             </div>
-              <div class="col-md-3">               
-                <select (change)="setServiceType(filter.serviceType)" class="form-control" [(ngModel)]="filter.serviceType">
-                  <option value="All">All</option>
-                  <option value="D">Daily</option>
-                  <option value="M">Monthly</option>
-                  <option value="Y">Yearly</option>
-                </select>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <input type="button"
-                         class="btn waves-effect waves-light btn-rounded btn-secondary btn-midblock"
-                         value="Reset" style="background-color: #5f76e8;width: 9em;border-radius: 10px;
-                                     border: none;" (click)="resetFilter()" />
-                </div>
-
-              </div>
-              <div *ngIf="isLoading" class="row">
-                <div class="col-md-3">
-                  <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
-              </div>
+            <div class="col-md-3">
+              <select (change)="setServiceType(filter.serviceType)" class="form-control" [(ngModel)]="filter.serviceType">
+                <option value="All">All</option>
+                <option value="D">Daily</option>
+                <option value="M">Monthly</option>
+                <option value="Y">Yearly</option>
+              </select>
             </div>
             <div class="row">
-              <div class="col-md-12 col-lg-12">
-                <div class="card" style="border-radius: 19px; border: 1px solid #c7d0de">
-                  <div class="card-body">
-                    <ng-container>
-                      <div class="table-responsive">
-                        <table class="table">
-                          <tr>
-                            <th style="border-radius: 15px 0px 0px 15px; color: black;">
-                              Ticket Number
-                            </th>
-                            <th style="color:black">
-                              Ticket Time
-                            </th>
-                            <th style="color:black">
-                              Maintainence Type
-                            </th>
-                            <th style="color:black">
-                              Service Type
-                            </th>
-                            <th style="color:black">
-                              Date Of Request
-                            </th>
-                            <th style="color:black">
-                              Status
-                            </th>
-                            <th style="color:black;border-radius: 0px 15px 15px 0px;">
-                              Action
-                            </th>
-                          </tr>
-                          <ng-container *ngFor="let row of data; let i=index;">
-                            <tr>
-                              <td style="border-radius: 15px 0px 0px 15px;color: #5f76e8;">
-                                {{row.ticketNumber}}
-                              </td>
-                              <td>
-                                {{row.timeValue}}
-                              </td>
-                              <td>
-                                {{row.jobMaintenanceType}}
-                              </td>
-                              <td>
-                                <!-- {{row.joDeptCode}}-->
-                                {{row.depNameEng}}
-                              </td>
-                              <td>
-                                {{row?.joDate| date:'dd/MM/YYYY'}}
-                              </td>
-                              <td>
-                                {{row.statusStr}}
-                              </td>
+              <div class="col-md-12">
+                <input type="button"
+                       class="btn waves-effect waves-light btn-rounded btn-secondary btn-midblock"
+                       value="Reset" style="background-color: #5f76e8;width: 9em;border-radius: 10px;
+                                     border: none;" (click)="resetFilter()" />
+              </div>
 
-                              <td style="border-radius: 0px 15px 15px 0px;">
-
-                                <div class="nav-item dropdown">
-                                  <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-options-vertical"></i></a>
-                                  <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="navbarDropdown" style="transform: translate3d(0px, -61px, 0px)!important;">
-
-                                    <ng-container *ngIf="row.isOpen">
-                                      <a data-toggle="modal" class="dropdown-item" href="#" (click)="assignAndApprove(row, 'approve')">Assign & Approve</a>
-                                      <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'cancel')" >Cancel</a>
-                                    </ng-container>
-                                    <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'void')" *ngIf="!row.isVoid">Void</a>-->
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'close')" *ngIf="row.isApproved && !row.isClosed">Close</a>
-                                    <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'complete')" *ngIf="row.isApproved && row.isClosed && !row.isCompleted">Complete</a>
-                                    <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'open')" *ngIf="!row.isOpen">Open</a>-->
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </ng-container>
-                        </table>
-                      </div>
-                    </ng-container>
-                  </div>
+            </div>
+            <div *ngIf="isLoading" class="row">
+              <div class="col-md-3">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
                 </div>
-                <div class="row">
-                  <div class="col-md-4 col-lg-4"></div>
-                  <div class="col-md-4 col-lg-4"></div>
-                  <div class="col-md-4 col-lg-4">
-                    <div class="btn-group  container text-left mt-2">
-                      <button class="btn btn-primary" id="leftBtn" (click)="clickPaginationButton('leftBtn')"><i class="fas fa-arrow-left"></i></button>
-                      <button class="btn btn-primary" id="upBtn" (click)="clickPaginationButton('upBtn')"><i class="fas fa-arrow-up"></i></button>
-                      <button class="btn btn-primary" id="downBtn" (click)="clickPaginationButton('downBtn')"><i class="fas fa-arrow-down"></i></button>
-                      <button class="btn btn-primary" id="rightBtn" (click)="clickPaginationButton('rightBtn')"><i class="fas fa-arrow-right"></i></button>
-                    </div>
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-12 col-lg-12">
+              <div class="card" style="border-radius: 19px; border: 1px solid #c7d0de">
+                <div class="card-body">
+                  <ng-container>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <tr>
+                          <th style="border-radius: 15px 0px 0px 15px; color: black;">
+                            Ticket Number
+                          </th>
+                          <th style="color:black">
+                            Ticket Time
+                          </th>
+                          <th style="color:black">
+                            Maintainence Type
+                          </th>
+                          <th style="color:black">
+                            Service Type
+                          </th>
+                          <th style="color:black">
+                            Date Of Request
+                          </th>
+                          <th style="color:black">
+                            Status
+                          </th>
+                          <th style="color:black;border-radius: 0px 15px 15px 0px;">
+                            Action
+                          </th>
+                        </tr>
+                        <ng-container *ngFor="let row of data; let i=index;">
+                          <tr>
+                            <td style="border-radius: 15px 0px 0px 15px;color: #5f76e8;">
+                              {{row.ticketNumber}}
+                            </td>
+                            <td>
+                              {{row.timeValue}}
+                            </td>
+                            <td>
+                              {{row.jobMaintenanceType}}
+                            </td>
+                            <td>
+                              <!-- {{row.joDeptCode}}-->
+                              {{row.depNameEng}}
+                            </td>
+                            <td>
+                              {{row?.joDate| date:'dd/MM/YYYY'}}
+                            </td>
+                            <td>
+                              {{row.statusStr}}
+                            </td>
+
+                            <td style="border-radius: 0px 15px 15px 0px;">
+
+                              <div class="nav-item dropdown">
+                                <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-options-vertical"></i></a>
+                                <div class="dropdown-menu dropdown-menu-custom" aria-labelledby="navbarDropdown" style="transform: translate3d(0px, -61px, 0px)!important;">
+
+                                  <a data-toggle="modal" class="dropdown-item" href="#" *ngIf="row.joStatus == 0" (click)="assignAndApprove(row, 'approve')">Assign & Approve</a>
+                                  <a data-toggle="modal" class="dropdown-item" href="#" *ngIf="row.joStatus != 5 && row.joStatus == 0" (click)="ticketAction(row, 'cancel')">Cancel</a>
+
+                                  <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'void')" *ngIf="!row.isVoid">Void</a>-->
+                                  <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'close')" *ngIf="row.isApproved && !row.isClosed">Close</a>
+                                  <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'complete')" *ngIf="row.isApproved && row.isClosed && !row.isCompleted">Complete</a>
+                                  <a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'note')" >Notes</a>
+                                  <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="ticketAction(row, 'open')" *ngIf="!row.isOpen">Open</a>-->
+                                  <!--<ng-container *ngIf="row.joStatus == 5 || row.joStatus == 9">
+                                  </ng-container>-->
+
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </table>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 col-lg-4"></div>
+                <div class="col-md-4 col-lg-4"></div>
+                <div class="col-md-4 col-lg-4">
+                  <div class="btn-group  container text-left mt-2">
+                    <button class="btn btn-primary" id="leftBtn" (click)="clickPaginationButton('leftBtn')"><i class="fas fa-arrow-left"></i></button>
+                    <button class="btn btn-primary" id="upBtn" (click)="clickPaginationButton('upBtn')"><i class="fas fa-arrow-up"></i></button>
+                    <button class="btn btn-primary" id="downBtn" (click)="clickPaginationButton('downBtn')"><i class="fas fa-arrow-down"></i></button>
+                    <button class="btn btn-primary" id="rightBtn" (click)="clickPaginationButton('rightBtn')"><i class="fas fa-arrow-right"></i></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

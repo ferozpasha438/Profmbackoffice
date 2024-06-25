@@ -10,14 +10,14 @@ import { UtilityService } from "../../services/utility.service";
     <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
     </div>
     <div class="row">
-    <div class="col-md-3 col-lg-3"></div>
-    <div class="col-md-6 col-lg-6">
+    <div class="col-md-2 col-lg-2"></div>
+    <div class="col-md-8 col-lg-8">
       <div class="form-group">
         <label for="contractCode">Enter {{title}}</label>
         <input class="form-control" id="contractCode" type="text" [(ngModel)]="remark">
       </div>
     </div>
-    <div class="col-md-3 col-lg-3"></div>
+    <div class="col-md-2 col-lg-2"></div>
 </div>
  <div class="row mt-3 ">
     <div class="col-md-12 col-lg-12 text-center">

@@ -45,9 +45,10 @@ export class BtcresourceallocateComponent extends ParentB2CComponent implements 
 
   Submit() {
     if (this.utilService.hasValue(this.ticketNumber) && this.utilService.hasValue(this.resource)) { // && this.utilService.hasValue(this.approvedDate)) {      
-      const date = this.utilService.hasValue(this.approvedDate) ? this.utilService.selectedDateTime(this.approvedDate) : null;
-
-      this.apiService.post('fomMobB2CService/assignresource', { ticketNumber: this.ticketNumber, resCode: this.resource, approvedDate: date })
+      const date = this.approvedDate ? this.utilService.selectedDateTime(this.approvedDate) : null;
+      const data = { ticketNumber: this.ticketNumber, resCode: this.resource, approvedDate: date };
+      console.log(data);
+      this.apiService.post('fomMobB2CService/createAssignresource', data)
         .subscribe(res => {
           this.utilService.OkMessage();
           this.dialogRef.close(true);
@@ -60,4 +61,7 @@ export class BtcresourceallocateComponent extends ParentB2CComponent implements 
       this.utilService.FillUpFields();
   }
 
+  closeModel() {
+    this.dialogRef.close();
+  }
 }
