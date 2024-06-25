@@ -29,9 +29,10 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
   loadFormData() {
 
     this.serviceList = [
-      { id: "Daily", name: 'Daily Service', },
-      { id: "Monthly", name: 'Monthly Service' },
-      { id: "Yearly", name: 'Yearly Service' },
+      { id: "D", name: 'Daily Service', },
+      { id: "M", name: 'Monthly Service' },
+      { id: "Y", name: 'Yearly Service' },
     ];
+
   }
 }
