@@ -47,6 +47,8 @@ const routes: Routes = [
   { path: 'getserviceitems', component: GetserviceitemComponent },
 
   { path: 'btcscheduleslist', component: BtcschedulelistComponent },
+  { path: 'btctickets', component: BtcTicketsComponent },
+
   { path: 'btctickethistory', component: BtctickethistoryComponent },
   { path: 'btcticketsummarybycust', component: BtcticketsummarybycustComponent },
   { path: 'btcticketsummarybyservicetype', component: BtcticketsummarybyservicetypeComponent },
