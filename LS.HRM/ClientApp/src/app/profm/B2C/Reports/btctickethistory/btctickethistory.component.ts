@@ -77,4 +77,9 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
   refresh() {
 
   }
+
+  openPrint() {
+    const printContent = document.getElementById("printcontainer") as HTMLElement;
+    this.utilService.printForLocale(printContent);
+  }
 }

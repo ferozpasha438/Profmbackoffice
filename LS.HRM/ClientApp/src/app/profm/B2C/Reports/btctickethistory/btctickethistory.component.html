@@ -97,9 +97,9 @@
                   </select>
 
                   <!--<ng-select [multiple]="true" formControlName="selectedServices">
-                      <ng-option *ngFor="let service of serviceList" [value]="service.id"
-                          [disabled]="service?.disabled">{{service.name}}</ng-option>
-                  </ng-select>-->
+                <ng-option *ngFor="let service of serviceList" [value]="service.id"
+                    [disabled]="service?.disabled">{{service.name}}</ng-option>
+            </ng-select>-->
                   <!-- <validation-message [control]="form.controls.selectedServices"></validation-message> -->
                   <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
                 </div>
@@ -142,11 +142,17 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-2 col-lg-2">
+              <div class="col-md-12 col-lg-12">
                 <div class="form-group ">
                   <br />
                   <button class="btn btn-primary"> {{'Search' | translate}}</button> &nbsp;&nbsp;
                   <button type="button" (click)="refresh()" class="btn btn-primary"> {{'Reset' | translate}}</button>
+
+                  <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock" data-toggle="modal" (click)="openPrint()">
+                    {{'Print' | translate}}
+                  </button>
+                  <br />
+                  <br />
                 </div>
               </div>
             </div>
@@ -154,8 +160,8 @@
           </form>
         </div>
 
-        <div class="container">
-          <table class="table table-responsive" style="width: 100%;">
+        <div class="outer" id="printcontainer">
+          <table style="width:100%; padding-bottom:5px;" cellpadding="0" cellspacing="0" width="100%" class="ur_tablestyle">
             <tr>
               <th>Date</th>
               <th>Time</th>
@@ -174,7 +180,7 @@
               <td>{{item.custName}}</td>
               <td>{{item.statusStr}}</td>
               <td>{{item.resourceName}}</td>
-              <td>{{item.serviceType}}</td>             
+              <td>{{item.serviceType}}</td>
             </tr>
           </table>
         </div>
