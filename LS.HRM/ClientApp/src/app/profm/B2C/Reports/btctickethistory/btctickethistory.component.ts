@@ -20,6 +20,7 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
   resources: Array<CustomSelectListItem> = [];
   CustomerContractList: Array<CustomSelectListItem> = [];
   list: Array<any> = [];
+  isLoading: boolean = false;
   form!: FormGroup;
 
   constructor(private fb: FormBuilder, private apiService: ApiService,
@@ -31,6 +32,7 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
   ngOnInit(): void {
     this.loadFormData();
     this.setForm();
+    this.filter();
   }
   setForm() {
     this.form = this.fb.group({
@@ -38,8 +40,8 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
       'ticketStatus': [''],
       'serviceType': [''],
       'resourceCode': [''],
-      'dateFrom': [null],
-      'dateTo': [null],
+      'dateFrom': [''],
+      'dateTo': [''],
     });
   }
 
@@ -71,11 +73,33 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
   }
 
   filter() {
+    this.isLoading = true;
+    // const qsLong = '?' + Object.keys(this.form.value).map(key => `${key}=${encodeURIComponent(this.form.value[key])}`).join('&')
 
+    this.form.controls['dateFrom'].setValue(this.utilService.getCommonDate(this.form.controls['dateFrom'].value));
+    this.form.controls['dateTo'].setValue(this.utilService.getCommonDate(this.form.controls['dateTo'].value));
+
+    const qs = new URLSearchParams(this.form.value).toString();
+    this.apiService.getPagination(`fomMobB2CReport/getB2CTickethistory`, qs).subscribe(res => {
+      this.isLoading = false;
+      if (res) {
+        let listItems = res['listItems'];
+        this.list = listItems['list'];
+
+      }
+    });
   }
 
   refresh() {
-
+    this.form.patchValue({
+      'custCode': '',
+      'ticketStatus': '',
+      'serviceType': '',
+      'resourceCode': '',
+      'dateFrom': '',
+      'dateTo': '',
+    });
+    this.filter();
   }
 
   openPrint() {

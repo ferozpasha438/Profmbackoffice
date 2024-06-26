@@ -29,18 +29,14 @@
               <div class="row">
                 <div class="col-md-6 col-lg-6 text-right"></div>
                 <div class="col-md-5 col-lg-5 text-right">
-                  <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock" data-toggle="modal" (click)="openPrint()">
-                    {{'Print' | translate}}
-                  </button>
-                  <br />
                   <!--<a data-toggle="modal" data-target="#createnewbranch"
-                     class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
-                    <i class="icon-print"> </i>{{'Print' | translate}}
-                  </a>&nbsp;
-                  <a data-toggle="modal" data-target="#createnewbranch"
-                     class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
-                    <i class="icon-cancel"> </i>{{'Cancel' | translate}}
-                  </a>-->
+               class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
+              <i class="icon-print"> </i>{{'Print' | translate}}
+            </a>&nbsp;
+            <a data-toggle="modal" data-target="#createnewbranch"
+               class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
+              <i class="icon-cancel"> </i>{{'Cancel' | translate}}
+            </a>-->
                 </div>
               </div>
             </div>
@@ -101,9 +97,9 @@
                   </select>
 
                   <!--<ng-select [multiple]="true" formControlName="selectedServices">
-                      <ng-option *ngFor="let service of serviceList" [value]="service.id"
-                          [disabled]="service?.disabled">{{service.name}}</ng-option>
-                  </ng-select>-->
+                <ng-option *ngFor="let service of serviceList" [value]="service.id"
+                    [disabled]="service?.disabled">{{service.name}}</ng-option>
+            </ng-select>-->
                   <!-- <validation-message [control]="form.controls.selectedServices"></validation-message> -->
                   <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
                 </div>
@@ -147,10 +143,13 @@
                 </div>
               </div>
               <div class="col-md-12 col-lg-12">
-                <div class="form-group text-right">
+                <div class="form-group text-center">
                   <br />
                   <button class="btn btn-primary"> {{'Search' | translate}}</button> &nbsp;&nbsp;
-                  <button type="button" (click)="refresh()" class="btn btn-primary"> {{'Reset' | translate}}</button>
+                  <button type="button" (click)="refresh()" class="btn btn-primary"> {{'Reset' | translate}}</button>&nbsp;&nbsp;
+                  <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock" data-toggle="modal" (click)="openPrint()">
+                    {{'Print' | translate}}
+                  </button>
                 </div>
               </div>
             </div>
@@ -158,8 +157,9 @@
           </form>
         </div>
 
+        <spinner-loader [isLoading]="isLoading"></spinner-loader>
         <div class="outer" id="printcontainer">
-          <table style="width:100%; padding-bottom:5px;" cellpadding="0" cellspacing="0" width="100%" class="ur_tablestyle">
+          <table style="width:100%; padding-bottom:5px;" border="1" cellpadding="0" cellspacing="0" width="100%" class="table  table-bordered no-wrap ur_tablestyle">
             <tr>
               <th>Date</th>
               <th>Time</th>
@@ -170,7 +170,7 @@
               <th>Resource</th>
               <th>Service</th>
             </tr>
-            <tr *ngFor="let  item of list">
+            <tr *ngFor="let item of list">
               <td>{{item.date | date:'dd/MM/YYYY'  }}</td>
               <td>{{item.time}}</td>
               <td>{{item.ticketNumber}}</td>
@@ -188,42 +188,10 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
   .container-fluid {
     width: 100%;
   }
-
-  .table-responsive {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-    .table-responsive th, .table-responsive td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-
     .table-responsive th {
       background-color: #f2f2f2;
     }

@@ -21,6 +21,7 @@ export class BtcticketsummarybycustComponent extends ParentB2CComponent implemen
   CustomerContractList: Array<CustomSelectListItem> = [];
   list: Array<any> = [];
   form!: FormGroup;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService,
@@ -31,6 +32,7 @@ export class BtcticketsummarybycustComponent extends ParentB2CComponent implemen
   ngOnInit(): void {
     this.loadFormData();
     this.setForm();
+    this.filter();
   }
   setForm() {
     this.form = this.fb.group({
@@ -54,13 +56,13 @@ export class BtcticketsummarybycustComponent extends ParentB2CComponent implemen
       }
     });
 
-    this.statusSelectionList = [
-      { text: 'All', id: 0 },
-      { text: 'Approved', id: 5 },
-      { text: 'Closed', id: 9 },
-      { text: 'Completed', id: 11 },
-      { text: 'Void', id: 3 },
-    ];
+    //this.statusSelectionList = [
+    //  { text: 'All', id: 0 },
+    //  { text: 'Approved', id: 5 },
+    //  { text: 'Closed', id: 9 },
+    //  { text: 'Completed', id: 11 },
+    //  { text: 'Void', id: 3 },
+    //];
 
     this.serviceList = [
       { id: "D", text: 'Daily Service', },
@@ -71,11 +73,33 @@ export class BtcticketsummarybycustComponent extends ParentB2CComponent implemen
   }
 
   filter() {
+    this.isLoading = true;
+    // const qsLong = '?' + Object.keys(this.form.value).map(key => `${key}=${encodeURIComponent(this.form.value[key])}`).join('&')
 
+    this.form.controls['dateFrom'].setValue(this.utilService.getCommonDate(this.form.controls['dateFrom'].value));
+    this.form.controls['dateTo'].setValue(this.utilService.getCommonDate(this.form.controls['dateTo'].value));
+
+    const qs = new URLSearchParams(this.form.value).toString();
+    this.apiService.getPagination(`fomMobB2CReport/getB2CTicketSummarybycust`, qs).subscribe(res => {
+      this.isLoading = false;
+      if (res) {
+        let listItems = res['listItems'];
+        this.list = listItems['list'];
+
+      }
+    });
   }
 
   refresh() {
-
+    this.form.patchValue({
+      'custCode': '',
+      'ticketStatus': '',
+      'serviceType': '',
+      'resourceCode': '',
+      'dateFrom': '',
+      'dateTo': '',
+    });
+    this.filter();
   }
 
   openPrint() {
