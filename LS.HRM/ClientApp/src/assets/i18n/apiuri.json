@@ -11,5 +11,5 @@
   "schooltestapiurl": "http://20.68.125.92/HVSTestMgt/api",
   "fleetapiurl": "http://localhost:13427/api",
   "fomapiurl": "http://localhost:13427/api",
-  "fomb2capiurl": "https://hvserp.com/FomMobB2C/api"
+  "fomb2capiurl": "http://localhost:44350/api"
 }

@@ -73,4 +73,8 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
   filter() {
 
   }
+
+  refresh() {
+
+  }
 }
