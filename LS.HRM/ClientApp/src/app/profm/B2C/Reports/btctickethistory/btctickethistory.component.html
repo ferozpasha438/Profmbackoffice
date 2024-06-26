@@ -29,14 +29,18 @@
               <div class="row">
                 <div class="col-md-6 col-lg-6 text-right"></div>
                 <div class="col-md-5 col-lg-5 text-right">
-                  <a data-toggle="modal" data-target="#createnewbranch"
+                  <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock" data-toggle="modal" (click)="openPrint()">
+                    {{'Print' | translate}}
+                  </button>
+                  <br />
+                  <!--<a data-toggle="modal" data-target="#createnewbranch"
                      class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
                     <i class="icon-print"> </i>{{'Print' | translate}}
                   </a>&nbsp;
                   <a data-toggle="modal" data-target="#createnewbranch"
                      class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
                     <i class="icon-cancel"> </i>{{'Cancel' | translate}}
-                  </a>
+                  </a>-->
                 </div>
               </div>
             </div>
@@ -97,9 +101,9 @@
                   </select>
 
                   <!--<ng-select [multiple]="true" formControlName="selectedServices">
-                <ng-option *ngFor="let service of serviceList" [value]="service.id"
-                    [disabled]="service?.disabled">{{service.name}}</ng-option>
-            </ng-select>-->
+                      <ng-option *ngFor="let service of serviceList" [value]="service.id"
+                          [disabled]="service?.disabled">{{service.name}}</ng-option>
+                  </ng-select>-->
                   <!-- <validation-message [control]="form.controls.selectedServices"></validation-message> -->
                   <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
                 </div>
@@ -147,12 +151,6 @@
                   <br />
                   <button class="btn btn-primary"> {{'Search' | translate}}</button> &nbsp;&nbsp;
                   <button type="button" (click)="refresh()" class="btn btn-primary"> {{'Reset' | translate}}</button>
-
-                  <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock" data-toggle="modal" (click)="openPrint()">
-                    {{'Print' | translate}}
-                  </button>
-                  <br />
-                  <br />
                 </div>
               </div>
             </div>
