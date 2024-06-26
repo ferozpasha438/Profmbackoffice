@@ -1,172 +1,188 @@
 <div class="page-breadcrumb">
-    <div class="row">
-        <div class="col-12 align-self-center">
-            <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
-                {{'Reports' | translate}}
-            </h3>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb m-0 p-0">
-                        <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
-                        <li class="breadcrumb-item text-muted ">{{'Reports' | translate}}</li>
-                        <li class="breadcrumb-item   active" aria-current="page">{{'Ticket History' | translate}} </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Reports' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Reports' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">{{'Ticket History' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
     </div>
+  </div>
 </div>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <!-- <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4"> -->
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <!-- <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4"> -->
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="row pb-3">
-                        <div class="col-md-12 col-lg-12">
-                            <h4 class="card-title pt6">{{'Ticket History' | translate}} </h4>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 text-right"></div>
-                                <div class="col-md-5 col-lg-5 text-right">
-                                    <a data-toggle="modal" data-target="#createnewbranch"
-                                        class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
-                                        <i class="icon-print"> </i>{{'Print' | translate}} </a>&nbsp;
-                                    <a data-toggle="modal" data-target="#createnewbranch"
-                                        class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
-                                        <i class="icon-cancel"> </i>{{'Cancel' | translate}} </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6 col-sm-6">
-                            <div class="form-group">
-                                <label>{{'Customer' | translate}}</label>
-                                <select class="custom-select mr-sm-2" formControlName="resTypeCode">
-                                    <option value="">{{'Select' | translate}} {{'Customer' | translate}}
-                                    </option>
-                                    <ng-container>
-                                        <option>123</option>
-                                        <option>ABC</option>
-                                        <option>PQR</option>
-                                    </ng-container>
-                                </select>
-                                <!-- <validation-message [control]="form.controls.resTypeCode"></validation-message> -->
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6 col-sm-6">
-                            <div class="form-group">
-                                <label>{{'Status' | translate}}</label>
-                                <select class="custom-select mr-sm-2" formControlName="resTypeCode">
-                                    <option value="">{{'Select' | translate}} {{'Status' | translate}}
-                                    </option>
-                                    <ng-container>
-                                        <option>123</option>
-                                        <option>ABC</option>
-                                        <option>PQR</option>
-                                    </ng-container>
-                                </select>
-                                <!-- <validation-message [control]="form.controls.resTypeCode"></validation-message> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6 col-sm-6">
-                            <div class="form-group">
-                                <label>{{'Service Type' | translate}}</label>
-                                <select class="custom-select mr-sm-2" formControlName="resTypeCode">
-                                    <option value="">{{'Select' | translate}} {{'Service Type' | translate}}
-                                    </option>
-                                    <ng-container>
-                                        <option>123</option>
-                                        <option>ABC</option>
-                                        <option>PQR</option>
-                                    </ng-container>
-                                </select>
-                                <!-- <validation-message [control]="form.controls.resTypeCode"></validation-message> -->
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label for="deptCodes">{{'Resources Name' | translate}}</label>
-                                <ng-select [multiple]="true" formControlName="selectedServices">
-                                    <ng-option *ngFor="let service of serviceList" [value]="service.id"
-                                        [disabled]="service?.disabled">{{service.name}}</ng-option>
-                                </ng-select>
-                                <!-- <validation-message [control]="form.controls.selectedServices"></validation-message> -->
-                                <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-lg-3">
-                            <div class="form-group ">
-                                <label for="offerStartDate" class="mr-sm-2">
-                                    {{'From' | translate}}
-                                </label>
-                                <div class="input-group ">
-                                    <input class="form-control input-mandatory"
-                                        placeholder=" {{'Please_Enter' | translate}} {{'Offer From' | translate}}"
-                                        formControlName="offerStartDate" [matDatepicker]="dateOfBirthpicker1">
-                                    <div class="input-group-prepend datapickericon">
-                                        <mat-datepicker-toggle matSuffix
-                                            [for]="dateOfBirthpicker1"></mat-datepicker-toggle>
-                                        <mat-datepicker #dateOfBirthpicker1></mat-datepicker>
-                                    </div>
-                                    <!-- <validation-message [control]="form.controls.offerStartDate"></validation-message> -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-lg-3">
-                            <div class="form-group ">
-                                <label for="offerEndDate" class="mr-sm-2">
-                                    {{'To' | translate}}
-                                </label>
-                                <div class="input-group ">
-                                    <input class="form-control input-mandatory"
-                                        placeholder=" {{'Please_Enter' | translate}} {{'Offer To' | translate}}"
-                                        formControlName="offerEndDate" [matDatepicker]="dateOfBirthpicker">
-                                    <div class="input-group-prepend datapickericon">
-                                        <mat-datepicker-toggle matSuffix
-                                            [for]="dateOfBirthpicker"></mat-datepicker-toggle>
-                                        <mat-datepicker #dateOfBirthpicker></mat-datepicker>
-                                    </div>
-                                    <!-- <validation-message [control]="form.controls.offerEndDate"></validation-message> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row pb-3">
+            <div class="col-md-12 col-lg-12">
+              <h4 class="card-title pt6">{{'Ticket History' | translate}} </h4>
+              <div class="row">
+                <div class="col-md-6 col-lg-6 text-right"></div>
+                <div class="col-md-5 col-lg-5 text-right">
+                  <a data-toggle="modal" data-target="#createnewbranch"
+                     class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
+                    <i class="icon-print"> </i>{{'Print' | translate}}
+                  </a>&nbsp;
+                  <a data-toggle="modal" data-target="#createnewbranch"
+                     class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
+                    <i class="icon-cancel"> </i>{{'Cancel' | translate}}
+                  </a>
                 </div>
-                <div class="container">
-                        <table class="table table-responsive" style="width: 100%;">
-                            <tr>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Ticket Number</th>
-                                <th>Customer Code</th>
-                                <th>Customer Name</th>
-                                <th>Status</th>
-                                <th>Resource</th>
-                                <th>Service</th>
-                            </tr>
-                            <tr>
-                                <td>01-01-2023</td>
-                                <td>10:30</td>
-                                <td>392</td>
-                                <td>C-001</td>
-                                <td>Sample Cust 1</td>
-                                <td>Completed</td>
-                                <td>Abdul Rahman</td>
-                                <td>Daily</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+              </div>
             </div>
-            <!-- </form> -->
+          </div>
+
+          <form [formGroup]="form" (ngSubmit)="filter()" novalidate class="mt-4">
+            <div class="row">
+              <div class="col-md-6 col-lg-6 col-sm-6">
+                <div class="form-group">
+                  <label>{{'Customer' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="custCode">
+                    <option value="">
+                      {{'Select' | translate}} {{'Customer' | translate}}
+                    </option>
+                    <ng-container *ngIf="CustomerContractList">
+                      <option *ngFor="let ccl of CustomerContractList" value="{{ccl.value}}">{{ccl.text}}</option>
+                    </ng-container>
+                  </select>
+                  <!-- <validation-message [control]="form.controls.resTypeCode"></validation-message> -->
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6 col-sm-6">
+                <div class="form-group">
+                  <label>{{'Status' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="ticketStatus">
+                    <option value="">
+                      {{'Select' | translate}} {{'Status' | translate}}
+                    </option>
+                    <ng-container *ngIf="CustomerContractList">
+                      <option *ngFor="let ccl of statusSelectionList" value="{{ccl.id}}">{{ccl.text}}</option>
+                    </ng-container>
+                  </select>
+                  <!-- <validation-message [control]="form.controls.resTypeCode"></validation-message> -->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6 col-sm-6">
+                <div class="form-group">
+                  <label>{{'Service Type' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="serviceType">
+                    <option value="">
+                      {{'Select' | translate}} {{'Service Type' | translate}}
+                    </option>
+                    <ng-container *ngIf="CustomerContractList">
+                      <option *ngFor="let ccl of serviceList" value="{{ccl.id}}">{{ccl.text}}</option>
+                    </ng-container>
+                  </select>
+                  <!-- <validation-message [control]="form.controls.resTypeCode"></validation-message> -->
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label for="deptCodes">{{'Resources Name' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="resourceCode">
+                    <option value="">{{'Select' | translate}} {{'Resource' | translate}} </option>
+                    <option *ngFor="let item of resources" value="{{item.value}}">{{item.value}}-{{item.text}}</option>
+                  </select>
+
+                  <!--<ng-select [multiple]="true" formControlName="selectedServices">
+                      <ng-option *ngFor="let service of serviceList" [value]="service.id"
+                          [disabled]="service?.disabled">{{service.name}}</ng-option>
+                  </ng-select>-->
+                  <!-- <validation-message [control]="form.controls.selectedServices"></validation-message> -->
+                  <!--<validation-message [control]="form.controls.deptCodes"></validation-message>-->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 col-lg-3">
+                <div class="form-group ">
+                  <label for="offerStartDate" class="mr-sm-2">
+                    {{'From' | translate}}
+                  </label>
+                  <div class="input-group ">
+                    <input class="form-control input-mandatory"
+                           placeholder=" {{'Please_Enter' | translate}} {{'Offer From' | translate}}"
+                           formControlName="dateFrom" [matDatepicker]="dateOfBirthpicker1">
+                    <div class="input-group-prepend datapickericon">
+                      <mat-datepicker-toggle matSuffix
+                                             [for]="dateOfBirthpicker1"></mat-datepicker-toggle>
+                      <mat-datepicker #dateOfBirthpicker1></mat-datepicker>
+                    </div>
+                    <!-- <validation-message [control]="form.controls.offerStartDate"></validation-message> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-lg-3">
+                <div class="form-group ">
+                  <label for="offerEndDate" class="mr-sm-2">
+                    {{'To' | translate}}
+                  </label>
+                  <div class="input-group ">
+                    <input class="form-control input-mandatory"
+                           placeholder=" {{'Please_Enter' | translate}} {{'Offer To' | translate}}"
+                           formControlName="dateTo" [matDatepicker]="dateOfBirthpicker">
+                    <div class="input-group-prepend datapickericon">
+                      <mat-datepicker-toggle matSuffix
+                                             [for]="dateOfBirthpicker"></mat-datepicker-toggle>
+                      <mat-datepicker #dateOfBirthpicker></mat-datepicker>
+                    </div>
+                    <!-- <validation-message [control]="form.controls.offerEndDate"></validation-message> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 col-lg-2">
+                <div class="form-group ">
+                  <br />
+                  <button class="btn btn-primary"> {{'Search' | translate}}</button> &nbsp;&nbsp;
+                  <button type="button" (click)="refresh()" class="btn btn-primary"> {{'Reset' | translate}}</button>
+                </div>
+              </div>
+            </div>
+
+          </form>
         </div>
+
+        <div class="container">
+          <table class="table table-responsive" style="width: 100%;">
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Ticket Number</th>
+              <th>Customer Code</th>
+              <th>Customer Name</th>
+              <th>Status</th>
+              <th>Resource</th>
+              <th>Service</th>
+            </tr>
+            <tr *ngFor="let  item of list">
+              <td>{{item.date | date:'dd/MM/YYYY'  }}</td>
+              <td>{{item.time}}</td>
+              <td>{{item.ticketNumber}}</td>
+              <td>{{item.custCode}}</td>
+              <td>{{item.custName}}</td>
+              <td>{{item.statusStr}}</td>
+              <td>{{item.resourceName}}</td>
+              <td>{{item.serviceType}}</td>             
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
+    <!-- </form> -->
+  </div>
+</div>
 
 
 
@@ -190,18 +206,21 @@
 
 
 <style>
-    .container-fluid {
-        width: 100%;
-    }
-    .table-responsive {
-        width: 100%;
-        border-collapse: collapse;
-    }
+  .container-fluid {
+    width: 100%;
+  }
+
+  .table-responsive {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
     .table-responsive th, .table-responsive td {
-        border: 1px solid #ddd;
-        padding: 8px;
+      border: 1px solid #ddd;
+      padding: 8px;
     }
+
     .table-responsive th {
-        background-color: #f2f2f2;
+      background-color: #f2f2f2;
     }
 </style>
