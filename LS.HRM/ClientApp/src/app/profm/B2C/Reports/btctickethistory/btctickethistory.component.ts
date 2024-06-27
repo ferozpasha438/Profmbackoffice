@@ -102,6 +102,10 @@ export class BtctickethistoryComponent extends ParentB2CComponent implements OnI
     this.filter();
   }
 
+  b2cFrequency(freq: any): string {
+
+    return '';
+  }
   openPrint() {
     const printContent = document.getElementById("printcontainer") as HTMLElement;
     this.utilService.printForLocale(printContent);

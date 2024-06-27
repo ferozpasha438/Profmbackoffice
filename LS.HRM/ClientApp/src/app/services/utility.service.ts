@@ -64,7 +64,6 @@ export class UtilityService {
       }, 50);    
   }
 
-
   selectedDateDays = (date: any): number => date ? this.getDate(date).getDate() : 0;
   selectedDate = (date: any): string => this.getCommonDate(date);
   selectedDateTime = (date: any): string => this.getCommonDate(date, 'T00:00:00');

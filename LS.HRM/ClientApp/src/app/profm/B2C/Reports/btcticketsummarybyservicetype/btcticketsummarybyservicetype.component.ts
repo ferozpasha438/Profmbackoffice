@@ -21,7 +21,8 @@ export class BtcticketsummarybyservicetypeComponent extends ParentB2CComponent i
   CustomerContractList: Array<CustomSelectListItem> = [];
   list: Array<any> = [];
   form!: FormGroup;
-
+  isLoading: boolean = false;
+  totalCount: number = 0;
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService,
     private notifyService: NotificationService, private validationService: ValidationService) {
@@ -31,6 +32,7 @@ export class BtcticketsummarybyservicetypeComponent extends ParentB2CComponent i
   ngOnInit(): void {
     this.loadFormData();
     this.setForm();
+    this.filter();
   }
   setForm() {
     this.form = this.fb.group({
@@ -54,28 +56,51 @@ export class BtcticketsummarybyservicetypeComponent extends ParentB2CComponent i
       }
     });
 
-    this.statusSelectionList = [
-      { text: 'All', id: 0 },
-      { text: 'Approved', id: 5 },
-      { text: 'Closed', id: 9 },
-      { text: 'Completed', id: 11 },
-      { text: 'Void', id: 3 },
-    ];
+    //this.statusSelectionList = [
+    //  { text: 'All', id: 0 },
+    //  { text: 'Approved', id: 5 },
+    //  { text: 'Closed', id: 9 },
+    //  { text: 'Completed', id: 11 },
+    //  { text: 'Void', id: 3 },
+    //];
 
-    this.serviceList = [
-      { id: "D", text: 'Daily Service', },
-      { id: "M", text: 'Monthly Service' },
-      { id: "Y", text: 'Yearly Service' },
-    ];
+    //this.serviceList = [
+    //  { id: "D", text: 'Daily Service', },
+    //  { id: "M", text: 'Monthly Service' },
+    //  { id: "Y", text: 'Yearly Service' },
+    //];
 
   }
 
-  filter() {
+  filter() {    
+    this.isLoading = true;
+    // const qsLong = '?' + Object.keys(this.form.value).map(key => `${key}=${encodeURIComponent(this.form.value[key])}`).join('&')
 
+    this.form.controls['dateFrom'].setValue(this.utilService.getCommonDate(this.form.controls['dateFrom'].value));
+    this.form.controls['dateTo'].setValue(this.utilService.getCommonDate(this.form.controls['dateTo'].value));
+
+    const qs = new URLSearchParams(this.form.value).toString();
+    this.apiService.getPagination(`fomMobB2CReport/getB2CTicketSummarybyservicetype`, qs).subscribe(res => {
+      this.isLoading = false;
+      if (res) {
+        this.totalCount = 0;
+        let listItems = res['listItems'];
+        this.list = listItems['list'];
+        this.list.forEach(e => this.totalCount += e.total);
+      }
+    });
   }
 
   refresh() {
-
+    this.form.patchValue({
+      'custCode': '',
+      'ticketStatus': '',
+      'serviceType': '',
+      'resourceCode': '',
+      'dateFrom': '',
+      'dateTo': '',
+    });
+    this.filter();
   }
 
   openPrint() {
