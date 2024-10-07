@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { ValidationService } from 'src/app/sharedcomponent/ValidationService';
 import { ParentB2CComponent } from 'src/app/sharedcomponent/parentb2c.component';
+import { ParentB2CFrontComponent } from '../../../../sharedcomponent/parentb2cfront.component';
 
 @Component({
   selector: 'app-btcticketsummarybycust',
@@ -14,7 +15,7 @@ import { ParentB2CComponent } from 'src/app/sharedcomponent/parentb2c.component'
   styles: [
   ]
 })
-export class BtcticketsummarybycustComponent extends ParentB2CComponent implements OnInit {
+export class BtcticketsummarybycustComponent extends ParentB2CFrontComponent implements OnInit {
   serviceList: any;
   statusSelectionList: Array<any> = [];
   resources: Array<CustomSelectListItem> = [];

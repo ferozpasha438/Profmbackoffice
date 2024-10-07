@@ -16,6 +16,7 @@ import { ParentB2CComponent } from '../../sharedcomponent/parentb2c.component';
 import { FomSharedService } from '../../services/fomShared.service';
 import { CommonRemarkComponent } from './commonremark.component';
 import { BtcresourceallocateComponent } from './btcresourceallocate.component';
+import { ParentB2CFrontComponent } from '../../sharedcomponent/parentb2cfront.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ import { BtcresourceallocateComponent } from './btcresourceallocate.component';
   templateUrl: './btctickets.component.html'
 })
 
-export class BtcTicketsComponent extends ParentB2CComponent implements OnInit {
+export class BtcTicketsComponent extends ParentB2CFrontComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 

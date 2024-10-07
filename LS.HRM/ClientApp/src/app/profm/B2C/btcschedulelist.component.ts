@@ -17,6 +17,7 @@ import { DBOperation } from '../../services/utility.constants';
 import { ParentB2CComponent } from '../../sharedcomponent/parentb2c.component';
 import { AllschedulecalendarComponent } from '../GetScheduling/SharedPages/allschedulecalendar.component';
 import { BtcschedulecalendarComponent } from './btcschedulecalendar.component';
+import { ParentB2CFrontComponent } from '../../sharedcomponent/parentb2cfront.component';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { BtcschedulecalendarComponent } from './btcschedulecalendar.component';
   styles: [
   ]
 })
-export class BtcschedulelistComponent extends ParentB2CComponent implements OnInit {
+export class BtcschedulelistComponent extends ParentB2CFrontComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;

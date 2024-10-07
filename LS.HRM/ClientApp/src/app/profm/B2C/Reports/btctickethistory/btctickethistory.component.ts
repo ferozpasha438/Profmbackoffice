@@ -7,6 +7,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { ValidationService } from 'src/app/sharedcomponent/ValidationService';
 import { ParentB2CComponent } from 'src/app/sharedcomponent/parentb2c.component';
 import { CustomSelectListItem } from '../../../../models/MenuItemListDto';
+import { ParentB2CFrontComponent } from '../../../../sharedcomponent/parentb2cfront.component';
 
 @Component({
   selector: 'app-btctickethistory',
@@ -14,7 +15,7 @@ import { CustomSelectListItem } from '../../../../models/MenuItemListDto';
   styles: [
   ]
 })
-export class BtctickethistoryComponent extends ParentB2CComponent implements OnInit {
+export class BtctickethistoryComponent extends ParentB2CFrontComponent implements OnInit {
   serviceList: any;
   statusSelectionList: Array<any> = [];
   resources: Array<CustomSelectListItem> = [];

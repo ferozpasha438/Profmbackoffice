@@ -18,6 +18,7 @@ import { PaginationService } from 'src/app/sharedcomponent/pagination.service';
 import { ParentB2CComponent } from '../../sharedcomponent/parentb2c.component';
 import { BtcschedulelistComponent } from './btcschedulelist.component';
 import { ValidationService } from '../../sharedcomponent/ValidationService';
+import { ParentB2CFrontComponent } from '../../sharedcomponent/parentb2cfront.component';
 
 
 @Component({
@@ -26,7 +27,7 @@ import { ValidationService } from '../../sharedcomponent/ValidationService';
   styles: [
   ]
 })
-export class BtcschedulecalendarComponent extends ParentB2CComponent implements OnInit {
+export class BtcschedulecalendarComponent extends ParentB2CFrontComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
@@ -156,7 +157,7 @@ export class BtcschedulecalendarComponent extends ParentB2CComponent implements 
   public showList() {
     this.isShowList = true;
   }
-  dateSelected(date: Date) {
+  dateSelected(date: Date) {    
     this.scheduleDateData = [];
     this.selectedDate = date;
     const newMonth = date.getMonth();
@@ -225,11 +226,14 @@ export class BtcschedulecalendarComponent extends ParentB2CComponent implements 
   }
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
+     
+      
       var highlightDate = this.scheduleDays
         .map(strDate => new Date(strDate))
         .some(d => d.getDate() === date.getDate()
           && d.getMonth() === date.getMonth()
           && d.getFullYear() === date.getFullYear());
+      console.log('highlightDate', this.scheduleDays);
       if (highlightDate) {
         return highlightDate ? 'special-event-date date' + date.getDate() + date.getMonth() + date.getFullYear() : '';
       }

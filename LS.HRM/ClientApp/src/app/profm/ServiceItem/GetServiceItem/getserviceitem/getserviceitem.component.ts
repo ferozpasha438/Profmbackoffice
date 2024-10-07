@@ -14,12 +14,13 @@ import { DeleteConfirmDialogComponent } from 'src/app/sharedcomponent/delete-con
 import { PaginationService } from 'src/app/sharedcomponent/pagination.service';
 import { ParentFomMgtComponent } from 'src/app/sharedcomponent/parentfommgt.component';
 import { ParentB2CComponent } from '../../../../sharedcomponent/parentb2c.component';
+import { ParentB2CFrontComponent } from '../../../../sharedcomponent/parentb2cfront.component';
 
 @Component({
   selector: 'app-getserviceitem',
   templateUrl: './getserviceitem.component.html',
 })
-export class GetserviceitemComponent extends ParentB2CComponent implements OnInit {
+export class GetserviceitemComponent extends ParentB2CFrontComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;

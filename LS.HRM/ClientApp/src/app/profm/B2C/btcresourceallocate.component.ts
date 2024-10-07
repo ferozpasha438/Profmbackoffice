@@ -10,6 +10,7 @@ import { PaginationService } from 'src/app/sharedcomponent/pagination.service';
 import { FomSharedService } from '../../services/fomShared.service';
 import { ParentB2CComponent } from '../../sharedcomponent/parentb2c.component';
 import { CustomSelectListItem } from '../../models/MenuItemListDto';
+import { ParentB2CFrontComponent } from '../../sharedcomponent/parentb2cfront.component';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { CustomSelectListItem } from '../../models/MenuItemListDto';
   styles: [
   ]
 })
-export class BtcresourceallocateComponent extends ParentB2CComponent implements OnInit {
+export class BtcresourceallocateComponent extends ParentB2CFrontComponent implements OnInit {
 
   row: any;
   resources: Array<CustomSelectListItem> = [];
