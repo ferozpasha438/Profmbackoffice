@@ -164,6 +164,12 @@ export class GetactivitieslistComponent extends ParentFomMgtComponent implements
     }
   }
 
+  onImageError(event: Event) {
+    const element = event.target as HTMLImageElement;
+    // Set the fallback image URL when the main image fails to load
+    element.src = '/assets/images/users/Image-Not-Found.jpg'; // Placeholder or alternate image URL
+  }
+
   private openDialogManage(id: number, dbops: DBOperation, modalTitle: string, modalBtnTitle: string, component: any) {
     let dialogRef = this.utilService.openCrudDialog(this.dialog, component);
     (dialogRef.componentInstance as any).dbops = dbops;

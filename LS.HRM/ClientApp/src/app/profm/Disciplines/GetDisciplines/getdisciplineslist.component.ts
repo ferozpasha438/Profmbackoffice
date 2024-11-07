@@ -81,6 +81,12 @@ export class GetdisciplineslistComponent extends ParentFomMgtComponent implement
     }, error => this.utilService.ShowApiErrorMessage(error));
   }
 
+  onImageError(event: Event) {
+    const element = event.target as HTMLImageElement;
+    // Set the fallback image URL when the main image fails to load
+    element.src = '/assets/images/users/Image-Not-Found.jpg'; // Placeholder or alternate image URL
+  }
+
   applyFilter(searchValue: any) {
     const search = searchValue;//.target.value as string;
     //if (search && search.length >= 3) {

@@ -1029,6 +1029,20 @@ namespace CIN.Application.FomMgtDtos
 
     }
 
+
+
+    public class DisciplineDto
+    {
+        public string DisciplineName { get; set; }
+        public List<ActivityDto> Activities { get; set; }
+    }
+
+    public class ActivityDto
+    {
+        public string ActivityName { get; set; }
+        public bool SelectCheckBox { get; set; }
+    }
+
     [AutoMap(typeof(TblErpFomSubContractor))]
     public class TblErpFomSubContractorDto
     {
@@ -1341,6 +1355,29 @@ namespace CIN.Application.FomMgtDtos
         public List<FomScheduleDetailsDto> DetailRows { get; set; }
     }
 
+
+
+    public class GeneratedScheduleFilterDto
+    {
+        public int Id { get; set; }
+        public int SchId { get; set; }
+        public int ContractId { get; set; }
+        public DateTime SchDate { get; set; }
+        public string Department { get; set; }
+        public string SerType { get; set; }
+        public string Frequency { get; set; }
+        public string TranNumber { get; set; }
+        public string ServiceItem { get; set; }
+        public string Remarks { get; set; }
+        public string Time { get; set; }
+        public bool IsReschedule { get; set; }
+        public bool IsActive { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerNameAr { get; set; }
+        public string SiteName { get; set; }
+        public string SiteNameAr { get; set; }
+        public string ContractCode { get; set; }
+    }
 
 
     public class FomScheduleDetailsDto

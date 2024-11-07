@@ -96,6 +96,7 @@ export class AddupdatedisciplinesComponent extends ParentFomMgtComponent impleme
     this.dialogRef.close();
   }
 
+  
 
   loadPeriod() {
     this.apiService.getall('FomDiscipline/getSelectTimePeriodsList').subscribe(res => {

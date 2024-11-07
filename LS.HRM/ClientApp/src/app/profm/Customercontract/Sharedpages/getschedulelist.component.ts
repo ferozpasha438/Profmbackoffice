@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCalendar, MatCalendarCellCssClasses } from '@angular/material/datepicker';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -96,6 +96,8 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
         'custCode': [''],
         'contStartDate': [''],
         'contEndDate': [''],
+        'startDate': [''],
+        'endDate': [''],
         'deptCode': [''],
         'contDeptCode': [''],
 
@@ -134,6 +136,8 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
     this.form.controls['custSiteCode'].setValue('');
     this.form.controls['contStartDate'].setValue('');
     this.form.controls['contEndDate'].setValue('');
+    this.form.controls['startDate'].setValue('');
+    this.form.controls['endDate'].setValue('');
     this.form.controls['contDeptCode'].setValue('');
     this.form.controls['contProjManager'].setValue('');
     this.form.controls['contProjSupervisor'].setValue('');
@@ -146,15 +150,125 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
   }
 
   initialLoading() {
-    this.loadList(0, this.pageService.pageCount, "", this.sortingOrder);
+  //  this.loadList(0, this.pageService.pageCount, "", this.sortingOrder, this.contractCode, this.startDate, this.endDate, this.deptCode);
   }
 
-  private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
+  //old
+  //private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
+  //  this.isLoading = true;
+  //  //const deptCode: string = 'AirConditioning';
+  //  //const contractCode: string = 'ContractCode01';
+  //  const deptCode: string = this.form.value['deptCode'] as string;
+  //  const contractCode: string = this.form.value['contractCode'] as string;
+  //  if (deptCode != undefined && deptCode != null && deptCode != '') {
+  //    this.deptCode = deptCode;
+  //    this.isShowCalander = true;
+  //  } else {
+  //    this.isShowCalander = false;
+  //    this.deptCode = '';
+  //  }
+  //  this.apiService.getall(`FomCustomerContract/GetGeneratedSchedule/${deptCode}/${contractCode}`).subscribe(result => {
+  //    this.totalItemsCount = 0;
+  //    this.data = new MatTableDataSource(result.detailRows);
+  //    this.scheduleData = result.detailRows;
+  //    this.totalItemsCount = result.detailRows.length;
+  //    setTimeout(() => {
+  //      this.paginator.pageIndex = page as number;
+  //      this.paginator.length = this.totalItemsCount;
+  //    });
+  //    this.data.sort = this.sort;
+  //    this.isLoading = false;
+  //  }, error => { this.utilService.ShowApiErrorMessage(error); this.isLoading = false; this.data = new MatTableDataSource(); this.totalItemsCount = 0; });
+  //}
+
+
+  private loadListMain(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
     this.isLoading = true;
-    //const deptCode: string = 'AirConditioning';
+    var startDate = "";
+    var endDate = "";
+    const deptCode: string = this.form.value['deptCode'] as string;
+    const contractCode: string = this.form.get('contractCode')?.value;
+
+    if (this.form.controls['startDate'].value != undefined && this.form.controls['startDate'].value != null && this.form.controls['startDate'].value != '') {
+      let sd = new Date(this.form.controls['startDate'].value);
+      startDate = sd.getFullYear().toString() + "-" + (sd.getMonth() + 1).toString() + "-" + sd.getDate().toString();
+    }
+    if (this.form.controls['endDate'].value != undefined && this.form.controls['endDate'].value != null && this.form.controls['endDate'].value != '') {
+      let ed = new Date(this.form.controls['endDate'].value);
+      endDate = ed.getFullYear().toString() + "-" + (ed.getMonth() + 1).toString() + "-" + ed.getDate().toString();
+    }
+
+
+    this.apiService.getPagination('FomCustomerContract/GetGeneratedScheduleFilter', this.utilService.getQueryFilterContractData(page, pageCount, query, orderBy, contractCode, startDate, endDate, deptCode)).subscribe(result => {
+      this.totalItemsCount = 0;
+      this.data = new MatTableDataSource(result.items);
+
+      this.totalItemsCount = result.totalCount;
+
+      setTimeout(() => {
+        this.paginator.pageIndex = page as number;
+        this.paginator.length = this.totalItemsCount;
+      });
+      this.data.sort = this.sort;
+
+      //console.log(this.data.sort)
+      //console.log(this.data.paginator)
+
+      this.isLoading = false;
+    }, error => this.utilService.ShowApiErrorMessage(error));
+  }
+
+
+
+
+  //new
+  private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined, contractCode: string | null, startDate: string | null | undefined, endDate: string | null | undefined, deptCode: string | null) {
+    this.isLoading = true;
+
+    this.apiService.getPagination('FomCustomerContract/GetGeneratedScheduleFilter', this.utilService.getQueryFilterContractData(page, pageCount, query, orderBy, contractCode, startDate, endDate, deptCode)).subscribe(result => {
+      this.totalItemsCount = 0;
+      this.data = new MatTableDataSource(result.items);
+
+      this.totalItemsCount = result.totalCount;
+
+      setTimeout(() => {
+        this.paginator.pageIndex = page as number;
+        this.paginator.length = this.totalItemsCount;
+      });
+      this.data.sort = this.sort;
+
+      //console.log(this.data.sort)
+      //console.log(this.data.paginator)
+
+      this.isLoading = false;
+    }, error => this.utilService.ShowApiErrorMessage(error));
+  }
+
+
+  onPageSwitch(event: PageEvent) {
+    this.pageService.change(event);
+    this.loadListMain(event.pageIndex, event.pageSize, "", this.sortingOrder);
+  }
+
+  getShedule() {
+
+    var contractId = 0;
+    var startDate = "";
+    var endDate = "";
+  //  const deptCode: string = 'AirConditioning';
     //const contractCode: string = 'ContractCode01';
     const deptCode: string = this.form.value['deptCode'] as string;
-    const contractCode: string = this.form.value['contractCode'] as string;
+    const contractCode: string = this.form.get('contractCode')?.value;
+
+    if (this.form.controls['startDate'].value != undefined && this.form.controls['startDate'].value != null && this.form.controls['startDate'].value != '') {
+      let sd = new Date(this.form.controls['startDate'].value);
+      startDate = sd.getFullYear().toString() + "-" + (sd.getMonth() + 1).toString() + "-" + sd.getDate().toString();
+    }
+    if (this.form.controls['endDate'].value != undefined && this.form.controls['endDate'].value != null && this.form.controls['endDate'].value != '') {
+      let ed = new Date(this.form.controls['endDate'].value);
+      endDate = ed.getFullYear().toString() + "-" + (ed.getMonth() + 1).toString() + "-" + ed.getDate().toString();
+    }
+
     if (deptCode != undefined && deptCode != null && deptCode != '') {
       this.deptCode = deptCode;
       this.isShowCalander = true;
@@ -162,22 +276,20 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
       this.isShowCalander = false;
       this.deptCode = '';
     }
-    this.apiService.getall(`FomCustomerContract/GetGeneratedSchedule/${deptCode}/${contractCode}`).subscribe(result => {
-      this.totalItemsCount = 0;
-      this.data = new MatTableDataSource(result.detailRows);
-      this.scheduleData = result.detailRows;
-      this.totalItemsCount = result.detailRows.length;
-      //setTimeout(() => {
-      //  this.paginator.pageIndex = page as number;
-      //  this.paginator.length = this.totalItemsCount;
-      //});
-      this.data.sort = this.sort;
-      this.isLoading = false;
-    }, error => { this.utilService.ShowApiErrorMessage(error); this.isLoading = false; this.data = new MatTableDataSource(); this.totalItemsCount = 0; });
-  }
 
-  getShedule() {
-    this.initialLoading();
+    if (endDate == null) {
+
+      endDate = '';
+    }
+
+    if (startDate == null) {
+
+      startDate = '';
+    }
+    this.loadList(0, this.pageService.pageCount, "", this.sortingOrder, contractCode, startDate, endDate, this.deptCode);
+
+
+ 
   }
 
 
@@ -186,7 +298,7 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
     //if (search && search.length >= 3) {
     if (search) {
       this.searchValue = search;
-      this.loadList(0, this.pageService.pageCount, this.searchValue, this.sortingOrder);
+     // this.loadList(0, this.pageService.pageCount, this.searchValue, this.sortingOrder);
     }
   }
 
@@ -379,6 +491,19 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
   //  },
   //    error => this.utilService.ShowApiErrorMessage(error));
   //}
+
+  //searchFilter
+  
+  searchFilter() {
+    this.getShedule();
+  }
+
+
+
+    
+
+
+ 
 
   closeModel() {
     this.dialogRef.close();

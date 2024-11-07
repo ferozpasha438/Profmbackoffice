@@ -57,7 +57,10 @@ import { BtcresourceallocateComponent } from './B2C/btcresourceallocate.componen
 import { BtctickethistoryComponent } from './B2C/Reports/btctickethistory/btctickethistory.component';
 import { BtcticketsummarybycustComponent } from './B2C/Reports/btcticketsummarybycust/btcticketsummarybycust.component';
 import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btcticketsummarybyservicetype/btcticketsummarybyservicetype.component';
-
+/*import { ActivityDialogComponent } from './Customercontract/Sharedpages/activitydialog.component';*/
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -110,6 +113,7 @@ import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btctickets
     BtctickethistoryComponent,
     BtcticketsummarybycustComponent,
     BtcticketsummarybyservicetypeComponent,
+    /*ActivityDialogComponent,*/
   ],
 
   imports: [
@@ -123,6 +127,9 @@ import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btctickets
     MatDatepickerModule,
     MatFormFieldModule,
     NgSelectModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    FormsModule
   ],
 
   exports: [CommonModule],

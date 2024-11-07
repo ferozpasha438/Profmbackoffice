@@ -76,64 +76,81 @@
                 </div>
 
               </div>
-              <!--<div class="row">
-                <div class="col-md-6 col-lg-6">
-                  <h2 class="text-right">{{'Contract Code' | translate}} </h2>
-                  <input class="form-control" id="contractCode" type="text" formControlName="contractCode"
-                         placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}" [(ngModel)]="contractCode">
-                </div>
 
-                <div class="col-md-6 col-lg-6">
-                  <h2 class="text-left">{{'Contract Name' | translate}} </h2>
-                  <input class="form-control" id="custCode" type="text" formControlName="custCode"
-                         placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}" [(ngModel)]="custCode">
-                </div>
-              </div>-->
               &nbsp;
-              <!--<div class="row">
-                <div class="col-md-3 col-lg-3"></div>
+              <div class="row">
                 <div class="col-md-3 col-lg-3">
                   <div class="form-group ">
-                    <label for="yourentity">{{'From Date' | translate}}</label>
-                    <input class="form-control" id="yourentity" type="text"
-                           placeholder="{{'Please_Enter' | translate}} {{'From Date' | translate}}">
+                    <label class="mr-sm-2">
+                      {{'Start Date' | translate}}
+                    </label>
+                    <div class="form-group ">
+                      <div class="input-group ">
+                        <input class="form-control datapickerinput"
+                               placeholder=" {{'Please_Enter' | translate}} {{'Start Date' | translate}}"
+                               formControlName="startDate" [matDatepicker]="picker1">
+                        <div class="input-group-prepend datapickericon">
+                          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-3 col-lg-3">
                   <div class="form-group ">
-                    <label for="yourentity">{{'To Date' | translate}}</label>
-                    <input class="form-control" id="yourentity" type="text"
-                           placeholder="{{'Please_Enter' | translate}} {{'To Date' | translate}}">
+                    <label class="mr-sm-2">
+                      {{'End Date' | translate}}
+                    </label>
+                    <div class="form-group ">
+                      <div class="input-group ">
+                        <input class="form-control datapickerinput"
+                               placeholder=" {{'Please_Enter' | translate}} {{'End Date' | translate}}"
+                               formControlName="endDate" [matDatepicker]="picker2">
+                        <div class="input-group-prepend datapickericon">
+                          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                          <mat-datepicker #picker2></mat-datepicker>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-3 col-lg-3"></div>
-              </div>-->
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-md-2 col-lg-2"></div>
-              <div class="col-md-8 col-lg-8">
-                <!--<label class="mr-sm-2" style="color: black;font-size: 22px;">
-                              {{
-                'Departments' |
-                                            translate
-                              }}
-                            </label>
-                            <select class="custom-select mr-sm-2">
-                              <option>{{'Select' | translate}}</option>
-                              <option>ABC</option>
-                              <option>XYZ</option>
-                              <option>123</option>
-                            </select>-->
-                <div class="form-group">
+                <div class="col-md-4 col-lg-4">
+                 <div class="form-group">
                   <label for="deptCode">{{'Disciplines' | translate}}</label>
-                  <select class="custom-select mr-sm-2" formControlName="deptCode" (change)="getShedule()">
+                  <select class="custom-select mr-sm-2" formControlName="deptCode">
                     <option value="">{{'Select' | translate}} {{'Disciplines' | translate}} </option>
                     <ng-container *ngIf="DepartmentCodeList">
                       <option *ngFor="let item of DepartmentCodeList" value="{{item.deptCode}}">{{ isArab ? item.nameEng : item.nameEng  }}</option>
                     </ng-container>
                   </select>
                 </div>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                    <div class="form-group ">
+                      <label class="mr-sm-2">
+                        &nbsp;
+                      </label><br />
+                      <button (click)="searchFilter()" class="btn btn-primary"> {{'Search' | translate}}</button>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-2 col-lg-2"></div>
+              <div class="col-md-8 col-lg-8">
+              
+                <!--<div class="form-group">
+                  <label for="deptCode">{{'Disciplines' | translate}}</label>
+                  <select class="custom-select mr-sm-2" formControlName="deptCode">
+                    <option value="">{{'Select' | translate}} {{'Disciplines' | translate}} </option>
+                    <ng-container *ngIf="DepartmentCodeList">
+                      <option *ngFor="let item of DepartmentCodeList" value="{{item.deptCode}}">{{ isArab ? item.nameEng : item.nameEng  }}</option>
+                    </ng-container>
+                  </select>
+                </div>-->
               </div>
               <div class="col-md-2 col-lg-2"></div>
             </div>
@@ -231,7 +248,7 @@
                             </table>
                             <ng-container>
                               <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
-                                             [pageSizeOptions]="pageService.selectItemsPerPage">
+                                             [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
                               </mat-paginator>
                             </ng-container>
                           </ng-container>
