@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 //import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AuthorizeService } from 'src/app/api-authorization/AuthorizeService';
 import { ApiService } from 'src/app/services/api.service';
-import { startWith, debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { startWith, debounceTime, distinctUntilChanged, switchMap, map, filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/services/notification.service';
 import { DBOperation } from 'src/app/services/utility.constants';
@@ -13,6 +13,8 @@ import { ParentHrmAdminComponent } from 'src/app/sharedcomponent/Parenthrmadmin.
 import { ValidationService } from 'src/app/sharedcomponent/ValidationService';
 import { CustomSelectListItem } from '../../../models/MenuItemListDto';
 import { ParentFomMgtComponent } from '../../../sharedcomponent/parentfommgt.component';
+import { ItemsList } from '@ng-select/ng-select/lib/items-list';
+/*import { ActivityDialogComponent } from '../Sharedpages/activitydialog.component';*/
 
 @Component({
   selector: 'app-addupdatecustomercontract',
@@ -37,11 +39,16 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
   catApproveAuthControl = new FormControl('', Validators.required);
   DepartmentCodeList: Array<CustomSelectListItem> = [];
   DepartmentSoftCodeList: Array<CustomSelectListItem> = [];
+  DepartmentSpecializedCodeList: Array<CustomSelectListItem> = [];
   CustomerCodeList: Array<CustomSelectListItem> = [];
   SiteCodeList: Array<CustomSelectListItem> = [];
   selectedCars = [2];
   productList: Array<CustomSelectListItem> = [];
   productId: number = 0;
+  isModalOpen = false;
+
+  disciplines: Array<any> = [];
+  deptActCodes: string = '';
   cars = [
         { id: 1, name: 'Electrical Department'},
         { id: 2, name: 'Janotorial Department' },
@@ -50,6 +57,26 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         { id: 5, name: 'Refrigator Service Department' },
 
   ];
+  //disciplines = [
+  //  {
+  //    name: 'Carpentry',
+  //    activities: [
+  //      { name: 'Door Maintenance', selected: true },
+  //      { name: 'Partition Maintenance', selected: false },
+  //      { name: 'Desk Maintenance', selected: true }
+  //    ]
+  //  },
+  //  {
+  //    name: 'Hospitality',
+  //    activities: [
+  //      { name: 'Welcome Guest', selected: true },
+  //      { name: 'Pantry Management', selected: true },
+  //      { name: 'Bank Visits', selected: false }
+  //    ]
+  //  }
+  //];
+
+
   fileUploadone!: File;
   fileUploadtwo!: File;
   fileUploadthree!: File;
@@ -57,7 +84,7 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
   file2Url: string = '';
   file3Url: string = '';
 
-  constructor(private fb: FormBuilder, private apiService: ApiService,
+  constructor(private fb: FormBuilder, private apiService: ApiService, public dialog: MatDialog, 
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdatecustomercontractComponent>,
     private notifyService: NotificationService, private validationService: ValidationService) {
     super(authService)
@@ -136,6 +163,7 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         'contEndDate': ['', Validators.required ],
         'contDeptCode': [[], Validators.required],
         'contDeptSoftCode': [[], Validators.required],
+        'contDeptSpecialCode': [[], Validators.required],
         'contProjManager': ['', Validators.required],
         'contProjSupervisor': ['', Validators.required],
         'remarks': ['', Validators.required],
@@ -162,7 +190,10 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
                 var deptdata = this.DepartmentCodeList as Array<any>;
                 res['contDeptCode'] = deptdata.filter(item => filterArray.includes(item.deptCode));
                 var deptSoftData = this.DepartmentSoftCodeList as Array<any>;
-                res['contDeptSoftCode'] = deptSoftData.filter(item => filterArray.includes(item.deptCode));
+            res['contDeptSoftCode'] = deptSoftData.filter(item => filterArray.includes(item.deptCode));
+            var deptSpecialData = this.DepartmentSpecializedCodeList as Array<any>;
+            res['contDeptSpecialCode'] = deptSpecialData.filter(item => filterArray.includes(item.deptCode));
+
             this.form.patchValue(res);
             this.file1Url = res.file1;
             this.file2Url = res.file2;
@@ -180,6 +211,190 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         }
       })
     }
+  }
+  //After Deployment
+  //onDeptCodeChange(selectedCodes: any) {
+  //  //const deptCodes1 = selectedCodes.map((dept: any) => dept.id); // Extract the department codes
+
+  //  this.deptActCodes = selectedCodes.map((dept: any) => dept.deptCode);
+
+  //  //this.apiService.getall(`FomCustomerContract/GetScheduleById/${deptCode}/${contractCode}`).subscribe(res => {
+  //  //  console.log(res);
+
+  //  //if (deptCodes != null) {
+  //  //  const codes = deptCodes.join(',');
+
+  //  //  this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`)
+  //  //    .subscribe({
+  //  //      next: (res) => {
+  //  //        console.log('API Response:', res); // Log to see what the response contains
+  //  //        if (Array.isArray(res)) {
+  //  //          this.SiteCodeList = res; // Only assign if the response is an array
+  //  //        } else {
+  //  //          console.error('Unexpected API Response:', res);
+  //  //        }
+  //  //      },
+  //  //      error: (err) => {
+  //  //        console.error('API Error:', err); // Log errors to debug failed requests
+  //  //      }
+  //  //    });
+  //  //}
+
+  //}
+
+
+
+
+  // Flag to keep track of "Select All" state
+  selectAllChecked = false;
+
+  // Method to toggle "Select All"
+  onDeptCodeChange(event: any) {
+    if (event && event.includes('Select All')) {
+      this.selectAllChecked = !this.selectAllChecked;
+      if (this.selectAllChecked) {
+        // Select all department codes
+        const allCodes = this.DepartmentCodeList.map(dept => dept);
+        this.form.controls['contDeptCode'].setValue(allCodes);
+      } else {
+        // Deselect all department codes
+        this.form.controls['contDeptCode'].setValue([]);
+      }
+    }
+
+    // Call getSelectedDeptCodes to get the updated selected codes
+    const selectedCodes = this.getSelectedDeptCodes();
+    console.log('Selected Department Codes:', selectedCodes);
+
+    // Perform additional actions with selectedCodes if needed
+  }
+
+
+
+
+
+
+  
+  //onDeptCodeChange(event: any) {
+  //  const selectedCodes = this.getSelectedDeptCodes();
+  //  // Perform necessary actions with the selected codes
+  //  console.log('Selected Department Codes on change:', selectedCodes);
+  //}
+
+  
+  onDeptSoftCodeChange(event: any) {
+    if (event && event.includes('Select All')) {
+      this.selectAllChecked = !this.selectAllChecked;
+      if (this.selectAllChecked) {
+        // Select all department codes
+      //  const codes = selectedCodes.map((dept: any) => dept.deptCode);
+        const allCodes = this.DepartmentSoftCodeList.map((dept: any) => dept.deptCode);
+        this.form.controls['contDeptSoftCode'].setValue(allCodes);
+      } else {
+        // Deselect all department codes
+        this.form.controls['contDeptSoftCode'].setValue([]);
+      }
+    }
+
+    const selectedCodes = this.getSelectedDeptSoftCodes();
+    // Perform necessary actions with the selected codes
+    console.log('Selected Department Codes on change:', selectedCodes);
+  }
+
+  onDeptSpecialCodeChange(event: any) {
+    if (event && event.includes('Select All')) {
+      this.selectAllChecked = !this.selectAllChecked;
+      if (this.selectAllChecked) {
+        // Select all department codes
+        //  const codes = selectedCodes.map((dept: any) => dept.deptCode);
+        const allCodes = this.DepartmentSpecializedCodeList.map((dept: any) => dept.deptCode);
+        this.form.controls['contDeptSpecialCode'].setValue(allCodes);
+      } else {
+        // Deselect all department codes
+        this.form.controls['contDeptSpecialCode'].setValue([]);
+      }
+    }
+
+    const selectedCodes = this.getSelectedDeptSpecialCodes();
+    // Perform necessary actions with the selected codes
+    console.log('Selected Department Codes on change:', selectedCodes);
+  }
+
+  getSelectedDeptCodes() {
+    return this.form.get('contDeptCode')?.value || [];
+  }
+
+
+  getSelectedDeptSoftCodes() {
+    return this.form.get('contDeptSoftCode')?.value || [];
+  }
+
+  getSelectedDeptSpecialCodes() {
+    return this.form.get('contDeptSpecialCode')?.value || [];
+  }
+
+  openModal() {
+   
+    const selectedCodes = this.getSelectedDeptCodes();
+    if (selectedCodes.length === 0) {
+      alert('Please select at least one Department Code');
+      return;
+    }
+
+    const codes  = selectedCodes.map((dept: any) => dept.deptCode);
+   // const codes = this.deptActCodes;
+    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+      (data) => {
+        this.disciplines = data;
+        this.isModalOpen = true;
+      },
+      (error) => {
+        console.error('Error fetching activities:', error);
+      }
+    );
+  }
+
+
+
+  openSoftModal() {
+    const selectedCodes = this.getSelectedDeptSoftCodes();
+    if (selectedCodes.length === 0) {
+      alert('Please select at least one Department Code');
+      return;
+    }
+
+    const codes = selectedCodes.map((dept: any) => dept.deptCode);
+    // const codes = this.deptActCodes;
+    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+      (data) => {
+        this.disciplines = data;
+        this.isModalOpen = true;
+      },
+      (error) => {
+        console.error('Error fetching activities:', error);
+      }
+    );
+  }
+
+
+  openSpecialModal() {
+    const selectedCodes = this.getSelectedDeptSpecialCodes();
+    if (selectedCodes.length === 0) {
+      alert('Please select at least one Department Code');
+      return;
+    }
+
+    const codes = selectedCodes.map((dept: any) => dept.deptCode);
+    // const codes = this.deptActCodes;
+    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+      (data) => {
+        this.disciplines = data;
+        this.isModalOpen = true;
+      },
+      (error) => {
+        console.error('Error fetching activities:', error);
+      }
+    );
   }
 
 
@@ -212,6 +427,7 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         var deptdata = res['items'] as Array<any>;
         this.DepartmentCodeList = deptdata.filter(item => item.deptServType == 'Hard Services');
         this.DepartmentSoftCodeList = deptdata.filter(item => item.deptServType == 'Soft Services');
+        this.DepartmentSpecializedCodeList = deptdata.filter(item => item.deptServType == 'Special Services');
         if (this.id > 0)
           this.setEditForm();
       }
@@ -263,7 +479,10 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         
       var deptdata = this.form.value['contDeptCode'] as Array<any>;
       var deptSoftData = this.form.value['contDeptSoftCode'] as Array<any>;
+      var deptSpecialData = this.form.value['contDeptSpecialCode'] as Array<any>;
       deptdata = [...deptdata, ...deptSoftData];
+
+      deptdata = [...deptdata, ...deptSpecialData];
       this.form.value['contDeptCode'] = deptdata.map(item => item.deptCode);
       this.form.value['contStartDate'] = this.utilService.selectedDateTime(this.form.value['contStartDate']);
       this.form.value['contEndDate'] = this.utilService.selectedDateTime(this.form.value['contEndDate']);
@@ -311,6 +530,7 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
     this.form.controls['contEndDate'].setValue(''); 
     this.form.controls['contDeptCode'].setValue('');
     this.form.controls['contDeptSoftCode'].setValue('');
+    this.form.controls['contDeptSpecialCode'].setValue('');
     this.form.controls['contProjManager'].setValue('');
     this.form.controls['contProjSupervisor'].setValue('');
     this.form.controls['remarks'].setValue('');
@@ -369,10 +589,40 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
       );
   }
 
+
+  //openActivity(): void {
+  //  alert('hi');
+  //  console.log("Activities button clicked!");
+  //  // Add your dialog opening or other logic here
+  //}
+
+
+
+
+
+  //openActivity(): void {
+  //  alert('hiiii');
+  //  const dialogRef = this.dialog.open(ActivityDialogComponent, {
+  //    //width: '400px',
+  //    //testdata: this.testdata
+
+  //  });
+   
+  //  dialogRef.afterClosed().subscribe(result => {
+  //    if (result) {
+  //      //this.testdata = result;  // Handle the returned data if needed
+  //      //console.log('Updated activities:', this.testdata);
+  //    }
+  //  });
+  //}
+
   toggleDisabled() {
     const car: any = this.cars[1];
     car.disabled = !car.disabled;
   }
+
+  
+
 
 //  public dateRangeValidator(): ValidatorFn {
 //    return (control: AbstractControl): { [key: string]: any } | null => {
@@ -386,6 +636,27 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
 //    return null;
 //  };
 //}
+  //openModal() {
+  //  this.isModalOpen = true;
+
+  //  alert('hi ModalOpen');
+  // // console.log("Activities button clicked!");
+  //}
+
+  
+  
+
+  saveActivities() {
+    console.log('Selected activities:', this.disciplines);
+    // Perform the save logic here, such as making an API call
+    this.closeModal();
+  }
+
+
+  // Function to close the modal
+  closeModal() {
+    this.isModalOpen = false;
+  }
 }
 
 

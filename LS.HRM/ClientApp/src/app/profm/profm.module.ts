@@ -78,6 +78,10 @@ import { JobplanscheduleprintComponent } from './AssetMaintenance/jobplan/jobpla
 
 
 
+/*import { ActivityDialogComponent } from './Customercontract/Sharedpages/activitydialog.component';*/
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -149,6 +153,7 @@ import { JobplanscheduleprintComponent } from './AssetMaintenance/jobplan/jobpla
     AssettasklistpopupComponent,
     JobplanscheduleprintComponent,
     
+    /*ActivityDialogComponent,*/
   ],
 
   imports: [
@@ -162,6 +167,9 @@ import { JobplanscheduleprintComponent } from './AssetMaintenance/jobplan/jobpla
     MatDatepickerModule,
     MatFormFieldModule,
     NgSelectModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    FormsModule
   ],
 
   exports: [CommonModule],

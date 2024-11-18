@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Activities</h1>
+<div mat-dialog-content>
+  <h3>Welcome</h3>
+  <!--<div *ngFor="let discipline of data.disciplines">
+    <h3>{{ discipline.name }}</h3>
+    <ul>
+      <li *ngFor="let activity of discipline.activities">
+        <mat-checkbox [(ngModel)]="activity.selected">{{ activity.name }}</mat-checkbox>
+      </li>
+    </ul>
+  </div>-->
+  <div *ngFor="let discipline of disciplines">
+    <strong>{{ discipline.disciplineName }}</strong>
+    <div *ngFor="let activity of discipline.activities">
+      <label>
+        <input type="checkbox" [(ngModel)]="activity.selectCheckBox" />
+        {{ activity.activityName }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+  <button mat-button [mat-dialog-close]="data">Save</button>
+</div>

@@ -167,6 +167,15 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         }
 
 
+        [HttpGet("GetGeneratedScheduleFilter")]
+        public async Task<IActionResult> GetGeneratedScheduleFilter([FromQuery] PaginationFilterContractDto filters)
+        {
+            var list = await Mediator.Send(new GetGeneratedScheduleFilter() { Input = filters.Values(), User = UserInfo() });
+            return Ok(list);
+        }
+
+
+
         [HttpGet("GetCustomerContractSelectList")]
         public async Task<IActionResult> GetCustomerContractSelectList()
         {
@@ -249,6 +258,36 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             else
                 return BadRequest(new ApiMessageDto { Message = message });
         }
+
+
+        [HttpGet("GetActivitiesByDeptCodes/{codes}")]
+        public async Task<IActionResult> GetActivitiesByDeptCodes([FromRoute] string codes)
+        {
+            var deptCodes = codes.Split(','); // Splitting the codes by comma
+            var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes() { DeptCodes = deptCodes, User = UserInfo() });
+            return obj is not null ? Ok(obj) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
+        }
+
+        //[HttpGet("GetActivitiesByDeptCodes/{codes}")]
+        //public async Task<IActionResult> Get([FromRoute] string codes)
+        //{
+        //    if (string.IsNullOrEmpty(codes))
+        //    {
+        //        return BadRequest(new ApiMessageDto { Message = "Department codes are required." });
+        //    }
+
+        //    // Splitting the comma-separated string into an array of department codes
+             
+
+        //    var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes
+        //    {
+        //        DeptCodes = codes.Split(','),  // Pass the array of department codes
+        //        User = UserInfo()       // Assuming you're getting user info from a helper method
+        //    });
+
+        //    return obj is not null ? Ok(obj) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
+        //}
+
 
     }
 }

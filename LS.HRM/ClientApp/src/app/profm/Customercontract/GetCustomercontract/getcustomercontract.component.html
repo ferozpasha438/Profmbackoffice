@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-12 align-self-center">
       <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
-        {{'Customer_Contract' | translate}}
+        {{'Project_Contract' | translate}}
       </h3>
       <div class="d-flex align-items-center">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb m-0 p-0">
             <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
-            <li class="breadcrumb-item text-muted ">{{'Customer_Contract' | translate}}</li>
-            <li class="breadcrumb-item   active" aria-current="page">{{'Customer_Contract_List' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Project_Contract' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">{{'Project_Contract_List' | translate}} </li>
           </ol>
         </nav>
       </div>
@@ -23,7 +23,7 @@
           <div class="card-body">
             <div class="row pb-3">
               <div class="col-md-12 col-lg-12">
-                <h4 class="card-title pt6">{{'Manage_Customer_Contract' | translate}} </h4>
+                <h4 class="card-title pt6">{{'Manage_Project_Contract' | translate}} </h4>
               </div>
               <div class="col-md-3">
                 <input class="form-control" placeholder="{{'Search' | translate}}..." [(ngModel)]="searchValue" />
@@ -35,8 +35,9 @@
               </div>
               <div class="col-md-5 col-lg-5 text-right">
                 <a data-toggle="modal" data-target="#createnewbranch"
-                  class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#"> <i
-                    class="icon-plus"> </i>{{'Add_Customer_Contract' | translate}} </a>
+                   class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#">
+                  <i class="icon-plus"> </i>{{'Add_Project_Contract' | translate}}
+                </a>
               </div>
             </div>
             <div class="cardtitle-divider"></div>

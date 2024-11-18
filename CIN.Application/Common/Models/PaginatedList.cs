@@ -18,6 +18,16 @@ namespace CIN.Application.Common
 
             return filter;
         }
+
+
+        public static PaginationFilterContractDto Values(this PaginationFilterContractDto filter)
+        {
+            filter.Query = filter.Query ?? string.Empty;
+            filter.Approval = filter.Approval ?? string.Empty;
+
+            return filter;
+        }
+
         public static OprPaginationFilterDto Values(this OprPaginationFilterDto filter)
         {
             filter.Query = filter.Query ?? string.Empty;
@@ -90,6 +100,24 @@ namespace CIN.Application.Common
         public string StartDate { get; set; }
         public string EndDate { get; set; }
     }
+
+    public class PaginationFilterContractDto
+    {
+        public int Id { get; set; }
+        public int Page { get; set; } = 0;
+        public int PageCount { get; set; }     
+        public string Query { get; set; } = string.Empty;
+        public string OrderBy { get; set; }
+        public string Approval { get; set; }
+        public short? StatusId { get; set; }
+        public string StuAdmNum { get; set; }
+        public string DeptCode { get; set; }
+        public string TeacherCode { get; set; }
+        public string ContractCode { get; set; } 
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
+
     public class OprPaginationFilterDto
     {
         public int Id { get; set; }

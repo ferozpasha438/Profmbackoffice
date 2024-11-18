@@ -774,6 +774,129 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
     #endregion
 
 
+
+
+
+    #region GetGeneratedScheduleFilter
+    public class GetGeneratedScheduleFilter : IRequest<PaginatedList<GeneratedScheduleFilterDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public PaginationFilterContractDto Input { get; set; }
+    }
+
+    public class GetGeneratedScheduleFilterHandler : IRequestHandler<GetGeneratedScheduleFilter, PaginatedList<GeneratedScheduleFilterDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public GetGeneratedScheduleFilterHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<PaginatedList<GeneratedScheduleFilterDto>> Handle(GetGeneratedScheduleFilter request, CancellationToken cancellationToken)
+        {
+            var contractDetails = await _context.FomCustomerContracts
+                .FirstOrDefaultAsync(x => x.ContractCode == request.Input.ContractCode);
+
+            if (contractDetails == null)
+            {
+                //  return PaginatedList<GeneratedScheduleDetailsDto>.Empty(request.Input.Page, request.Input.PageCount);
+               
+            }
+
+            DateTime? startDate = null;
+            DateTime? endDate = null;
+            if (!string.IsNullOrEmpty(request.Input.ContractCode) && !string.IsNullOrEmpty(request.Input.StartDate) && !string.IsNullOrEmpty(request.Input.EndDate))
+            {
+
+
+                startDate = new DateTime(Convert.ToInt32(request.Input.StartDate.Split('-')[0]), Convert.ToInt32(request.Input.StartDate.Split('-')[1]), Convert.ToInt32(request.Input.StartDate.Split('-')[2]));
+                endDate = new DateTime(Convert.ToInt32(request.Input.EndDate.Split('-')[0]), Convert.ToInt32(request.Input.EndDate.Split('-')[1]), Convert.ToInt32(request.Input.EndDate.Split('-')[2]));
+
+            }
+
+
+
+
+            var result = await _context.FomScheduleSummary.AsNoTracking()
+                .Where(x => x.ContractId == contractDetails.Id && x.DeptCode == request.Input.DeptCode).FirstOrDefaultAsync();
+            //.Select(x => new GeneratedScheduleDetailsDto
+            //{
+            //    Id = x.Id,
+            //    IsApproved = x.IsApproved,
+            //    DeptCode = x.DeptCode,
+            //    ApproveDate = x.ApproveDate,
+            //    IsSchGenerated = x.IsSchGenerated
+            //})
+            //
+
+            if (result == null)
+            {
+               // return PaginatedList<GeneratedScheduleDetailsDto>.Empty(request.Input.Page, request.Input.PageCount);
+            }
+
+
+            var list = await _context.FomScheduleDetails.AsNoTracking()
+                .Where(e => e.SchId == result.Id && e.ContractId == contractDetails.Id && e.Department == request.Input.DeptCode && (e.SchDate >= startDate && e.SchDate <= endDate))
+                .OrderBy(e => e.SchDate)
+                .Select(e => new GeneratedScheduleFilterDto
+                {
+                    ContractId = e.ContractId,
+                    SchDate = e.SchDate,
+                    Department = e.Department,
+                    SerType = e.SerType,
+                    Frequency = e.Frequency,
+                    TranNumber = e.TranNumber,
+                    ServiceItem = e.ServiceItem,
+                    Remarks = e.Remarks,
+                    Time = e.Time.ToString(@"hh\:mm"),
+                    IsReschedule = e.IsReschedule,
+                    IsActive = e.IsActive
+                })
+                .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+
+                if (list.TotalCount > 0)
+                {
+                    foreach (var item in list.Items)
+                    {
+                        item.ContractCode = contractDetails.ContractCode;
+
+                        var custDetails = await _context.OprCustomers.AsNoTracking()
+                            .ProjectTo<TblSndDefCustomerMasterDto>(_mapper.ConfigurationProvider)
+                            .SingleOrDefaultAsync(e => e.CustCode == contractDetails.CustCode);
+                        if (custDetails != null)
+                        {
+                            item.CustomerName = custDetails.CustName;
+                            item.CustomerNameAr = custDetails.CustArbName;
+                        }
+
+                        var siteDetails = await _context.OprSites.AsNoTracking()
+                            .ProjectTo<TblSndDefSiteMasterDto>(_mapper.ConfigurationProvider)
+                            .SingleOrDefaultAsync(e => e.SiteCode == contractDetails.CustSiteCode);
+                        if (siteDetails != null)
+                        {
+                            item.SiteName = siteDetails.SiteName;
+                            item.SiteNameAr = siteDetails.SiteArbName;
+                        }
+                    }
+                }
+            
+            return list;
+
+            //result.DetailRows = list.Items;
+            //return new PaginatedList<GeneratedScheduleFilterDto>(
+            //    new List<GeneratedScheduleFilterDto> { result },
+            //    list.TotalCount, request.Input.Page, request.Input.PageCount);
+
+
+        }
+    }
+    #endregion
+
+
+
     #region GetAll
     public class GetFomCalenderScheduleList : IRequest<List<TblErpFomScheduleDetailsDto>>
     {
@@ -2006,4 +2129,87 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
 
     #endregion
+
+
+    //#region GetActivitiesByDeptCode
+    //public class GetDeptActivitiesByDeptCodes : IRequest<List<TblErpFomActivitiesDto>>
+    //{
+    //    public UserIdentityDto User { get; set; }
+    //    public string [] DeptCodes { get; set; } // Change from string to List<string>
+    //}
+
+    //public class GetDeptActivitiesByDeptCodesHandler : IRequestHandler<GetDeptActivitiesByDeptCodes, List<TblErpFomActivitiesDto>>
+    //{
+    //    private readonly CINDBOneContext _context;
+    //    private readonly IMapper _mapper;
+    //    public GetDeptActivitiesByDeptCodesHandler(CINDBOneContext context, IMapper mapper)
+    //    {
+    //        _context = context;
+    //        _mapper = mapper;
+    //    }
+    //    public async Task<List<TblErpFomActivitiesDto>> Handle(GetDeptActivitiesByDeptCodes request, CancellationToken cancellationToken)
+    //    {
+    //        var list = await _context.FomActivities.AsNoTracking()
+    //            .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+    //            .Where(e => request.DeptCodes.Contains(e.DeptCode)) // Filtering by multiple department codes
+    //            .ToListAsync();
+
+    //        return list;
+    //    }
+    //}
+
+
+
+    //#endregion
+
+    #region GetActivitiesByDeptCode
+    public class GetDeptActivitiesByDeptCodes : IRequest<List<DisciplineDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public string[] DeptCodes { get; set; } // Change from string to List<string>
+    }
+
+    public class GetDeptActivitiesByDeptCodesHandler : IRequestHandler<GetDeptActivitiesByDeptCodes, List<DisciplineDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public GetDeptActivitiesByDeptCodesHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<List<DisciplineDto>> Handle(GetDeptActivitiesByDeptCodes request, CancellationToken cancellationToken)
+        {
+            // Fetch and map the activities from the database
+            var activities = await _context.FomActivities.AsNoTracking()
+                .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+                .Where(e => request.DeptCodes.Contains(e.DeptCode))
+                .ToListAsync(cancellationToken);
+
+            // Group activities by department to build disciplines
+            var disciplines = activities
+                .GroupBy(a => new { a.DeptCode}) // Ensure DeptName is available in TblErpFomActivitiesDto
+                .Select(group => new DisciplineDto
+                {
+                    DisciplineName = group.Key.DeptCode,
+                    Activities = group.Select(a => new ActivityDto
+                    {
+                        ActivityName = a.ActName,
+                        SelectCheckBox = true
+                    }).ToList()
+                }).ToList();
+
+            return disciplines;
+        }
+    }
+    #endregion
+
+    // DTOs for returning the structured result
+    
+
+
+
+
 }

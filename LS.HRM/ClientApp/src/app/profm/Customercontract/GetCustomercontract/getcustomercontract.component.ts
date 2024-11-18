@@ -141,10 +141,10 @@ export class GetcustomercontractComponent extends ParentFomMgtComponent implemen
 
 
   public create() {
-    this.openDialogManage(0, DBOperation.create, this.translate.instant('Add_Customer_Contract'), 'Add');
+    this.openDialogManage(0, DBOperation.create, this.translate.instant('Add_Project_Contract'), 'Add');
   }
   public edit(id: number) {
-    this.openDialogManage(id, DBOperation.update, this.translate.instant('Update_Customer_Contract'), 'Update');
+    this.openDialogManage(id, DBOperation.update, this.translate.instant('Update_Project_Contract'), 'Update');
   }
 
   public schedule(row: any) {

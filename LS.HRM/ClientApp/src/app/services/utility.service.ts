@@ -33,6 +33,15 @@ export class UtilityService {
     return queryParam;
     //return params.join('');
   }
+
+  getQueryFilterContractData(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined, contractCode: string | null | undefined, startDate: string | null | undefined, endDate: string | null | undefined,deptCode: string | null | undefined): string {
+    let queryParam = `Page=${encodeURIComponent("" + page)}&PageCount=${encodeURIComponent("" + pageCount)}&Query=${encodeURIComponent("" + query)}&OrderBy=${encodeURIComponent("" + orderBy)}&ContractCode=${encodeURIComponent("" + contractCode)}&StartDate=${encodeURIComponent("" + startDate)}&EndDate=${encodeURIComponent("" + endDate)}&DeptCode=${encodeURIComponent("" + deptCode)}`;
+    return queryParam;
+    //return params.join('');
+  }
+
+
+
   getStudentQueryString(stuAdmNum: string = "",page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined, approval: string = "", statusId: string = "", id: number = 0): string {
     let queryParam = `StuAdmNum=${encodeURIComponent("" + stuAdmNum)}&Page=${encodeURIComponent("" + page)}&PageCount=${encodeURIComponent("" + pageCount)}&Query=${encodeURIComponent("" + query)}&OrderBy=${encodeURIComponent("" + orderBy)}&Approval=${encodeURIComponent("" + approval)}&statusId=${encodeURIComponent("" + statusId)}&Id=${encodeURIComponent("" + id)}`;
     return queryParam;

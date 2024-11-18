@@ -39,3 +39,16 @@ export interface GetSideMenuOptionListDto {
   subModuleAr: string;
   items: TblErpSysMenuOptionDto[];
 }
+
+
+//public class DisciplineDto
+//    {
+//        public string NameEng { get; set; }
+//        public List<ActivityDto> Activities { get; set; }
+//    }
+
+//    public class ActivityDto
+//    {
+//        public string ActName { get; set; }
+//        public bool Selected { get; set; }
+//    }

@@ -46,12 +46,26 @@
             <div class="mat-elevation-z8">
               <ng-container>
                 <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                  <!--<ng-container matColumnDef="thumbNailImage">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{'Image' | translate}}
+    </th>
+    <td mat-cell *matCellDef="let row" style="background-color: #dfe7e2;">
+      <img src="{{ row.thumbNailImage }}" alt="{{ row.thumbNailImage }}" width="80" height="80" style="border-radius: 50%;" />
+    </td>
+  </ng-container>-->
+
                   <ng-container matColumnDef="thumbNailImage">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
                       {{'Image' | translate}}
                     </th>
                     <td mat-cell *matCellDef="let row" style="background-color: #dfe7e2;">
-                      <img src="{{ row.thumbNailImage }}" alt="{{ row.thumbNailImage }}" width="80" height="80" style="border-radius: 50%;" />
+                      <img [src]="row.thumbNailImage"
+                           alt="Image Not Found"
+                           width="80"
+                           height="80"
+                           style="border-radius: 50%;"
+                           (error)="onImageError($event)" />
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="deptCode">
@@ -83,11 +97,11 @@
                   </ng-container>
 
                   <!--<ng-container matColumnDef="createdBy">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                      {{'Created_By' | translate}}
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ !isArab ? row.createdBy : row.createdBy }}</td>
-                  </ng-container>-->
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{'Created_By' | translate}}
+    </th>
+    <td mat-cell *matCellDef="let row">{{ !isArab ? row.createdBy : row.createdBy }}</td>
+  </ng-container>-->
 
                   <ng-container matColumnDef="createdDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>

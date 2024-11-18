@@ -4,7 +4,7 @@
 </div>
 <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
   <div class="row">
-    <div class="col-md-6 col-lg-6">
+    <div class="col-md-4 col-lg-4">
       <div class="form-group">
         <label for="contractCode">{{'Contract_Code' | translate}}</label>
         <input class="form-control" id="contractCode" type="text"
@@ -16,16 +16,8 @@
         <validation-message [control]="form.controls.contractCode"></validation-message>
       </div>
     </div>
-    <!--<div class="col-md-3 col-lg-3">
-      <div class="form-group">
-        <label for="custCode">{{'Customer_Code' | translate}}</label>
-        <input class="form-control" id="custCode" type="text"
-               placeholder="{{'Please_Enter' | translate}} {{'Customer_Code' | translate}} "
-               formControlName="custCode" [readonly]="isReadOnly">
-        <validation-message [control]="form.controls.custCode"></validation-message>
-      </div>
-    </div>-->
-    <div class="col-md-3 col-lg-3">
+
+    <div class="col-md-4 col-lg-4">
       <div class="form-group">
         <label>{{'Customer_Code' | translate}}</label>
         <select class="custom-select mr-sm-2" formControlName="custCode" (change)="onCustSiteCode($event.target.value)">
@@ -38,18 +30,10 @@
         <validation-message [control]="form.controls.custCode"></validation-message>
       </div>
     </div>
-    <!--<div class="col-md-3 col-lg-3">
-      <div class="form-group">
-        <label for="custSiteCode">{{'Customer_Site_Code' | translate}}</label>
-        <input class="form-control" id="custSiteCode" type="text"
-               placeholder="{{'Please_Enter' | translate}} {{'Customer_Site_Code' | translate}} "
-               formControlName="custSiteCode" [readonly]="isReadOnly">
-        <validation-message [control]="form.controls.custSiteCode"></validation-message>
-      </div>
-    </div>-->
 
 
-    <div class="col-md-3 col-lg-3">
+
+    <div class="col-md-4 col-lg-4">
       <div class="form-group">
         <label>{{'Customer_Site_Code' | translate}}</label>
         <select class="custom-select mr-sm-2" formControlName="custSiteCode">
@@ -64,38 +48,107 @@
     </div>
 
   </div>
-  <div class="row">
-    <!--<div class="col-md-6 col-lg-6">
-        <div class="form-group">
-            <label for="contDeptCode">{{'Contract_Department_Code' | translate}}</label>
+  <hr />
 
-        <input class="form-control" id="contDeptCode" type="text"
-               placeholder="{{'Please_Enter' | translate}} {{'Customer_Site_Code' | translate}} "
-               formControlName="contDeptCode" [readonly]="isReadOnly">
-            <validation-message [control]="form.controls.contDeptCode"></validation-message>
+  <div class="row">
+    <!--<div class="col-md-4 col-lg-4">-->
+    <!--<div class="form-group d-flex align-items-center">-->
+    <!--<div class="form-group">
+    <label for="deptCodes">{{ 'Department_Codes (Hard Services)' | translate }}</label>
+    <ng-select [multiple]="true" formControlName="contDeptCode" (change)="onDeptCodeChange($event)">
+      <ng-option [value]="'Select All'">Select All</ng-option>
+      <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+        {{ deptCode.nameEng }}
+      </ng-option>
+    </ng-select>-->
+    <!--<button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>-->
+    <!--<validation-message [control]="form.controls.contDeptCode"></validation-message>-->
+    <!-- Button to trigger the modal -->
+    <!--<button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>
+    </div>
+  </div>
+
+  <div class="col-md-4 col-lg-4">
+    <div class="form-group">
+      <label for="deptCodes">{{'Department_Codes (Soft Services)' | translate}}</label>
+      <ng-select [multiple]="true" formControlName="contDeptSoftCode" (change)="onDeptSoftCodeChange($event)">
+        <ng-option [value]="'Select All'">Select All</ng-option>
+        <ng-option *ngFor="let deptCode of DepartmentSoftCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+        {{deptCode.nameEng}}</ng-option>
+      </ng-select>
+      <validation-message [control]="form.controls.contDeptSoftCode"></validation-message>
+      <button type="button" class="btn btn-primary ml-2" (click)="openSoftModal()">Activities</button>
+    </div>
+  </div>
+
+  <div class="col-md-4 col-lg-4">-->
+    <!--<div class="form-group d-flex align-items-center">-->
+    <!--<div class="form-group">
+    <label for="deptCodes">{{ 'Department_Codes (Special Services)' | translate }}</label>
+    <ng-select [multiple]="true" formControlName="contDeptSpecialCode" (change)="onDeptSpecialCodeChange($event)">
+      <ng-option [value]="'Select All'">Select All</ng-option>
+      <ng-option *ngFor="let deptCode of DepartmentSpecializedCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+        {{ deptCode.nameEng }}
+      </ng-option>
+    </ng-select>
+    <validation-message [control]="form.controls.contDeptSpecialCode"></validation-message>
+
+    <button type="button" class="btn btn-primary ml-2" (click)="openSpecialModal()">Activities</button>-->
+    <!-- Button to trigger the modal -->
+    <!--</div>
+  </div>-->
+
+
+   
+      <!-- Department Codes (Hard Services) -->
+      <div class="col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="deptCodes">{{ 'Disciplines(Hard Services)' | translate }}</label>
+          <ng-select [multiple]="true" formControlName="contDeptCode" (change)="onDeptCodeChange($event)">
+            <ng-option [value]="'Select All'">Select All</ng-option>
+            <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+              {{ deptCode.nameEng }}
+            </ng-option>
+          </ng-select>
+          <validation-message [control]="form.controls.contDeptCode"></validation-message>
+          <button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>
         </div>
-    </div>-->
-    <div class="col-md-6 col-lg-6">
-      <div class="form-group">
-        <label for="deptCodes">{{'Department_Codes (Hard Services)' | translate}}</label>
-        <ng-select [multiple]="true" formControlName="contDeptCode">
-          <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
-        </ng-select>
-        <validation-message [control]="form.controls.contDeptCode"></validation-message>
       </div>
-    </div>
-    <div class="col-md-6 col-lg-6">
-      <div class="form-group">
-        <label for="deptCodes">{{'Department_Codes (Soft Services)' | translate}}</label>
-        <ng-select [multiple]="true" formControlName="contDeptSoftCode">
-          <ng-option *ngFor="let deptCode of DepartmentSoftCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
-        </ng-select>
-        <validation-message [control]="form.controls.contDeptSoftCode"></validation-message>
+
+      <!-- Department Codes (Soft Services) -->
+      <div class="col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="deptCodes">{{ 'Disciplines(Soft Services)' | translate }}</label>
+          <ng-select [multiple]="true" formControlName="contDeptSoftCode" (change)="onDeptSoftCodeChange($event)">
+            <ng-option [value]="'Select All'">Select All</ng-option>
+            <ng-option *ngFor="let deptCode of DepartmentSoftCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+              {{ deptCode.nameEng }}
+            </ng-option>
+          </ng-select>
+          <validation-message [control]="form.controls.contDeptSoftCode"></validation-message>
+          <button type="button" class="btn btn-primary ml-2" (click)="openSoftModal()">Activities</button>
+        </div>
       </div>
-    </div>
+
+      <!-- Department Codes (Special Services) -->
+      <div class="col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="deptCodes">{{ 'Disciplines(Specialized Services)' | translate }}</label>
+          <ng-select [multiple]="true" formControlName="contDeptSpecialCode" (change)="onDeptSpecialCodeChange($event)">
+            <ng-option [value]="'Select All'">Select All</ng-option>
+            <ng-option *ngFor="let deptCode of DepartmentSpecializedCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+              {{ deptCode.nameEng }}
+            </ng-option>
+          </ng-select>
+          <validation-message [control]="form.controls.contDeptSpecialCode"></validation-message>
+          <button type="button" class="btn btn-primary ml-2" (click)="openSpecialModal()">Activities</button>
+        </div>
+      </div>
+   
 
 
   </div>
+  <hr />
   <div class="row">
     <div class="col-md-6 col-lg-6">
       <div class="form-group ">
@@ -133,6 +186,7 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <!--<div class="col-md-6 col-lg-6">
       <div class="form-group">
@@ -203,6 +257,7 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-md-6 col-lg-6">
       <div class="form-group">
@@ -252,6 +307,7 @@
   </div>
 
   <br>
+
   <div class="row">
     <div class="col-md-3 col-lg-3">
       <div class="form-group">
@@ -312,7 +368,9 @@
       </div>
     </div>
   </div>
+  <hr />
   <br>
+
   <div class="row mt-3 ">
     <div class="col-md-12 col-lg-12 text-center">
       <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
@@ -322,3 +380,129 @@
     </div>
   </div>
 </form>
+
+
+<div class="modal fade show" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModalLabel" aria-hidden="true"
+     [ngClass]="{'show': isModalOpen}" [ngStyle]="{'display': isModalOpen ? 'block' : 'none'}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="activityModalLabel">Activities</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let discipline of disciplines">
+          <strong>{{ discipline.disciplineName }}</strong>
+          <div *ngFor="let activity of discipline.activities">
+            <label>
+              <input type="checkbox" [(ngModel)]="activity.selectCheckBox" />
+              {{ activity.activityName }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="col-md-12 col-lg-12 text-center">
+          <input type="button" class="btn waves-effect waves-light btn-rounded btn-secondary btn-midblock"
+                 value="{{'Cancel' | translate}}" (click)="closeModal()" /> &nbsp;
+          <!--<input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                 value="{{'Save' | translate}}" (click)="saveActivities()" />-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  /* Style the Activities button */
+  button.btn-primary.ml-2 {
+    margin-left: 10px;
+    white-space: nowrap;
+    width: 100px; /* Smaller button width */
+    height: 35px; /* Smaller button height */
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  /* Modal styling */
+  .modal.show {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Ensure modal is vertically and horizontally centered */
+  .modal-dialog {
+    max-width: 500px; /* Smaller modal width */
+    width: 70%; /* Modal width relative to screen */
+    margin: 1.75rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    height: 400px; /* Smaller modal height */
+    align-items:center;
+  }
+
+  .modal-header {
+    padding: 10px;
+  }
+
+  .modal-body {
+    padding: 15px;
+    font-size: 14px;
+    height: calc(100% - 90px); /* Adjust body height based on modal content */
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    padding: 10px;
+    text-align: right;
+  }
+
+  /* Close button styling */
+  .btn-close {
+    background: transparent;
+    border: 0;
+    font-size: 1.2rem;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+    .btn-close:hover {
+      opacity: 1;
+    }
+
+  /* Secondary and primary buttons in modal */
+  .modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+  }
+
+  .modal-footer .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+  }
+
+  /* Add responsiveness for smaller screens */
+  @media (max-width: 576px) {
+    .modal-dialog {
+      max-width: 80%;
+      height: auto;
+    }
+
+    .modal-content {
+      height: auto;
+    }
+  }
+
+</style>
