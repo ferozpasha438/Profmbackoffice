@@ -55,6 +55,12 @@
   background-color: #fde68a !important;
   border-radius: 999px;
 }
+.special-event-date-ppm {
+  background-color: #fde68a !important;
+  border-radius: 50%;
+  padding-top:0%!important;
+  padding-bottom:0%!important;
+}
 
 .spanDiv1 {
   color: red !important;
@@ -77,4 +83,7 @@
 
 .circle-color-red {
   background-color: red;
+}
+.input-mandatory {
+  border-left: 3px solid red!important;
 }

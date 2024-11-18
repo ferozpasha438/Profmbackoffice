@@ -18,6 +18,12 @@ namespace CIN.Application
         /// <param name="id">Entity ID</param>
         /// <returns></returns>
         public static AppCtrollerDto DuplicateInfo(string field) => new AppCtrollerDto { Message = Duplicate(field), Id = 0 };
+        /// <summary>
+        /// 1 is success, 0 is failure
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static AppCtrollerDto Status(short type, long id = 0) => new AppCtrollerDto { Message = GetAppControllerStatus(type), Id = id };
         public static AppCtrollerDto Status(string message, long id = 0) => new AppCtrollerDto { Message = message, Id = id };
         public static MobileCtrollerDto Status(short type, bool status, long id = 0) => new MobileCtrollerDto { Message = GetAppControllerStatus(type), Status = status, Id = id };

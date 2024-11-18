@@ -1,0 +1,135 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Asset_Master' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Asset_Master' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">{{'Asset_Master_List' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row pb-3">
+            <div class="col-md-3">
+              <input class="form-control" placeholder="{{'Search' | translate}}..." [(ngModel)]="searchValue" />
+            </div>
+            <div class="col-md-2 arabicright">
+              <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' | translate}}</button>
+              &nbsp;
+              <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+            </div>
+            <div class="col-md-7 col-lg-7 text-right">
+              <button (click)="importFile()" class="btn  btn-primary">Import</button> &nbsp;&nbsp;
+              <input type="file" (change)="onFileChanged($event)" id="excel_file"/>
+              <a data-toggle="modal" data-target="#createnewbranch"
+                 class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#">
+                <i class="icon-plus"> </i>{{'Add_Asset_Master' | translate}}
+              </a>
+            </div>
+          </div>
+          <div class="cardtitle-divider"></div>
+          <div class="table-responsive">
+            <spinner-loader [isLoading]="isLoading"></spinner-loader>
+            <div class="mat-elevation-z8">
+              <ng-container>
+                <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                  <ng-container matColumnDef="assetCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'AssetMaster_Code' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.assetCode }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="nameEng">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'AssetMaster_Name' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="nameArabic">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'AssetMaster_Name_AR' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.nameAr }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="sectionCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'AssetMaster_sectionCode' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.sectionCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="deptCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'AssetMaster_deptCode' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.deptCode}}</td>
+                  </ng-container>
+                   <ng-container matColumnDef="contractCode">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                       {{'AssetMaster_contractCode' | translate}}
+                     </th>
+                    <td mat-cell *matCellDef="let row">{{ row.contractCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="createdDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'Created_Date' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.created | date: 'dd-MM-yyyy' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="isActive">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'IsActive' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.isActive }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Actions" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+                    <td mat-cell *matCellDef="let row">
+                      <a class="tableicons" (click)="edit(row.id)" matTooltip="{{'Edit_Item' | translate}}">
+                        <i class="icon-note"> </i>
+                      </a> &nbsp;
+                      <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}">
+                        <i class="icon-trash"> </i>
+                      </a>&nbsp;
+                      <a class="tableicons pcursor" data-toggle="modal"
+                         data-target="#scrollable-modal" (click)="uploadFile(row.id)" matTooltip="{{'Document_Upload' | translate}}"><i class="icon-cloud-upload"> </i></a> &nbsp;
+                    </td>
+                  </ng-container>
+
+                  <!--<a class="tableicons" matTooltip="{{'Delete_Item' | translate}}"><i class="icon-trash"> </i></a>-->
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <ng-container>
+                  <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                 [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
+                  </mat-paginator>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

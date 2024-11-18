@@ -1,0 +1,68 @@
+<div class="col-md-12 col-lg-12">
+  <h4 class="pt-2"> {{'jobPlan_assetCode' | translate}} : {{data.assetCode}} -  {{'Asset_ChildCode' | translate}} :  {{data.childCode}}</h4>
+  <h4 class="pt-2">  {{'JobPlan_Code' | translate}} : {{data.jobPlanCode}} -  {{'jobPlan_frequency' | translate}} : {{data.frequency}}</h4>
+
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+  <div class="row">
+    <div class="col-md-4 text-center">
+      {{'date' | translate}}
+    </div>
+    <div class="col-md-4 text-center">
+      {{'remarks' | translate}}
+    </div>
+  </div>
+
+  <ng-container *ngFor="let arr of data.list; index as i;">
+    <div class="row pb-1">
+      <div class="col-md-1" [ngClass]="i == 0 ? 'p-0' : ''">
+        {{i+1}}.
+      </div>
+      <!--<div class="col-md-4">
+    <input type="date" class="form-control all-date" [ngClass]="item.textTwo" [value]="setFrequencyDates(item.value)" [ngClass]="item.textTwo"
+     (blur)="blurchangeDate(i+1, arr, $event)" (dateChange)="changeDate(i+1, arr, $event)"
+    />*ngIf="data.childHasDiffFreq;else noHasDiffFreq"
+  </div>-->
+      <div class="col-md-4" [ngClass]="i == 0 ? 'p-1' : ''">
+        <div class="form-group">
+          <div class="input-group mb-2">
+            <ng-container>
+              <input class="form-control datapickerinput" placeholder="{{'jobPlan_planStartDate' | translate}}"
+                     [matDatepicker]="picker5" [value]="arr.planStartDate" id="input_{{i+1}}" style="width:90%;" readonly>
+
+              <div class="input-group-prepend datapickericon">
+                <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                <mat-datepicker #picker5 data-date-format="dd/mm/yyyy"
+                                [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+
+              </div>
+            </ng-container>
+            <!--<ng-template #noHasDiffFreq>
+          <input class="form-control" placeholder="{{'jobPlan_planStartDate' | translate}}" type="text"
+                 [value]="readOnlyDate(arr.planStartDate)" id="input_{{i+1}}" style="width:90%;" readonly>
+        </ng-template>-->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <input type="text" class="form-control" [value]="arr.remarks" id="remarks_{{i+1}}" />
+      </div>
+    </div>
+  </ng-container>
+  <div class="row pb-1">
+    <div class="col-md-6 col-lg-6 text-center">
+      <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+             value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+      <input type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+             value="{{'Save' | translate}}" (click)="save()" /> &nbsp;
+    </div>
+  </div>
+  <div class="pb-4">&nbsp;</div>
+</div>
+<!--<style>
+  .mat-calendar-header {
+    display: none;
+  }
+  .mat-focus-indicator mat-calendar-period-button {
+    display: none;
+  }
+</style>-->

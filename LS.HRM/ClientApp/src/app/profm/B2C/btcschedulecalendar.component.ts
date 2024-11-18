@@ -41,7 +41,7 @@ export class BtcschedulecalendarComponent extends ParentB2CFrontComponent implem
   totalItemsCount: number = 0;
   form!: FormGroup;
   // myForm: FormGroup;
-  row: any;
+  row:any = {id:0};
   isReadOnly: boolean = false;
   id: number = 0;
   deptCode: string = '';

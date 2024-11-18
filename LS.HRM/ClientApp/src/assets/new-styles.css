@@ -1970,7 +1970,7 @@ pre {
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #e9ecef;
-    border-radius: 18px;
+   /* border-radius: 18px;*/
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {

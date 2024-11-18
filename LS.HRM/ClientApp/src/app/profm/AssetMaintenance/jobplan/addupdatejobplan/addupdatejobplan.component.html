@@ -1,0 +1,213 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{modalTitle}}</h3>
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="jobPlanCode">{{'jobPlanCode_Code' | translate}}</label>
+        <input class="form-control" id="jobPlanCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlanCode_Code' | translate}} " formControlName="jobPlanCode"
+               readonly>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'jobPlan_Date' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'jobPlan_Date' | translate}}" formControlName="jobPlanDate"
+                 [matDatepicker]="picker2">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <validation-message [control]="form.controls.jobPlanDate"></validation-message>
+    </div>   
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="assetCode">{{'jobPlan_assetCode' | translate}}</label>
+        <select class="custom-select mr-sm-2 input-mandatory" formControlName="assetCode" (change)="loadAssetFor_AstCode($event)">
+          <option value="">{{ 'jobPlan_assetCode' | translate}}</option>
+          <option *ngFor="let item of assetSelectList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+        </select>
+        <validation-message [control]="form.controls.assetCode"></validation-message>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="contractCode">{{'jobPlan_contractCode' | translate}}</label>
+        <input class="form-control input-mandatory" id="contractCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_contractCode' | translate}}" formControlName="contractCode" readonly>
+        <validation-message [control]="form.controls.contractCode"></validation-message>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'jobPlan_ContractStartDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'jobPlan_ContractStartDate' | translate}}" formControlName="contStartDate"
+                 [matDatepicker]="picker3">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <validation-message [control]="form.controls.contStartDate"></validation-message>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'jobPlan_ContractEndDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'jobPlan_ContractEndDate' | translate}}" formControlName="contEndDate"
+                 [matDatepicker]="picker4">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+            <mat-datepicker #picker4 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <validation-message [control]="form.controls.contEndDate"></validation-message>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="frequency">{{'jobPlan_frequency' | translate}}</label>
+        <select class="custom-select mr-sm-2 input-mandatory" formControlName="frequency">
+          <option value="">{{ 'jobPlan_frequency' | translate}}</option>
+          <option *ngFor="let item of frequencyList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+        </select>
+        <validation-message [control]="form.controls.frequency"></validation-message>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="preFixCode">{{'jobPlan_prefixCode' | translate}}</label>
+        <input class="form-control" id="preFixCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_prefixCode' | translate}}" formControlName="preFixCode">
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="deptCode">{{'jobPlan_deptCode' | translate}}</label>
+        <input class="form-control" id="deptCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_deptCode' | translate}}" formControlName="deptCode" readonly>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="sectionCode">{{'jobPlan_Section' | translate}}</label>
+        <input class="form-control" id="sectionCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_Section' | translate}}" formControlName="sectionCode" readonly>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="preparedBy">{{'jobPlan_preparedBy' | translate}}</label>
+        <input class="form-control" id="preparedBy" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_preparedBy' | translate}}" formControlName="preparedBy">
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="approvedBy">{{'jobPlan_approvedBy' | translate}}</label>
+        <input class="form-control" id="approvedBy" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_approvedBy' | translate}}" formControlName="approvedBy">
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'jobPlan_planStartDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'jobPlan_planStartDate' | translate}}" formControlName="planStartDate"
+                 [matDatepicker]="picker5">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+            <mat-datepicker #picker5 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <validation-message [control]="form.controls.planStartDate"></validation-message>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="remarks">{{'remarks' | translate}}</label>
+        <textarea class="form-control" id="remarks" type="text"
+                  placeholder="{{'Please_Enter' | translate}} {{'jobPlan_remarks' | translate}}" formControlName="remarks"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="noJobPlanKpi">{{'noJobPlanKpi' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="noJobPlanKpi"></mat-slide-toggle>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="canGenChildSch">{{'canGenChildSch' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="canGenChildSch" (change)="canGenChildSchEvent($event)"></mat-slide-toggle>
+      </div>
+    </div>
+    <!--<div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="approve">{{'approve' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="approve"></mat-slide-toggle>
+      </div>
+    </div>-->
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="childHasDiffFreq">{{'childHasDiffFreq' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="childHasDiffFreq"></mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+     
+    </div>
+    <div class="col-md-6 col-lg-6">
+     
+    </div>
+
+  </div>
+
+
+
+  <div class="row mt-3 ">
+    <div class="col-md-12 col-lg-12 text-center">
+      <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+             value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+
+      <input type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+             value="{{'Generate_P_P_M_Schedule' | translate}}" (click)="jobPlanSchedule()" *ngIf="canGenChildSchSelected"/> &nbsp;
+
+      <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+             value="{{'Save_Schedules' | translate}}" [disabled]="isSaving"/>
+    </div>
+  </div>
+</form>

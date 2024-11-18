@@ -22,6 +22,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using System.Linq;
 using CIN.Domain.FomMgt;
 using CIN.Domain.HRMAdminMgt;
+using CIN.Domain.FomMob;
+using CIN.Domain.FomNotificationB2C;
+using CIN.Domain.FomMgt.AssetMaintenanceMgt;
 
 namespace CIN.DB
 {
@@ -196,7 +199,7 @@ namespace CIN.DB
         #endregion
 
         #region SalesSetup
-        
+
         public DbSet<TblSndDefSalesShipment> SndSalesShipments { get; set; }
         public DbSet<TblSndDefSalesTermsCode> SndSalesTermsCodes { get; set; }
         public DbSet<TblInvDefSalesConfig> SalesConfigs { get; set; }
@@ -355,120 +358,120 @@ namespace CIN.DB
 
         #endregion
 
-       // #region School Management System
-       //// public DbSet<TblStudentDetails> StudentDetails { get; set; }
+        // #region School Management System
+        //// public DbSet<TblStudentDetails> StudentDetails { get; set; }
 
-       // public DbSet<TblParentsLogin> TblParentsLogin { get; set; }
+        // public DbSet<TblParentsLogin> TblParentsLogin { get; set; }
 
-       // public DbSet<TblWardDetails> TblWardDetails { get; set; }
+        // public DbSet<TblWardDetails> TblWardDetails { get; set; }
 
-       // public DbSet<TblSysSchoolAcademicBatches> SysSchoolAcademicBatches { get; set; }
+        // public DbSet<TblSysSchoolAcademicBatches> SysSchoolAcademicBatches { get; set; }
 
-       // public DbSet<TblSysSchoolAcademicsSubects> SysSchoolAcademicsSubects { get; set; }
+        // public DbSet<TblSysSchoolAcademicsSubects> SysSchoolAcademicsSubects { get; set; }
 
-       // public DbSet<TblSysSchoolSectionsSection> SchoolSectionsSection { get; set; }
+        // public DbSet<TblSysSchoolSectionsSection> SchoolSectionsSection { get; set; }
 
-       // public DbSet<TblSysSchoolAcedemicClassGrade> SchoolAcedemicClassGrade { get; set; }
+        // public DbSet<TblSysSchoolAcedemicClassGrade> SchoolAcedemicClassGrade { get; set; }
 
-       // public DbSet<TblSysSchoolSemister> SchoolSemister { get; set; }
+        // public DbSet<TblSysSchoolSemister> SchoolSemister { get; set; }
 
-       // public DbSet<TblSysSchoolPETCategory> SysSchoolPETCategory { get; set; }
+        // public DbSet<TblSysSchoolPETCategory> SysSchoolPETCategory { get; set; }
 
-       // public DbSet<TblSysSchoolNationality> SysSchoolNationality { get; set; }
+        // public DbSet<TblSysSchoolNationality> SysSchoolNationality { get; set; }
 
-       // public DbSet<TblSysSchoolStuLeaveType> SysSchoolStuLeaveType { get; set; }
+        // public DbSet<TblSysSchoolStuLeaveType> SysSchoolStuLeaveType { get; set; }
 
-       // public DbSet<TblSysSchoolPayTypes> SysSchoolPayTypes { get; set; }
+        // public DbSet<TblSysSchoolPayTypes> SysSchoolPayTypes { get; set; }
 
-       // public DbSet<TblSysSchoolReligion> SysSchoolReligion { get; set; }
+        // public DbSet<TblSysSchoolReligion> SysSchoolReligion { get; set; }
 
-       // public DbSet<TblSysSchoolLanguages> SysSchoolLanguages { get; set; }
+        // public DbSet<TblSysSchoolLanguages> SysSchoolLanguages { get; set; }
 
-       // public DbSet<TblSysSchoolGender> SysSchoolGender { get; set; }
+        // public DbSet<TblSysSchoolGender> SysSchoolGender { get; set; }
 
-       // public DbSet<TblSysSchoolFeeTerms> SysSchoolFeeTerms { get; set; }
-       // public DbSet<TblSysSchoolFeeType> SysSchoolFeeType { get; set; }
+        // public DbSet<TblSysSchoolFeeTerms> SysSchoolFeeTerms { get; set; }
+        // public DbSet<TblSysSchoolFeeType> SysSchoolFeeType { get; set; }
 
-       // public DbSet<TblSysSchoolBranches> SchoolBranches { get; set; }
+        // public DbSet<TblSysSchoolBranches> SchoolBranches { get; set; }
 
-       // public DbSet<TblSysSchoolFeeStructureHeader> SchoolFeeStructureHeader { get; set; }
+        // public DbSet<TblSysSchoolFeeStructureHeader> SchoolFeeStructureHeader { get; set; }
 
-       // public DbSet<TblSysSchoolFeeStructureDetails> SchoolFeeStructureDetails { get; set; }
+        // public DbSet<TblSysSchoolFeeStructureDetails> SchoolFeeStructureDetails { get; set; }
 
-       // public DbSet<TblSysSchoolGradeSectionMapping> SchoolGradeSectionMapping { get; set; }
+        // public DbSet<TblSysSchoolGradeSectionMapping> SchoolGradeSectionMapping { get; set; }
 
-       // public DbSet<TblSysSchoolGradeSubjectMapping> SchoolGradeSubjectMapping { get; set; }
+        // public DbSet<TblSysSchoolGradeSubjectMapping> SchoolGradeSubjectMapping { get; set; }
 
-       // //web student Registration
-       // public DbSet<TblWebStudentRegistration> WebStudentRegistration { get; set; }
+        // //web student Registration
+        // public DbSet<TblWebStudentRegistration> WebStudentRegistration { get; set; }
 
-       // public DbSet<TblDefSchoolStudentMaster> DefSchoolStudentMaster { get; set; }
+        // public DbSet<TblDefSchoolStudentMaster> DefSchoolStudentMaster { get; set; }
 
-       // public DbSet<TblDefStudentFeeHeader> DefStudentFeeHeader { get; set; }
+        // public DbSet<TblDefStudentFeeHeader> DefStudentFeeHeader { get; set; }
 
-       // public DbSet<TblDefStudentFeeDetails> DefStudentFeeDetails { get; set; }
+        // public DbSet<TblDefStudentFeeDetails> DefStudentFeeDetails { get; set; }
 
-       // public DbSet<TblDefStudentAddress> DefStudentAddress { get; set; }
-       // public DbSet<TblDefStudentGuardiansSiblings> DefStudentGuardiansSiblings { get; set; }
-       // public DbSet<TblDefStudentPrevEducation> DefStudentPrevEducation { get; set; }
-       // public DbSet<TblDefStudentNotices> DefStudentNotices { get; set; }
-       // public DbSet<TblDefStudentNoticesReasonCode> DefStudentNoticesReasonCode { get; set; }
-       // public DbSet<TblDefStudentAcademics> DefStudentAcademics { get; set; }
+        // public DbSet<TblDefStudentAddress> DefStudentAddress { get; set; }
+        // public DbSet<TblDefStudentGuardiansSiblings> DefStudentGuardiansSiblings { get; set; }
+        // public DbSet<TblDefStudentPrevEducation> DefStudentPrevEducation { get; set; }
+        // public DbSet<TblDefStudentNotices> DefStudentNotices { get; set; }
+        // public DbSet<TblDefStudentNoticesReasonCode> DefStudentNoticesReasonCode { get; set; }
+        // public DbSet<TblDefStudentAcademics> DefStudentAcademics { get; set; }
 
-       // public DbSet<TblSysSchoolBranchesAuthority> SysSchoolBranchesAuthority { get; set; }
-
-
-       // ////mobile app Messages
-       // public DbSet<TblSchoolMessages> SchoolMessages { get; set; }
-       // public DbSet<TblDefStudentAttendance> StudentAttendance { get; set; }
-
-       // public DbSet<TblDefStudentApplyLeave> StudentApplyLeave { get; set; }
-
-       // public DbSet<TblSysSchoolHolidayCalanderStudent> StudentHolidayClaender { get; set; }
-
-       // public DbSet<TblParentAddRequest> ParentAddRequest { get; set; }
-
-       // public DbSet<TblTranFeeTransaction> FeeTransaction { get; set; }
-
-       // public DbSet<TblStudentHomeWork> StudentHomeWork { get; set; }
-
-       // public DbSet<TblSysSchooScheduleEvents> SchooScheduleEvents { get; set; }
-
-       // public DbSet<TblLessonPlanHeader> LessonPlanHeader { get; set; }
-
-       // public DbSet<TblSysSchoolNews> SysSchoolNews { get; set; }
-
-       // public DbSet<TblSysSchoolNewsMediaLib> SysSchoolNewsMedia { get; set; }
-
-       // public DbSet<TblDefSchoolTeacherMaster> DefSchoolTeacherMaster { get; set; }
-       // public DbSet<TblDefSchoolTeacherLanguages> DefSchoolTeacherLanguages { get; set; }
-       // public DbSet<TblDefSchoolTeacherQualification> DefSchoolTeacherQualification { get; set; }
-       // public DbSet<TblDefSchoolTeacherSubjectsMapping> DefSchoolTeacherSubjectsMapping { get; set; }
-       // public DbSet<TblDefSchoolTeacherClassMapping> DefSchoolTeacherClassMapping { get; set; }
-       // public DbSet<TblLessonPlanDetails> LessonPlanDetails { get; set; }
-       // public DbSet<TblDefSchoolSubjectExamsGrade> SchoolSubjectExamsGrade { get; set; }
-       // public DbSet<TblDefSchoolExaminationManagementHeader> SchoolExaminationManagementHeader { get; set; }
-       // public DbSet<TblDefSchoolExaminationManagementDetails> SchoolExaminationManagementDetails { get; set; }
-       // public DbSet<TblDefSchoolStudentResultHeader> SchoolStudentResultHeader { get; set; }
-       // public DbSet<TblDefSchoolStudentResultDetails> SchoolStudentResultDetails { get; set; }
-       // public DbSet<TblSysSchoolExaminationTypes> SchoolExaminationTypes { get; set; }
-       // public DbSet<TblSysSchoolSchedule> SchoolSchedule { get; set; }
-       // public DbSet<TblStudentAttnRegHeader> StudentAttnRegHeader { get; set; }
-       // public DbSet<TblStudentAttnRegDetails> StudentAttnRegDetails { get; set; }
-
-       // //public DbSet<TblLessonPlanDetails> LessonPlanDetails { get; set; }
+        // public DbSet<TblSysSchoolBranchesAuthority> SysSchoolBranchesAuthority { get; set; }
 
 
-       // public DbSet<TblSysSchoolPushNotificationParent> PushNotificationParent { get; set; }
+        // ////mobile app Messages
+        // public DbSet<TblSchoolMessages> SchoolMessages { get; set; }
+        // public DbSet<TblDefStudentAttendance> StudentAttendance { get; set; }
 
-       // public DbSet<TblParentMyGallery> ParentMyGallery { get; set; }
+        // public DbSet<TblDefStudentApplyLeave> StudentApplyLeave { get; set; }
 
-       // public DbSet<TblSysSchoolNotifications> SchoolNotifications { get; set; }
-       // public DbSet<TblSysSchoolNotificationFilters> SchoolNotificationFilters { get; set; }
+        // public DbSet<TblSysSchoolHolidayCalanderStudent> StudentHolidayClaender { get; set; }
 
-       // public DbSet<TblSysNotificaticationTemplate> NotificaticationTemplates { get; set; }
+        // public DbSet<TblParentAddRequest> ParentAddRequest { get; set; }
 
-       // #endregion
+        // public DbSet<TblTranFeeTransaction> FeeTransaction { get; set; }
+
+        // public DbSet<TblStudentHomeWork> StudentHomeWork { get; set; }
+
+        // public DbSet<TblSysSchooScheduleEvents> SchooScheduleEvents { get; set; }
+
+        // public DbSet<TblLessonPlanHeader> LessonPlanHeader { get; set; }
+
+        // public DbSet<TblSysSchoolNews> SysSchoolNews { get; set; }
+
+        // public DbSet<TblSysSchoolNewsMediaLib> SysSchoolNewsMedia { get; set; }
+
+        // public DbSet<TblDefSchoolTeacherMaster> DefSchoolTeacherMaster { get; set; }
+        // public DbSet<TblDefSchoolTeacherLanguages> DefSchoolTeacherLanguages { get; set; }
+        // public DbSet<TblDefSchoolTeacherQualification> DefSchoolTeacherQualification { get; set; }
+        // public DbSet<TblDefSchoolTeacherSubjectsMapping> DefSchoolTeacherSubjectsMapping { get; set; }
+        // public DbSet<TblDefSchoolTeacherClassMapping> DefSchoolTeacherClassMapping { get; set; }
+        // public DbSet<TblLessonPlanDetails> LessonPlanDetails { get; set; }
+        // public DbSet<TblDefSchoolSubjectExamsGrade> SchoolSubjectExamsGrade { get; set; }
+        // public DbSet<TblDefSchoolExaminationManagementHeader> SchoolExaminationManagementHeader { get; set; }
+        // public DbSet<TblDefSchoolExaminationManagementDetails> SchoolExaminationManagementDetails { get; set; }
+        // public DbSet<TblDefSchoolStudentResultHeader> SchoolStudentResultHeader { get; set; }
+        // public DbSet<TblDefSchoolStudentResultDetails> SchoolStudentResultDetails { get; set; }
+        // public DbSet<TblSysSchoolExaminationTypes> SchoolExaminationTypes { get; set; }
+        // public DbSet<TblSysSchoolSchedule> SchoolSchedule { get; set; }
+        // public DbSet<TblStudentAttnRegHeader> StudentAttnRegHeader { get; set; }
+        // public DbSet<TblStudentAttnRegDetails> StudentAttnRegDetails { get; set; }
+
+        // //public DbSet<TblLessonPlanDetails> LessonPlanDetails { get; set; }
+
+
+        // public DbSet<TblSysSchoolPushNotificationParent> PushNotificationParent { get; set; }
+
+        // public DbSet<TblParentMyGallery> ParentMyGallery { get; set; }
+
+        // public DbSet<TblSysSchoolNotifications> SchoolNotifications { get; set; }
+        // public DbSet<TblSysSchoolNotificationFilters> SchoolNotificationFilters { get; set; }
+
+        // public DbSet<TblSysNotificaticationTemplate> NotificaticationTemplates { get; set; }
+
+        // #endregion
 
         #region Fleet Management
         // public DbSet<TblParentsLogin> TblParentsLogin { get; set; }
@@ -510,8 +513,8 @@ namespace CIN.DB
 
 
         #region PROFM
-         public DbSet<TblErpFomClientMaster> ProfmClientMaster { get; set; }
-         public DbSet<TblSndDefCustomerCategory> SndCustomerCategories { get; set; }
+        public DbSet<TblErpFomClientMaster> ProfmClientMaster { get; set; }
+        public DbSet<TblSndDefCustomerCategory> SndCustomerCategories { get; set; }
         //public DbSet<TblErpFomSysCompany> ErpFomSysCompany { get; set; }
 
         //public DbSet<TblErpFomSysCompanyBranch> ErpfomSysCompanyBranch { get; set; }
@@ -567,10 +570,19 @@ namespace CIN.DB
 
         public DbSet<TblErpFomScheduleWeekdays> FomScheduleWeekdays { get; set; }
 
-       public DbSet<TblFomB2CUserClientLoginMapping> FomB2CUserClientLoginMappings { get; set; }
+        public DbSet<TblFomB2CUserClientLoginMapping> FomB2CUserClientLoginMappings { get; set; }
+        public DbSet<TblErpFomSection> FomSections { get; set; }
+        public DbSet<TblErpFomAssetMaster> FomAssetMasters { get; set; }
+        public DbSet<TblErpFomAssetMasterChild> FomAssetMasterChilds { get; set; }
+        public DbSet<TblErpFomAssetMasterTask> FomAssetMasterTasks { get; set; }
+        public DbSet<TblErpFomJobPlanMaster> FomJobPlanMasters { get; set; }
+        public DbSet<TblErpFomJobPlanChildSchedule> FomJobPlanChildSchedules { get; set; }
+        public DbSet<TblErpFomJobPlanMessageLog> FomJobPlanMessageLogs { get; set; }
+        public DbSet<TblErpFomJobPlanScheduleClosure> FomJobPlanScheduleClosures { get; set; }
+        public DbSet<TblErpFomJobPlanScheduleClosureItem> FomJobPlanScheduleClosureItems { get; set; }
 
         #region by SAMBA
-        
+
 
         public DbSet<TblFomB2CJobTicket> FomB2CJobTickets { get; set; }
         public DbSet<TblFomJobTicketPayment> FomJobTicketPayments { get; set; }
@@ -593,8 +605,29 @@ namespace CIN.DB
 
         #endregion
 
+        #region FomMob
+        public DbSet<TblFomMobSequenceNumberGenerator> FomMobSequenceNumberGenerator { get; set; }
+        public DbSet<TblSndDefCustomerMaster> ErpFomDefCustomerMaster { get; set; }
+        public DbSet<TblSndDefSiteMaster> ProfmDefSiteMaster { get; set; }
+
+        #endregion
+
+        #region  FomNotificationsB2C
+        public DbSet<TblFomSysMobileLogs> FomSysMobileLogs { get; set; }
+        public DbSet<TblFomSysPushNotificationSetting> FomSysPushNotificationSettings { get; set; }
+        #endregion
 
 
+        #region FomB2C
+        //public DbSet<TblErpFomPeriod> FomPeriod { get; set; }
+        //public DbSet<TblFomB2CUserClientLoginMapping> FomB2CUserClientLoginMappings { get; set; }
+        //public DbSet<TblErpFomServiceItems> FomServiceItems { get; set; }
+        //public DbSet<TblErpFomServiceItemsDetails> FomServiceItemsDetails { get; set; }
+        //public DbSet<TblFomJobTicketPayment> FomJobTicketPayments { get; set; }
+        //public DbSet<TblFomB2CJobTicket> FomB2CJobTickets { get; set; }
+        public DbSet<TblFomB2CDefaultPaymentPrice> FomB2CDefaultPaymentPrices { get; set; }
+
+        #endregion
 
         //public DbSet<TblProfmUserClientLoginMapping> ProfmUserClientLoginMapping { get; set; }
 
@@ -817,9 +850,9 @@ namespace CIN.DB
             #region PROFM
 
             modelBuilder.Entity<TblErpFomClientMaster>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
-           //modelBuilder.Entity<TblErpFomSysCompany>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
-           //modelBuilder.Entity<TblErpFomSysCompanyBranch>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
-           //modelBuilder.Entity<TblErpFomSysUser>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            //modelBuilder.Entity<TblErpFomSysCompany>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            //modelBuilder.Entity<TblErpFomSysCompanyBranch>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            //modelBuilder.Entity<TblErpFomSysUser>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
             modelBuilder.Entity<TblErpFomUserClientLoginMapping>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
             modelBuilder.Entity<TblFomJobTicket>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
             modelBuilder.Entity<TblFomJobWorkOrder>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
@@ -843,6 +876,10 @@ namespace CIN.DB
             modelBuilder.Entity<TblFomB2CJobTicket>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
             modelBuilder.Entity<TblFomJobTicketPayment>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
             modelBuilder.Entity<TblFomJobTicketFeedBack>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            modelBuilder.Entity<TblErpFomSection>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            modelBuilder.Entity<TblErpFomAssetMaster>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            modelBuilder.Entity<TblErpFomAssetMasterChild>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
+            modelBuilder.Entity<TblErpFomJobPlanMaster>().Property(e => e.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Throw);
             #endregion
 
             base.OnModelCreating(modelBuilder);

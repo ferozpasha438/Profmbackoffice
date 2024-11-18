@@ -1,0 +1,70 @@
+<div class="modal-header">
+  <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+    {{'Asset_Child_Items' | translate}}
+  </h3>
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+  <br />
+</div>
+
+<spinner-loader [isLoading]="isShowList"></spinner-loader>
+<div class="row" *ngIf="!isShowList">
+  <div class="col-md-8 col-lg-8">
+    <div class="table-responsive tableright overflow-hidden" *ngIf="childItems.length> 0;else nodata">
+      <div>
+        <div class="form-group">
+          <label for="assetCode">{{'filter_Data' | translate}}</label>
+          <select class="custom-select mr-sm-2 input-mandatory" [(ngModel)]="Status" (change)="loadChildsForAsset($event)">
+            <option value="A">{{ 'All' | translate}}</option>
+            <option value="C">{{ 'Closed' | translate}}</option>
+            <option value="P">{{ 'Pending' | translate}}</option>
+          </select>
+        </div>
+      </div>
+      <ng-container *ngFor="let item of childItems">
+        <p class="text-center text-primary"><b>{{item.childCode}}</b></p>
+        <ul>
+          <li style="list-style:none;">
+            <table id="zero_config1" class="table  table-bordered no-wrap">
+              <thead>
+                <tr>
+                  <th>{{'Schedule_Date' | translate}}</th>
+                  <th>{{'Asset' | translate}}</th>
+                  <th>{{'frequency' | translate}}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let citem of item.childItems">
+                  <td>{{citem.date | date: 'dd-MM-yyyy' }}</td>
+                  <td>{{citem.assetCode}}</td>
+                  <td> {{citem.frequency}}</td>
+                  <td>
+                    <a class="tableicons" *ngIf="!citem.isClosed;else notClosed" (click)="requireInfo(citem)" matTooltip="{{'Close_Item' | translate}}">
+                      <i class="icon-close text-danger"> </i>
+                    </a>
+                    <ng-template #notClosed>
+                      <b class="text-primary">{{'Closed' | translate}}</b>
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul>
+        <hr />
+      </ng-container>
+      <div class="row mt-3 ">
+        <div class="col-md-12 col-lg-12 text-center">
+          <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+                 value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;       
+        </div>
+      </div>
+    </div>
+    <ng-template #nodata>
+      <div class="text-center">
+        <b class="text-danger">No Asset_Child_Items Data</b>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

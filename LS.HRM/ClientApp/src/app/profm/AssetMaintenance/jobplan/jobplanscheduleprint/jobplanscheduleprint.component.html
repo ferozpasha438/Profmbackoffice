@@ -1,0 +1,85 @@
+<div style="position:fixed;">
+  <button (click)="printInvoice()"> {{'Print' | translate}}</button> &nbsp;
+  <button type="button" class="" aria-hidden="true" (click)="closeModel()">  {{'Close' | translate}}</button>
+</div>
+<br />
+<br />
+<br />
+
+<div class="container-fluid invoice-container print-container" style=" margin: auto; padding:0 35px;" id="printcontainer" *ngIf="printItems">
+  <div dir="{{utilService.getDir()}}" style="width:inherit;">
+    <!--<table style="width:100%" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td style="text-align: left;width:60%">
+          <h4 style="font-size: 1rem !important;color: #0c2f54; font-family: 'Poppins', sans-serif;font-weight: 500;
+        line-height: 1.2;margin:0;padding-top:4px">
+            {{printItem.companyName}}
+          </h4>
+          <h4 style="font-size: 1rem !important;color: #0c2f54; font-family: 'Poppins', sans-serif;font-weight: 500;
+        line-height: 1.2;margin:0;padding-top:4px">
+            {{printItem.address}}
+          </h4>
+
+        </td>
+        <td style=" text-align: right;vertical-align: middle;">
+          <img id="logo" style="width:120px" src="{{printItem.logo}}" title="invoice" alt="invoice" />
+        </td>
+
+
+      </tr>
+    </table>-->
+
+    <div style="padding-top:10px;padding-bottom:5px">
+      <h4>  {{'jobPlanCode_Schedule_Print' | translate}}</h4>
+      <table style="width:100%;border:2px solid #878787" border="1" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <td class="text-center font-weight-medium">
+              {{'jobPlanCode_Code' | translate}}
+            </td>
+            <td class="text-center font-weight-medium">
+              {{'jobPlan_assetCode' | translate}}
+            </td>
+            <td class="text-center font-weight-medium">
+              {{'childCode' | translate}}
+            </td>
+            <td class="text-center font-weight-medium">
+              {{'jobPlan_planStartDate' | translate}}
+            </td>
+            <td class="text-center font-weight-medium">
+              {{'jobPlan_frequency' | translate}}
+            </td>
+            <td class="text-center font-weight-medium">
+              {{'remarks' | translate}}
+            </td>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of printItems">
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{jobPlanCode}}
+            </td>
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{item.assetCode}}
+            </td>
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{item.childCode}}
+            </td>
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{item.date}}
+            </td>
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{item.frequency}}
+            </td>
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{item.remarks}}
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

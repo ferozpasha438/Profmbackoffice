@@ -32,7 +32,8 @@ namespace CIN.Domain.InvoiceSetup
         public int SDOrderNumber { get; set; }
         public int SDDeliveryNumber { get; set; }
         public int SDInvRetNumber { get; set; }
+        public int JobPlanNumber { get; set; }
         [StringLength(20)]
-        public string  BranchCode { get; set; }
+        public string BranchCode { get; set; }
     }
 }

@@ -1,0 +1,218 @@
+<div class="modal-header">
+  <h3 class="modal-title"> {{'Asset_Closing' | translate}}</h3>
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="jobPlanCode">{{'jobPlanCode_Code' | translate}}</label>
+        <input class="form-control" id="jobPlanCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlanCode_Code' | translate}} " formControlName="jobPlanCode"
+               readonly>
+        <validation-message [control]="form.controls.jobPlanCode"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="assetCode">{{'jobPlan_assetCode' | translate}}</label>
+        <input class="form-control" id="assetCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_assetCode' | translate}} " formControlName="assetCode"
+               readonly>
+        <validation-message [control]="form.controls.assetCode"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="frequency">{{'jobPlan_frequency' | translate}}</label>
+        <input class="form-control" id="frequency" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_frequency' | translate}} " formControlName="frequency"
+               readonly>
+        <validation-message [control]="form.controls.frequency"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="childCode">{{'jobPlan_childcode' | translate}}</label>
+        <input class="form-control" id="childCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'jobPlan_childcode' | translate}} " formControlName="childCode"
+               readonly>
+        <validation-message [control]="form.controls.childCode"></validation-message>
+      </div>
+    </div>
+
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="preparedBy">{{'Closed_By' | translate}}</label>
+        <input class="form-control" id="preparedBy" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'Closed_By' | translate}}" formControlName="closedBy">
+        <validation-message [control]="form.controls.closedBy"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="remarks">{{'remarks' | translate}}</label>
+        <textarea class="form-control" id="remarks" type="text"
+                  placeholder="{{'Please_Enter' | translate}} {{'jobPlan_remarks' | translate}}" formControlName="remarks" maxlength="500"></textarea>
+
+      </div>
+    </div>
+  </div>
+  <div class="row pb-2">
+    <div class="col-md-12 col-lg-12">
+      <h4>{{'Document_Upload' | translate}}</h4>
+    </div>
+    <div class="col-md-4 col-lg-4">
+      <label for="TileImage"></label>
+      <input type="file" (change)="onSelectFile1($event)">
+    </div>
+    <div class="col-md-4 col-lg-4 pt-3">
+      <input class="form-control" maxlength="500" type="text" placeholder="{{'Please_Enter' | translate}}" [(ngModel)]="fileone" [ngModelOptions]="{standalone: true}">
+    </div>
+  </div>
+  <hr/>
+  <div class="row">
+    <div class="col-md-12 col-lg-12 pt-2">
+      <mat-tab-group>
+        <mat-tab label="{{'Materials' | translate}}">
+          <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">
+            <thead>
+              <tr>
+                <th width="45%">{{'Description' | translate}}</th>
+                <th width="45%">{{'Quantity' | translate}}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <textarea class="form-control" type="text" placeholder="{{'Description' | translate}}" [(ngModel)]="matdescription" [ngModelOptions]="{standalone: true}" rows="2"></textarea>
+                </td>
+                <td>
+                  <input class="form-control" type="text" placeholder="{{'Quantity' | translate}}" [(ngModel)]="matquantity" [ngModelOptions]="{standalone: true}">
+                </td>
+                <td>
+                  <button type="button" class="btn waves-effect waves-light   btn-primary  " (click)="addmat()"><i class="icon-plus"></i></button>
+                </td>
+              </tr>
+            </tbody>
+
+            <thead>
+              <tr>
+                <th>{{'Description' | translate}}</th>
+                <th>{{'Quantity' | translate}}</th>
+                <th class="text-center"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listOfmat; let index = i;">
+                <td>{{item.description}}</td>
+                <td>{{item.quantity}}</td>
+                <td class="text-center">
+                  <i class="icon-note cpointer" (click)="editmat(item)"> </i> &nbsp;
+                  <i class="icon-trash cpointer " (click)="deletemat(item)"> </i> &nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+        <mat-tab label="{{'Tools' | translate}}">
+          <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">
+            <thead>
+              <tr>
+                <th width="45%">{{'Description' | translate}}</th>
+                <th width="45%">{{'Quantity' | translate}}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <textarea class="form-control" type="text" placeholder="{{'Description' | translate}}" [(ngModel)]="tooldescription" [ngModelOptions]="{standalone: true}" rows="2"></textarea>
+                </td>
+                <td>
+                  <input class="form-control" type="text" placeholder="{{'Quantity' | translate}}" [(ngModel)]="toolquantity" [ngModelOptions]="{standalone: true}">
+                </td>
+                <td>
+                  <button type="button" class="btn waves-effect waves-light   btn-primary  " (click)="addtool()"><i class="icon-plus"></i></button>
+                </td>
+              </tr>
+            </tbody>
+
+            <thead>
+              <tr>
+                <th>{{'Description' | translate}}</th>
+                <th>{{'Quantity' | translate}}</th>
+                <th class="text-center"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listOftool; let index = i;">
+                <td>{{item.description}}</td>
+                <td>{{item.quantity}}</td>
+                <td class="text-center">
+                  <i class="icon-note cpointer" (click)="edittool(item)"> </i> &nbsp;
+                  <i class="icon-trash cpointer " (click)="deletetool(item)"> </i> &nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+        <mat-tab label="{{'Labor_Hours' | translate}}">
+          <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">
+            <thead>
+              <tr>
+                <th width="45%">{{'Description' | translate}}</th>
+                <th width="45%">{{'Quantity' | translate}}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <textarea class="form-control" type="text" placeholder="{{'Description' | translate}}" [(ngModel)]="laborhrdescription" [ngModelOptions]="{standalone: true}" rows="2"></textarea>
+                </td>
+                <td>
+                  <input class="form-control" type="text" placeholder="{{'Quantity' | translate}}" [(ngModel)]="laborhrquantity" [ngModelOptions]="{standalone: true}">
+                </td>
+                <td>
+                  <button type="button" class="btn waves-effect waves-light   btn-primary  " (click)="addlaborhr()"><i class="icon-plus"></i></button>
+                </td>
+              </tr>
+            </tbody>
+
+            <thead>
+              <tr>
+                <th>{{'Description' | translate}}</th>
+                <th>{{'Quantity' | translate}}</th>
+                <th class="text-center"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listOflaborhr; let index = i;">
+                <td>{{item.description}}</td>
+                <td>{{item.quantity}}</td>
+                <td class="text-center">
+                  <i class="icon-note cpointer" (click)="editlaborhr(item)"> </i> &nbsp;
+                  <i class="icon-trash cpointer " (click)="deletelaborhr(item)"> </i> &nbsp;
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+
+  <div class="row mt-3 ">
+    <div class="col-md-12 col-lg-12 text-center">
+      <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+             value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+      <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+             value="{{'Save' | translate}}" />
+    </div>
+  </div>
+
+</form>
+

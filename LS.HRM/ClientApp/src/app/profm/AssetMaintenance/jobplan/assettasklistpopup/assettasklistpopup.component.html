@@ -1,0 +1,29 @@
+<div class="modal-header">
+  
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+  <br />
+</div>
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <div class="table-responsive" style="width:95%;">
+      <h4 class="text-center">{{'Task_Activities' | translate}}</h4>
+      <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">       
+        <thead>
+          <tr>
+            <th>{{'ActCode' | translate}}</th>
+            <th>{{'ResTypeCode' | translate}}</th>
+         
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listOfAssetTasks; let index = i;">
+            <td>{{item.actCode}}</td>
+            <td>{{item.resTypeCode}}</td>
+            
+          </tr>
+
+      </table>
+
+    </div>
+  </div>
+</div>
