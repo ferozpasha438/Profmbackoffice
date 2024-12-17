@@ -66,6 +66,10 @@ namespace CIN.Application.FomMgtDtos
         [StringLength(20)]
         public string ContractCode { get; set; }
 
+        public DateTime? InstallDate { get; set; }
+        public DateTime? ReplacementDate { get; set; }
+        public bool? IsWrittenOff { get; set; }
+        public int? AssetScale { get; set; }
         public List<TblErpFomAssetMasterChildDto> AssetChilds { get; set; }
         public List<TblErpFomAssetMasterTaskDto> AssetTasks { get; set; }
 
@@ -249,6 +253,7 @@ namespace CIN.Application.FomMgtDtos
         public string Description { get; set; }
         [StringLength(100)]
         public string Quantity { get; set; }
+        public int? Hours { get; set; }
         [StringLength(20)]
         public string Source { get; set; }
         public DateTime CreatedDate { get; set; }

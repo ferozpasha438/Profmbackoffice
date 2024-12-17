@@ -104,6 +104,10 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                         JobPlan = e.JobPlan,
                                         HasChild = e.HasChild,
                                         IsActive = e.IsActive,
+                                        IsWrittenOff = e.IsWrittenOff ?? false,
+                                        InstallDate = e.InstallDate,
+                                        ReplacementDate = e.ReplacementDate,
+                                        AssetScale = e.AssetScale ?? 0,
                                     })
                                     .FirstOrDefaultAsync();
 
@@ -332,7 +336,10 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     assetMst.JobPlan = obj.JobPlan;
                     assetMst.HasChild = obj.HasChild;
                     assetMst.IsActive = obj.IsActive;
-
+                    assetMst.InstallDate = obj.InstallDate;
+                    assetMst.ReplacementDate = obj.ReplacementDate;
+                    assetMst.IsWrittenOff = obj.IsWrittenOff;
+                    assetMst.AssetScale = obj.AssetScale;
 
                     if (obj.Id > 0)
                     {

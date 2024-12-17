@@ -2,21 +2,16 @@
 using CIN.Application.Common;
 using CIN.Application.FomMgtDtos;
 using CIN.Application.FomMgtQuery.ProfmQuery;
-using CIN.Application.ProfmQuery;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -99,7 +94,10 @@ namespace LS.API.FomMobB2C.Controllers
 
             string fileExtension = Path.GetExtension(file.FileName);
             if (fileExtension != ".xls" && fileExtension != ".xlsx")
-                return Content("InvalidFileUploaded");
+                return BadRequest(new ApiMessageDto
+                {
+                    Message = "Invalid File"
+                });
 
             var webRoot = $"{_env.ContentRootPath}/files/uploadedastmaster";
             var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmssfff", CultureInfo.InvariantCulture)}{Path.GetExtension(file.FileName)}";
@@ -116,83 +114,245 @@ namespace LS.API.FomMobB2C.Controllers
                 await file.CopyToAsync(fileStream);
             }
 
-            using (ExcelPackage package = new ExcelPackage(fileLocation))
+            try
             {
-                //ExcelWorksheet workSheet = package.Workbook.Worksheets["Table1"];
-                var workSheet = package.Workbook.Worksheets.First();
-                int totalRows = workSheet.Dimension.Rows;
-
-                var assetMasterList = new List<TblErpFomAssetMasterDto>();
-                var assetMasterChilds = new List<TblErpFomAssetMasterChildDto>();
-
-                for (int i = 2; i <= totalRows; i++)
+                if (fileExtension.ToUpper() == ".XLSX")
                 {
-                    if (workSheet.Cells[i, 1].Value != null || workSheet.Cells[i, 2].Value != null)
+                    using (ExcelPackage package = new ExcelPackage(fileLocation))
                     {
-                        string assetCode = Convert.ToString(workSheet.Cells[i, 1].Value);
+                        //ExcelWorksheet workSheet = package.Workbook.Worksheets["Table1"];
+                        var workSheet = package.Workbook.Worksheets.First();
+                        int totalRows = workSheet.Dimension.Rows;
 
-                        if (assetCode.HasValue())
+                        var assetMasterList = new List<TblErpFomAssetMasterDto>();
+                        var assetMasterChilds = new List<TblErpFomAssetMasterChildDto>();
+
+                        for (int i = 2; i <= totalRows; i++)
                         {
-                            var asstMasterDto = new TblErpFomAssetMasterDto();
-                            asstMasterDto.AssetCode = assetCode;
-                            asstMasterDto.Name = Convert.ToString(Convert.ToString(workSheet.Cells[i, 2].Value));
-                            asstMasterDto.NameAr = Convert.ToString(Convert.ToString(workSheet.Cells[i, 3].Value));
-                            asstMasterDto.Description = Convert.ToString(Convert.ToString(workSheet.Cells[i, 4].Value));
-                            asstMasterDto.Location = Convert.ToString(workSheet.Cells[i, 5].Value);
-                            asstMasterDto.Classification = Convert.ToString(workSheet.Cells[i, 6].Value);
-                            asstMasterDto.RouteGroup = Convert.ToString(workSheet.Cells[i, 7].Value);
-                            asstMasterDto.JobPlan = string.Empty;
-                            asstMasterDto.SectionCode = Convert.ToString(workSheet.Cells[i, 8].Value);
-                            asstMasterDto.DeptCode = Convert.ToString(workSheet.Cells[i, 9].Value);
-                            asstMasterDto.ContractCode = Convert.ToString(workSheet.Cells[i, 10].Value);
+                            if (workSheet.Cells[i, 1].Value != null || workSheet.Cells[i, 2].Value != null)
+                            {
+                                string assetCode = Convert.ToString(workSheet.Cells[i, 1].Value);
 
-                            assetMasterList.Add(asstMasterDto);
+                                if (assetCode.HasValue())
+                                {
+                                    var asstMasterDto = new TblErpFomAssetMasterDto();
+                                    asstMasterDto.AssetCode = assetCode;
+                                    asstMasterDto.Name = Convert.ToString(Convert.ToString(workSheet.Cells[i, 2].Value));
+                                    asstMasterDto.NameAr = Convert.ToString(Convert.ToString(workSheet.Cells[i, 3].Value));
+                                    asstMasterDto.Description = Convert.ToString(Convert.ToString(workSheet.Cells[i, 4].Value));
+                                    asstMasterDto.Location = Convert.ToString(workSheet.Cells[i, 5].Value);
+                                    asstMasterDto.Classification = Convert.ToString(workSheet.Cells[i, 6].Value);
+                                    asstMasterDto.RouteGroup = Convert.ToString(workSheet.Cells[i, 7].Value);
+                                    asstMasterDto.JobPlan = string.Empty;
+                                    asstMasterDto.SectionCode = Convert.ToString(workSheet.Cells[i, 8].Value);
+                                    asstMasterDto.DeptCode = Convert.ToString(workSheet.Cells[i, 9].Value);
+                                    asstMasterDto.ContractCode = Convert.ToString(workSheet.Cells[i, 10].Value);
+                                    asstMasterDto.IsWrittenOff = false;
+                                    asstMasterDto.AssetScale = 0;
+                                    assetMasterList.Add(asstMasterDto);
+                                }
+                                else
+                                {
+                                    var asstMasterChildDto = new TblErpFomAssetMasterChildDto
+                                    {
+                                        ChildCode = Convert.ToString(Convert.ToString(workSheet.Cells[i, 2].Value)),
+                                        Name = Convert.ToString(Convert.ToString(workSheet.Cells[i, 3].Value)),
+                                        AssetCode = Convert.ToString(Convert.ToString(workSheet.Cells[i, 4].Value)),
+                                    };
+
+                                    assetMasterChilds.Add(asstMasterChildDto);
+                                }
+                            }
+                        }
+
+                        if (assetMasterChilds.Count > 0)
+                        {
+                            foreach (var astMaster in assetMasterList)
+                            {
+                                astMaster.AssetChilds = assetMasterChilds.Where(e => e.AssetCode == astMaster.AssetCode).ToList();
+                                astMaster.HasChild = astMaster.AssetChilds.Any();
+                            }
+                        }
+
+                        if (assetMasterList.Count() > 0)
+                            result = await Mediator.Send(new ImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
+
+                        FileInfo fi = new FileInfo(filePath);
+                        fi.Delete();
+
+                        if (result.Id == assetMasterList.Count())
+                        {
+                            result.Message = "Successfully imported data";
+                            return Ok(result);
+                        }
+                        else if (result.Id < assetMasterList.Count())
+                        {
+                            result.Message = "Partially Successful";
+                            return Ok(result);
                         }
                         else
-                        {
-                            var asstMasterChildDto = new TblErpFomAssetMasterChildDto
+                            return BadRequest(new ApiMessageDto
                             {
-                                ChildCode = Convert.ToString(Convert.ToString(workSheet.Cells[i, 2].Value)),
-                                Name = Convert.ToString(Convert.ToString(workSheet.Cells[i, 3].Value)),
-                                AssetCode = Convert.ToString(Convert.ToString(workSheet.Cells[i, 4].Value)),
+                                Message = ApiMessageInfo.Failed
+                            });
+                    }
+
+                }
+                else if (fileExtension.ToUpper() == ".XLS")
+                {
+                    static List<T> DataTableToList<T>(DataTable table) where T : new()
+                    {
+                        List<T> list = new List<T>();
+
+                        foreach (DataRow row in table.Rows)
+                        {
+                            T obj = new T();
+
+                            foreach (var prop in typeof(T).GetProperties())
+                            {
+                                if (table.Columns.Contains(prop.Name) && row[prop.Name] != DBNull.Value)
+                                {
+                                    prop.SetValue(obj, Convert.ChangeType(row[prop.Name], prop.PropertyType));
+                                }
+                            }
+
+                            list.Add(obj);
+                        }
+
+                        return list;
+                    }
+
+                    List<TblErpFomAssetMasterDto> assetMasterList = null;
+                    using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+                    {
+                        System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                        using (var reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration()
+                        {
+                            FallbackEncoding = System.Text.Encoding.GetEncoding(1252)
+                        }))
+                        {
+                            var conf = new ExcelDataSetConfiguration
+                            {
+                                ConfigureDataTable = _ => new ExcelDataTableConfiguration
+                                {
+                                    UseHeaderRow = true
+                                }
                             };
 
-                            assetMasterChilds.Add(asstMasterChildDto);
+                            var dataSet = reader.AsDataSet(conf);
+                            var dataTable = dataSet.Tables[0];
+                            assetMasterList = DataTableToList<TblErpFomAssetMasterDto>(dataTable);
+
                         }
                     }
-                }
 
-                if (assetMasterChilds.Count > 0)
-                {
-                    foreach (var astMaster in assetMasterList)
+                    if (assetMasterList is not null && assetMasterList.Count() > 0)
                     {
-                        astMaster.AssetChilds = assetMasterChilds.Where(e => e.AssetCode == astMaster.AssetCode).ToList();
-                        astMaster.HasChild = astMaster.AssetChilds.Any();
+                        var assetMasterChilds = assetMasterList.Where(e => !e.AssetCode.HasValue()).Select(e => new TblErpFomAssetMasterChildDto
+                        {
+                            ChildCode = e.Name,
+                            Name = e.Name,
+                            AssetCode = e.Description
+                        }).ToList();
+                        assetMasterList = assetMasterList.Where(e => e.AssetCode.HasValue()).ToList();
+
+                        if (assetMasterChilds.Count > 0)
+                        {
+                            foreach (var astMaster in assetMasterList)
+                            {
+                                astMaster.AssetChilds = assetMasterChilds.Where(e => e.AssetCode == astMaster.AssetCode).ToList();
+                                astMaster.HasChild = astMaster.AssetChilds.Any();
+                                astMaster.JobPlan = string.Empty;
+                                astMaster.IsWrittenOff = false;
+                                astMaster.AssetScale = 0;
+                            }
+                        }
+
+                        if (assetMasterList.Count() > 0)
+                            result = await Mediator.Send(new ImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
+
+                        FileInfo fi = new FileInfo(filePath);
+                        fi.Delete();
+
+                        if (result.Id == assetMasterList.Count())
+                        {
+                            result.Message = "Successfully imported data";
+                            return Ok(result);
+                        }
+                        else if (result.Id < assetMasterList.Count())
+                        {
+                            result.Message = "Partially Successful";
+                            return Ok(result);
+                        }
+                        else
+                            return BadRequest(new ApiMessageDto
+                            {
+                                Message = ApiMessageInfo.Failed
+                            });
                     }
+
                 }
 
-                if (assetMasterList.Count() > 0)
-                    result = await Mediator.Send(new ImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
 
-                FileInfo fi = new FileInfo(filePath);
-                fi.Delete();
-
-                if (result.Id == assetMasterList.Count())
+                return BadRequest(new ApiMessageDto
                 {
-                    result.Message = "Successfully imported data";
-                    return Ok(result);
-                }
-                else if (result.Id < assetMasterList.Count())
-                {
-                    result.Message = "Partially Successful";
-                    return Ok(result);
-                }
-                else
-                    return BadRequest(new ApiMessageDto
-                    {
-                        Message = ApiMessageInfo.Failed
-                    });
+                    Message = "Invalid File"
+                });
+
+                ////static string ReadExcel()
+                ////{
+                ////    DataTable dtTable = new DataTable();
+                ////    List<string> rowList = new List<string>();
+                ////    ISheet sheet;
+                ////    using (var stream = new FileStream("TestData.xlsx", FileMode.Open))
+                ////    {
+                ////        stream.Position = 0;
+                ////        XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
+                ////        sheet = xssWorkbook.GetSheetAt(0);
+                ////        IRow headerRow = sheet.GetRow(0);
+                ////        int cellCount = headerRow.LastCellNum;
+                ////        for (int j = 0; j < cellCount; j++)
+                ////        {
+                ////            ICell cell = headerRow.GetCell(j);
+                ////            if (cell == null || string.IsNullOrWhiteSpace(cell.ToString())) continue;
+                ////            {
+                ////                dtTable.Columns.Add(cell.ToString());
+                ////            }
+                ////        }
+                ////        for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++)
+                ////        {
+                ////            IRow row = sheet.GetRow(i);
+                ////            if (row == null) continue;
+                ////            if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+                ////            for (int j = row.FirstCellNum; j < cellCount; j++)
+                ////            {
+                ////                if (row.GetCell(j) != null)
+                ////                {
+                ////                    if (!string.IsNullOrEmpty(row.GetCell(j).ToString()) && !string.IsNullOrWhiteSpace(row.GetCell(j).ToString()))
+                ////                    {
+                ////                        rowList.Add(row.GetCell(j).ToString());
+                ////                    }
+                ////                }
+                ////            }
+                ////            if (rowList.Count > 0)
+                ////                dtTable.Rows.Add(rowList.ToArray());
+                ////            rowList.Clear();
+                ////        }
+                ////    }
+                ////    return JsonConvert.SerializeObject(dtTable);
+                ////}
+
+
             }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new ApiMessageDto
+                {
+                    Message = "Can not Process File"
+                });
+            }
+
         }
 
         [HttpDelete("deleteAssetMaster/{id}")]

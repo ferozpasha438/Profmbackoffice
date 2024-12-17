@@ -32,6 +32,7 @@ export class AssetclosinginfoComponent implements OnInit {
   laborhrsequence: number = 1;
   laborhrdescription: string = '';
   laborhrquantity: string = '';
+  laborhrhours: number = 0;
   laborhreditsequence: number = 0;
   listOflaborhr: Array<any> = [];
 
@@ -47,6 +48,7 @@ export class AssetclosinginfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.setForm();
+    console.log(this.data.childCode ?? '-');
   }
 
   setForm() {
@@ -55,7 +57,7 @@ export class AssetclosinginfoComponent implements OnInit {
         'jobPlanCode': [this.data.jobPlanCode, Validators.required],
         'assetCode': [this.data.assetCode, Validators.required],
         'frequency': [this.data.frequency, Validators.required],
-        'childCode': [this.data.childCode, Validators.required],
+        'childCode': [this.data.childCode],//this.utilService.hasValue(this.data.childCode) ? this.data.childCode : '-', Validators.required],
         "closedBy": [this.authService.getUserName(), Validators.required],
         "remarks": '',
       }
@@ -135,17 +137,18 @@ export class AssetclosinginfoComponent implements OnInit {
 
 
   addlaborhr() {
-    if (this.laborhrdescription.trim() && this.laborhrquantity) {
+    if (this.laborhrdescription.trim() && this.laborhrhours > 0 && this.laborhrquantity) {
       if (this.laborhreditsequence > 0) {
         var index: number = this.listOflaborhr.findIndex(a => a.sequence === this.laborhreditsequence);
         let pItem = this.listOflaborhr[index];
         pItem.description = this.laborhrdescription;
         pItem.quantity = this.laborhrquantity;
+        pItem.hours = this.laborhrhours;
         this.laborhreditsequence = 0;
       }
       else {
         this.listOflaborhr.push({
-          sequence: this.getlaborhrSequence(), source: 'labh', description: this.laborhrdescription, quantity: this.laborhrquantity
+          sequence: this.getlaborhrSequence(), source: 'labh', description: this.laborhrdescription, quantity: this.laborhrquantity, hours: this.laborhrhours
         })
       }
       this.setlaborhrToDefault();
@@ -162,9 +165,12 @@ export class AssetclosinginfoComponent implements OnInit {
     this.laborhreditsequence = item.sequence;
     this.laborhrdescription = item.description;
     this.laborhrquantity = item.quantity;
+    this.laborhrhours = item.hours;
   }
   setlaborhrToDefault() {
-    this.laborhrdescription = ''; this.laborhrquantity = '';
+    this.laborhrdescription = '';
+    this.laborhrquantity = '';
+    this.laborhrhours = 0;
   }
   getlaborhrSequence(): number { return this.laborhrsequence = this.laborhrsequence + 1 };
 
@@ -173,6 +179,8 @@ export class AssetclosinginfoComponent implements OnInit {
   }
 
   submit() {
+
+    console.log(this.form.errors);
     if (this.form.valid) {
 
       this.form.value['childScheduleId'] = this.data.id;

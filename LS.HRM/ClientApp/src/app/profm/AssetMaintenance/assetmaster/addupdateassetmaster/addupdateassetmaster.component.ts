@@ -77,9 +77,13 @@ export class AddupdateassetmasterComponent implements OnInit {
         "location": '',
         "classification": '',
         "routeGroup": '',
+        "assetScale": 0,
+        "installDate": null,
+        "replacementDate": null,
         "jobPlan": '',
         "hasChild": [false],
         'isActive': [true],
+        'isWrittenOff': [false],
       }
     );
     this.isReadOnly = false;
@@ -243,6 +247,11 @@ export class AddupdateassetmasterComponent implements OnInit {
       if (this.listOfAssetTasks.length > 0) {
         this.form.value['assetTasks'] = this.listOfAssetTasks;
       }
+
+      if (this.form.controls['installDate'].value)
+        this.form.controls['installDate'].setValue(this.utilService.selectedDate(this.form.controls['installDate'].value));
+      if (this.form.controls['replacementDate'].value)
+        this.form.controls['replacementDate'].setValue(this.utilService.selectedDate(this.form.controls['replacementDate'].value));
 
       this.apiService.post('assetMaintenance/createUpdateFomAssetMaster', this.form.value)
         .subscribe(res => {

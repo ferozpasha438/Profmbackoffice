@@ -112,6 +112,61 @@
       </div>
     </div>
 
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="jobPlan">{{'AssetMaster_Scale' | translate}} &nbsp;&nbsp; ( {{form.controls['assetScale'].value}} )</label>
+        <input class="form-control" id="jobPlan" type="range" min="0" max="10"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_Scale' | translate}}" formControlName="assetScale">
+
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'jobPlan_installDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'jobPlan_installDate' | translate}}" formControlName="installDate"
+                 [matDatepicker]="picker1">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <!--<validation-message [control]="form.controls.jobPlanDate"></validation-message>-->
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'jobPlan_replacementDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'jobPlan_replacementDate' | translate}}" formControlName="replacementDate"
+                 [matDatepicker]="picker2">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="jobPlan">{{'AssetMaster_jobPlan' | translate}}</label>
+        <input class="form-control" id="jobPlan" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_jobPlan' | translate}}" formControlName="jobPlan" [readonly]="true">
+
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="isActive">{{'isWrittenOff' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="isWrittenOff"></mat-slide-toggle>
+      </div>
+    </div>
+
   </div>
 
 

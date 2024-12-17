@@ -1011,7 +1011,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     {
                         foreach (var item in items)
                         {
-                            ClosureItems.Add(new() { Description = item.Description, Quantity = item.Quantity, Source = item.Source, CreatedDate = DateTime.Now, ScheduleClosureId = Closure.Id });
+                            ClosureItems.Add(new() { Description = item.Description, Quantity = item.Quantity, Hours = item.Hours, Source = item.Source, CreatedDate = DateTime.Now, ScheduleClosureId = Closure.Id });
                         }
                     }
 

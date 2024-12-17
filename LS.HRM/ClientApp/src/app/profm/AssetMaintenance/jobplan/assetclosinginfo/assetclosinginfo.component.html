@@ -165,6 +165,7 @@
               <tr>
                 <th width="45%">{{'Description' | translate}}</th>
                 <th width="45%">{{'Quantity' | translate}}</th>
+                <th width="45%">{{'No_Of_Hours' | translate}}</th>
                 <th></th>
               </tr>
             </thead>
@@ -177,6 +178,9 @@
                   <input class="form-control" type="text" placeholder="{{'Quantity' | translate}}" [(ngModel)]="laborhrquantity" [ngModelOptions]="{standalone: true}">
                 </td>
                 <td>
+                  <input class="form-control" type="number" placeholder="{{'Hours' | translate}}" [(ngModel)]="laborhrhours" [ngModelOptions]="{standalone: true}">
+                </td>
+                <td>
                   <button type="button" class="btn waves-effect waves-light   btn-primary  " (click)="addlaborhr()"><i class="icon-plus"></i></button>
                 </td>
               </tr>
@@ -186,6 +190,7 @@
               <tr>
                 <th>{{'Description' | translate}}</th>
                 <th>{{'Quantity' | translate}}</th>
+                <th>{{'No_Of_Hours' | translate}}</th>
                 <th class="text-center"> </th>
               </tr>
             </thead>
@@ -193,6 +198,7 @@
               <tr *ngFor="let item of listOflaborhr; let index = i;">
                 <td>{{item.description}}</td>
                 <td>{{item.quantity}}</td>
+                <td>{{item.hours}}</td>
                 <td class="text-center">
                   <i class="icon-note cpointer" (click)="editlaborhr(item)"> </i> &nbsp;
                   <i class="icon-trash cpointer " (click)="deletelaborhr(item)"> </i> &nbsp;
