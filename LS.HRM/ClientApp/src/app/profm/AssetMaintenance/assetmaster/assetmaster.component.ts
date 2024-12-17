@@ -30,6 +30,7 @@ export class AssetmasterComponent extends ParentB2CFrontComponent implements OnI
   searchValue: string = '';
   sortingOrder: string = 'id desc';
   isLoading: boolean = false;
+  isImporting: boolean = false;
   totalItemsCount: number = 0;
   data: MatTableDataSource<any> = new MatTableDataSource();
   displayedColumns: string[] = ['assetCode', 'nameEng', 'nameArabic', 'sectionCode', 'deptCode', 'contractCode', 'createdDate', 'isActive', 'Actions'];
@@ -182,14 +183,17 @@ export class AssetmasterComponent extends ParentB2CFrontComponent implements OnI
 
       dialogRef.afterClosed().subscribe(canDelete => {
         if (canDelete) {
+          this.isImporting = true;
           this.apiService
             .post('AssetMaintenance/importExcelFomAssetMaster', formData)
             .subscribe(
               (res) => {
+                this.isImporting = false;
                 this.utilService.OkMessage();                
                 this.refresh();
               },
               (error) => {
+                this.isImporting = false;
                 this.utilService.ShowApiErrorMessage(error);
               }
             );
