@@ -114,8 +114,8 @@
 
     <div class="col-md-6 col-lg-6">
       <div class="form-group">
-        <label for="jobPlan">{{'AssetMaster_Scale' | translate}} &nbsp;&nbsp; ( {{form.controls['assetScale'].value}} )</label>
-        <input class="form-control" id="jobPlan" type="range" min="0" max="10"
+        <label for="scale">{{'AssetMaster_Scale' | translate}} &nbsp;&nbsp; ( {{form.controls['assetScale'].value}} )</label>
+        <input class="form-control" id="scale" type="range" min="0" max="10"
                placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_Scale' | translate}}" formControlName="assetScale">
 
       </div>
@@ -161,7 +161,7 @@
 
     <div class="col-md-6 col-lg-6">
       <div class="form-group">
-        <label for="isActive">{{'isWrittenOff' | translate}}</label>
+        <label for="isWrittenOff">{{'isWrittenOff' | translate}}</label>
         <br />
         <mat-slide-toggle color="primary" formControlName="isWrittenOff"></mat-slide-toggle>
       </div>
