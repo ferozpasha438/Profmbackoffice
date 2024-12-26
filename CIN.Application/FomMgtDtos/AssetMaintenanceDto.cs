@@ -73,6 +73,13 @@ namespace CIN.Application.FomMgtDtos
         public List<TblErpFomAssetMasterChildDto> AssetChilds { get; set; }
         public List<TblErpFomAssetMasterTaskDto> AssetTasks { get; set; }
 
+        public string Manufacturer { get; set; }
+        public string CountryofOrigin { get; set; }
+        public string ModelNumber { get; set; }
+        public string SerialNumber { get; set; }
+        public string Project { get; set; }
+        public string ProjectLocation { get; set; }
+        public string Status { get; set; }
 
     }
 

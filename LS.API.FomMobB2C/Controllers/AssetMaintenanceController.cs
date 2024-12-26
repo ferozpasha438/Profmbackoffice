@@ -15,6 +15,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LS.API.FomMobB2C.Controllers
@@ -99,14 +100,19 @@ namespace LS.API.FomMobB2C.Controllers
                     Message = "Invalid File"
                 });
 
+            var guid = Guid.NewGuid().ToString();
+            guid = $"{guid}_{fileExtension}";
             var webRoot = $"{_env.ContentRootPath}/files/uploadedastmaster";
-            var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmssfff", CultureInfo.InvariantCulture)}{Path.GetExtension(file.FileName)}";
+
+            //var webRoot = $"{_env.ContentRootPath}/files/uploadedastmaster";
+            //var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmssfff", CultureInfo.InvariantCulture)}{Path.GetExtension(file.FileName)}";
 
             //Create directory if not exists.
             if (!Directory.Exists(webRoot))
                 Directory.CreateDirectory(webRoot);
 
-            var filePath = Path.Combine(webRoot, fileName);
+            var filePath = Path.Combine(webRoot, guid);
+            //var filePath = Path.Combine(webRoot, fileName);
             var fileLocation = new FileInfo(filePath);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -139,14 +145,25 @@ namespace LS.API.FomMobB2C.Controllers
                                     asstMasterDto.AssetCode = assetCode;
                                     asstMasterDto.Name = Convert.ToString(Convert.ToString(workSheet.Cells[i, 2].Value));
                                     asstMasterDto.NameAr = Convert.ToString(Convert.ToString(workSheet.Cells[i, 3].Value));
-                                    asstMasterDto.Description = Convert.ToString(Convert.ToString(workSheet.Cells[i, 4].Value));
-                                    asstMasterDto.Location = Convert.ToString(workSheet.Cells[i, 5].Value);
+
+
                                     asstMasterDto.Classification = Convert.ToString(workSheet.Cells[i, 6].Value);
-                                    asstMasterDto.RouteGroup = Convert.ToString(workSheet.Cells[i, 7].Value);
+
+                                    StringBuilder dataDes = new();
+                                    //dataDes.AppendLine($"Manufacturer : {Convert.ToString(workSheet.Cells[i, 4].Value)}");
+                                    dataDes.AppendLine($"Manufacturer : {Convert.ToString(workSheet.Cells[i, 7].Value)}");
+                                    dataDes.AppendLine($"Country of Origin : {Convert.ToString(workSheet.Cells[i, 8].Value)}");
+                                    dataDes.AppendLine($"Model Number : {Convert.ToString(workSheet.Cells[i, 9].Value)}");
+                                    dataDes.AppendLine($"Serial Number : {Convert.ToString(workSheet.Cells[i, 10].Value)}");
+                                    asstMasterDto.Description = dataDes.ToString();
+
+                                    asstMasterDto.RouteGroup = Convert.ToString(workSheet.Cells[i, 11].Value);
                                     asstMasterDto.JobPlan = string.Empty;
-                                    asstMasterDto.SectionCode = Convert.ToString(workSheet.Cells[i, 8].Value);
-                                    asstMasterDto.DeptCode = Convert.ToString(workSheet.Cells[i, 9].Value);
-                                    asstMasterDto.ContractCode = Convert.ToString(workSheet.Cells[i, 10].Value);
+                                    asstMasterDto.SectionCode = Convert.ToString(workSheet.Cells[i, 14].Value);
+                                    asstMasterDto.DeptCode = Convert.ToString(workSheet.Cells[i, 15].Value);
+                                    asstMasterDto.ContractCode = Convert.ToString(workSheet.Cells[i, 17].Value);
+                                    asstMasterDto.Location = Convert.ToString(workSheet.Cells[i, 18].Value);
+                                    asstMasterDto.IsActive = Convert.ToString(workSheet.Cells[i, 19].Value).ToLower() == "active" ? true : false;
                                     asstMasterDto.IsWrittenOff = false;
                                     asstMasterDto.AssetScale = 0;
                                     assetMasterList.Add(asstMasterDto);
@@ -171,6 +188,10 @@ namespace LS.API.FomMobB2C.Controllers
                             {
                                 astMaster.AssetChilds = assetMasterChilds.Where(e => e.AssetCode == astMaster.AssetCode).ToList();
                                 astMaster.HasChild = astMaster.AssetChilds.Any();
+                                astMaster.JobPlan = string.Empty;
+                                astMaster.IsWrittenOff = false;
+                                astMaster.AssetScale = 0;
+
                             }
                         }
 
@@ -185,7 +206,7 @@ namespace LS.API.FomMobB2C.Controllers
                             result.Message = "Successfully imported data";
                             return Ok(result);
                         }
-                        else if (result.Id < assetMasterList.Count())
+                        else if (result.Id > 0 && result.Id < assetMasterList.Count())
                         {
                             result.Message = "Partially Successful";
                             return Ok(result);
@@ -248,12 +269,28 @@ namespace LS.API.FomMobB2C.Controllers
 
                     if (assetMasterList is not null && assetMasterList.Count() > 0)
                     {
+                        StringBuilder dataDes = new();
+                        assetMasterList.ForEach(item =>
+                        {
+                            dataDes.AppendLine($"Manufacturer : {item.Manufacturer}");
+                            dataDes.AppendLine($"Country of Origin : {item.CountryofOrigin}");
+                            dataDes.AppendLine($"Model Number : {item.ModelNumber}");
+                            dataDes.AppendLine($"Serial Number : {item.SerialNumber}");
+                            item.Description = dataDes.ToString();
+                            item.Location = item.ProjectLocation;
+                            item.ContractCode = item.Project;
+                            item.IsActive = item.Status.ToLower() == "active" ? true : false;
+
+                            dataDes.Clear();
+                        });
+
                         var assetMasterChilds = assetMasterList.Where(e => !e.AssetCode.HasValue()).Select(e => new TblErpFomAssetMasterChildDto
                         {
                             ChildCode = e.Name,
-                            Name = e.Name,
+                            Name = e.NameAr,
                             AssetCode = e.Description
                         }).ToList();
+
                         assetMasterList = assetMasterList.Where(e => e.AssetCode.HasValue()).ToList();
 
                         if (assetMasterChilds.Count > 0)
@@ -279,7 +316,7 @@ namespace LS.API.FomMobB2C.Controllers
                             result.Message = "Successfully imported data";
                             return Ok(result);
                         }
-                        else if (result.Id < assetMasterList.Count())
+                        else if (result.Id > 0 && result.Id < assetMasterList.Count())
                         {
                             result.Message = "Partially Successful";
                             return Ok(result);
