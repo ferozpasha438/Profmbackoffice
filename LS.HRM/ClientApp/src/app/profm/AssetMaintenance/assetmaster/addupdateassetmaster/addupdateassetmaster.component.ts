@@ -47,7 +47,8 @@ export class AddupdateassetmasterComponent implements OnInit {
   taskeditsequence: number = 0;
   listOfAssetTasks: Array<any> = [];
   isArab: boolean = false;
-
+  scales: any[] = ['Worst', 'Bad', 'Medium', 'Medium', 'Good', 'Good', 'Better', 'Better', 'Better', 'Best', 'Best'];
+  assetScaleValue: string = '';
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdateassetmasterComponent>,
     private notifyService: NotificationService, private validationService: ValidationService) {
@@ -65,6 +66,7 @@ export class AddupdateassetmasterComponent implements OnInit {
 
 
   setForm() {
+    this.assetScaleValue = this.scales[0];
     this.form = this.fb.group(
       {
         'assetCode': ['', [Validators.required, Validators.maxLength(20)]],
@@ -93,6 +95,7 @@ export class AddupdateassetmasterComponent implements OnInit {
   setEditForm() {
     this.apiService.get('assetMaintenance', this.id).subscribe(res => {
       if (res) {
+        this.assetScaleValue = this.scales[res.assetScale];
         this.form.patchValue(res);
         this.loadActivityFor_Dept(res.deptCode);
         if (res.hasChild) {
@@ -235,9 +238,21 @@ export class AddupdateassetmasterComponent implements OnInit {
   }
   getTaskSequence(): number { return this.sequenceTask = this.sequenceTask + 1 };
 
+  assetScale(evt: any) {
+    //let scales: any[] = ['Worst', 'Bad', 'Medium', 'Medium', 'Good', 'Good', 'Better', 'Better', 'Better', 'Best', 'Best'];
+    //let scales :any[] = [{0:'Worst'},{1:'Bad'},{2:'Medium'},{3:'Good'},{4:'Good'},{5:'Good'},{6:'Better'},{7:'Better'},{8:'Better'},{9:'Best'},{10:'Best'}];
+    //console.log(evt.target.value, scales[evt.target.value]);
 
+    this.assetScaleValue = this.scales[evt.target.value];
+  }
   submit() {
     if (this.form.valid) {
+
+      if (this.form.controls['installDate'].value)
+        this.form.controls['installDate'].setValue(this.utilService.selectedDate(this.form.controls['installDate'].value));
+      if (this.form.controls['replacementDate'].value)
+        this.form.controls['replacementDate'].setValue(this.utilService.selectedDate(this.form.controls['replacementDate'].value));
+
       if (this.id > 0)
         this.form.value['id'] = this.id;
 
@@ -248,10 +263,6 @@ export class AddupdateassetmasterComponent implements OnInit {
         this.form.value['assetTasks'] = this.listOfAssetTasks;
       }
 
-      if (this.form.controls['installDate'].value)
-        this.form.controls['installDate'].setValue(this.utilService.selectedDate(this.form.controls['installDate'].value));
-      if (this.form.controls['replacementDate'].value)
-        this.form.controls['replacementDate'].setValue(this.utilService.selectedDate(this.form.controls['replacementDate'].value));
 
       this.apiService.post('assetMaintenance/createUpdateFomAssetMaster', this.form.value)
         .subscribe(res => {
