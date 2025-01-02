@@ -1,0 +1,180 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'JobPlan_Master' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'JobPlan_Master' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">{{'JobPlan_Master_List' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row pb-3">
+            <div class="col-md-3">
+              <input class="form-control" placeholder="{{'Search' | translate}}..." [(ngModel)]="searchValue" />
+            </div>
+            <div class="col-md-4 arabicright">
+              <button (click)="applyFilter(searchValue)" class="btn btn-primary">{{'Search' | translate}}</button>
+              &nbsp;
+              <a (click)="refresh()" class=""><i class="btn btn-primary icon-refresh"></i></a>
+            </div>
+            <div class="col-md-5 col-lg-5 text-right">
+              <a data-toggle="modal" data-target="#createnewbranch"
+                 class="btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#">
+                <i class="icon-plus"> </i>{{'Add_JobPlan_Master' | translate}}
+              </a>
+            </div>
+          </div>
+          <div class="cardtitle-divider"></div>
+          <div class="table-responsive">
+            <spinner-loader [isLoading]="isLoading"></spinner-loader>
+            <div class="mat-elevation-z8">
+              <ng-container>
+                <table mat-table [dataSource]="data" matSortDisableClear matSort class="table  table-bordered no-wrap">
+                  <ng-container matColumnDef="jobPlanCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'JobPlan_Code' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.jobPlanCode }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="assetCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'jobPlan_assetCode' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.assetCode }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="contractCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'JobPlan_contractCode' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.contractCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="deptCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'JobPlan_deptCode' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.deptCode}}</td>
+                  </ng-container>
+
+                  <!--<ng-container matColumnDef="sectionCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'JobPlan_sectionCode' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.sectionCode}}</td>
+                  </ng-container>-->
+
+                  <ng-container matColumnDef="createdDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'Created_Date' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.created | date: 'dd-MM-yyyy' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="isActive">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{'Approve' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.approve}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="isClosed">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                       {{'isClosed' | translate}}
+                     </th>
+                     <td mat-cell *matCellDef="let row">{{ row.isClosed}}</td>
+                  </ng-container>
+                   <!--
+                   <ng-container matColumnDef="isVoid">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                       {{'isVoid' | translate}}
+                     </th>
+                     <td mat-cell *matCellDef="let row">{{ row.isVoid}}</td>
+                  </ng-container>-->
+
+                  <ng-container matColumnDef="Actions" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef style="width:92px;padding:0!important;">{{'Actions' | translate}}</th>
+                    <td mat-cell *matCellDef="let row" class="text-center" style="z-index:0!important;">
+
+                      <div class="nav-item dropdown">
+                        <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-options-vertical"></i></a>
+
+                        <div style="transform: translate3d(-110px, 0px, 0px) !important; width: 220px;" class="dropdown-menu dropdown-menu-custom text-center" aria-labelledby="navbarDropdown">
+                          <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="edit(row.id)" *ngIf="!row.isApproved"><i class="icon-edit"> </i>&nbsp;</a>-->
+                          <a class="tableicons" (click)="edit(row)" *ngIf="!row.approve" matTooltip="{{'Edit_Item' | translate}}"><i class="icon-pencil"> </i>&nbsp;</a>
+                          <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}" *ngIf="!row.approve"><i class="icon-trash"> </i>&nbsp;</a>
+                          <a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="uploadFile(row.id)" matTooltip="{{'Document_Upload' | translate}}"><i class="icon-cloud-upload"> </i>&nbsp;</a>
+                          <a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="approve(row.id)" *ngIf="!row.approve" matTooltip="{{'Approve' | translate}}"><i class="icon-arrow-up-circle"> </i>&nbsp;</a>
+                          <!--<a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="canClose(row.id)" *ngIf="!row.isClosed" matTooltip="{{'Close' | translate}}"><i class="icon-close"> </i>&nbsp;</a>-->
+                          <!--<a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="canVoid(row.id)" *ngIf="!row.isVoid" matTooltip="{{'Void' | translate}}"><i class="icon-control-rewind"> </i>&nbsp;</a>-->
+                          <a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="schedules(row.jobPlanCode)" matTooltip="{{'Schedules' | translate}}"><i class="icon-list"> </i>&nbsp;</a>
+                          <a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="tasks(row.assetCode)" matTooltip="{{'Task_List' | translate}}"><i class="icon-info"> </i></a>&nbsp;
+                          <a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="notes(row.jobPlanCode)" matTooltip="{{'Notes' | translate}}"><i class="icon-notebook"> </i></a>&nbsp;
+                          <a class="tableicons pcursor" data-toggle="modal" data-target="#scrollable-modal" (click)="print(row.jobPlanCode)" matTooltip="{{'Print' | translate}}"><i class="icon-printer"> </i></a>&nbsp;
+
+
+                          <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="copy(row.id)">{{'Copy' | translate}}</a>-->
+                          <!--<a data-toggle="modal" class="dropdown-item" href="#" (click)="printList(row.id)">{{'PrintList' | translate}}</a>-->
+                          <!--<ng-container *ngIf="row.hasAuthority && row.isDrCrAmtSame">
+    <a data-toggle="modal" class="dropdown-item" href="#" (click)="approve(row.id)" *ngIf="!row.approvedUser && !row.isSettled">{{'Approve' | translate}}</a>
+
+    <ng-container *ngIf="row.isDrCrAmtSame">
+      <a data-toggle="modal" class="dropdown-item" href="#" (click)="posting(row.id)" *ngIf="row.canSettle && (!row.isSettled && !row.isVoid )">{{'Post' | translate}}</a>
+      <a data-toggle="modal" class="dropdown-item" href="#" (click)="voidStatus(row.id)" *ngIf="row.canSettle && (!row.isSettled && !row.isVoid ) ">{{'Void' | translate}}</a>
+    </ng-container>
+  </ng-container>-->
+                        </div>
+                      </div>
+
+                      <!--<a class="tableicons" (click)="edit(row.id)" matTooltip="{{'Edit_Item' | translate}}">
+    <i class="icon-note"> </i>
+  </a> &nbsp;-->
+                      <!--<div class="nav-item dropdown">
+    <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="z-index:0!important;"><i class="icon-options-vertical"></i></a>
+
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown" x-placement="bottom-start" style="z-index:1000!important;">
+  <a class="tableicons" (click)="delete(row.id)" matTooltip="{{'Delete_Item' | translate}}">
+    <i class="icon-trash"> </i>
+  </a><br />
+  <a class="tableicons pcursor" data-toggle="modal"
+     data-target="#scrollable-modal" (click)="uploadFile(row.id)" matTooltip="{{'Document_Upload' | translate}}"><i class="icon-cloud-upload"> </i></a> <br />
+
+      <a class="dropdown-item tableicons" (click)="approve(row.id)"><i class="icon-note"> </i> {{'Edit_Site' | translate}} </a><br />
+    </div>
+  </div>-->
+
+                    </td>
+                  </ng-container>
+
+                  <!--<a class="tableicons" matTooltip="{{'Delete_Item' | translate}}"><i class="icon-trash"> </i></a>-->
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <ng-container>
+                  <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                 [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
+                  </mat-paginator>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

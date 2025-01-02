@@ -1758,5 +1758,77 @@ namespace CIN.Application.FomMgtDtos
         public string MaintananceType { get; set; }
         public string StatusStr { get; set; }
     }
+    public class AssignTicketResourceDto
+    {
+        [Required]
+        public string TicketNumber { get; set; }
+        [Required]
+        public string ResCode { get; set; }
+        public DateTime? ApprovedDate { get; set; }
 
+    }
+    [AutoMap(typeof(TblErpFomServiceItems))]
+    public class TblErpFomServiceItemsDto
+    {
+        public int Id { get; set; }
+        [StringLength(20)]
+        public string ServiceCode { get; set; }
+        public string DeptCode { get; set; }
+        public string ActivityCode { get; set; }
+        public string ServiceShortDesc { get; set; }
+        public string ServiceShortDescAr { get; set; }
+        public string ServiceDetails { get; set; }
+        public string ServiceDetailsAr { get; set; }
+        public TimeSpan TimeUnitPrimary { get; set; }
+        public int ResourceUnitPrimary { get; set; }
+        public int MinReqResource { get; set; }
+        public TimeSpan MinRequiredHrs { get; set; }
+        public Decimal PotentialCost { get; set; }
+        public Decimal PrimaryUnitPrice { get; set; }
+        public Decimal ApplicableDiscount { get; set; }
+        public bool IsOnOffer { get; set; }
+        public Decimal OfferPrice { get; set; }
+        public DateTime OfferStartDate { get; set; }
+        public DateTime OfferEndDate { get; set; }
+        public string Remarks1 { get; set; }
+        public string Remarks2 { get; set; }
+        public string FullImagePath { get; set; }
+        public string ThumbNailImagePath { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime CreatedBy { get; set; }
+        public decimal MonthlyPrice { get; set; }
+        public decimal YearlyPrice { get; set; }
+        public bool IsMonthlyPrice { get; set; }
+        public bool IsYearlyPrice { get; set; }
+        [StringLength(126)]
+        public string Serviceitems { get; set; }
+        public List<string> SelectedServices { get; set; }
+    }
+    [AutoMap(typeof(TblErpFomServiceItemsDetails))]
+    public class TblErpFomServiceItemsDetailsDto
+    {
+        public int Id { get; set; }
+        public string ServiceCode { get; set; }
+        public string ImagePath { get; set; }
+        public string Desc1 { get; set; }
+        public string Desc1Ar { get; set; }
+        public string Desc2 { get; set; }
+        public string Desc2Ar { get; set; }
+        public string ServiceDetails { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+
+    [AutoMap(typeof(TblErpFomPeriod))]
+    public class TblErpFomPeriodDto
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string TitleAr { get; set; }
+        public string Descriptions { get; set; }
+        public string Descriptions_Ar { get; set; }
+        public string ImagePath { get; set; }
+        public bool IsActive { get; set; }
+    }
 }

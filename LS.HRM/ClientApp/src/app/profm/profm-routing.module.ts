@@ -24,6 +24,11 @@ import { LoginandsecurityComponent } from '../systemsetup/loginandsecurity/login
 import { BtctickethistoryComponent } from './B2C/Reports/btctickethistory/btctickethistory.component';
 import { BtcticketsummarybycustComponent } from './B2C/Reports/btcticketsummarybycust/btcticketsummarybycust.component';
 import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btcticketsummarybyservicetype/btcticketsummarybyservicetype.component';
+import { AssetmasterComponent } from './AssetMaintenance/assetmaster/assetmaster.component';
+import { SectionlistComponent } from './Section/sectionlist.component';
+import { JobplanlistComponent } from './AssetMaintenance/jobplan/jobplanlist.component';
+import { SchedulejobplanlistComponent } from './AssetMaintenance/jobplan/schedulejobplanlist/schedulejobplanlist.component';
+import { AssetjoborderlistComponent } from './AssetMaintenance/jobplan/assetjoborderlist/assetjoborderlist.component';
 
 const routes: Routes = [
   { path: 'getdisciplines', component: GetdisciplineslistComponent },
@@ -48,10 +53,15 @@ const routes: Routes = [
 
   { path: 'btcscheduleslist', component: BtcschedulelistComponent },
   { path: 'btctickets', component: BtcTicketsComponent },
-
   { path: 'btctickethistory', component: BtctickethistoryComponent },
   { path: 'btcticketsummarybycust', component: BtcticketsummarybycustComponent },
   { path: 'btcticketsummarybyservicetype', component: BtcticketsummarybyservicetypeComponent },
+
+  { path: 'sectionlist', component: SectionlistComponent },
+  { path: 'assetmaster', component: AssetmasterComponent },
+  { path: 'createjobplan', component: JobplanlistComponent },
+  { path: 'schedulejobplan', component: SchedulejobplanlistComponent },
+  { path: 'assetjoborders', component: AssetjoborderlistComponent },
 ];
 
 @NgModule({

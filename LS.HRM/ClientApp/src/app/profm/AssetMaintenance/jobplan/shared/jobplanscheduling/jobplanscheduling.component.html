@@ -1,0 +1,161 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Schedules' | translate}}
+        
+      </h3>
+      <!--<button *ngIf="jobPlanCode" type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>-->      
+      <div class="d-flex align-items-center" *ngIf="!jobPlanCode">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Schedules' | translate}}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{'Schedules List' | translate}} </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<spinner-loader [isLoading]="isShowList"></spinner-loader>
+<div class="row" *ngIf="!isShowList">
+  <div class="col-md-4 col-lg-4">
+    <div class="calendar">
+      <mat-calendar [selected]="selectedDate" [dateClass]="dateClass()" (activeDateChange)="onActiveDateChange($event)"
+                    (monthSelected)="monthSelected($event)" (selectedChange)="dateSelected($event)" #calendar></mat-calendar>
+    </div>
+  </div>
+  <div class="col-md-8 col-lg-8">
+    <div class="text-center font-weight-bold"> {{'Schedules' | translate}}</div>
+    <hr />
+    <br /><br />
+    <div class="table-responsive tableright" *ngIf="scheduleDateData.length>0;else nodata">
+      <table id="zero_config1" class="table  table-bordered no-wrap">
+        <thead>
+          <tr>
+            <th>{{'Contract Code' | translate}}</th>
+            <th>{{'Customer Name' | translate}}</th>
+            <!--<th>{{'Site Name' | translate}}</th>-->
+            <th>{{'Asset' | translate}}</th>
+            <th>{{'ChildCode' | translate}}</th>
+            <th>{{'Schedule Date' | translate}}</th>
+            <!--<th> {{'Time' | translate}}  </th>-->
+            <th>{{'Department' | translate}}</th>
+            <th>{{'Remarks' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of scheduleDateData; let j = index;">
+            <td>
+              {{row.contractCode}}
+            </td>
+            <td>
+              {{row.customerName}}
+            </td>
+            <!--<td>
+              {{row.siteName}}
+            </td>-->
+            <td>
+              {{ row.serviceItem }}
+            </td>
+            <td>
+              {{ row.serType}}
+            </td>
+            <td>
+              {{ row.schDate | date: 'fullDate' }}
+            </td>
+            <!--<td>
+              {{ row.time }}
+            </td>-->
+            <td>
+
+              {{ row.department }}
+            </td>
+            <td>
+              {{ row.remarks }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #nodata>
+      <div class="text-center">
+        <b class="text-danger">No Schedules Data</b>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+
+
+
+
+<style>
+
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 5px;
+    width: 5px;
+    color: black;
+  }
+
+  .custom-textarea {
+    width: 110px;
+    height: 32px;
+  }
+
+  .calendar-container {
+    border: 1px solid transparent;
+    border-color: #fff #ddd;
+    margin: 0 2em 2em
+  }
+
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .events {
+    margin-top: 20px;
+  }
+
+  .mat-calendar {
+    width: 400px;
+    /* Set the desired width */
+    height: 100%;
+    /* Set the desired height */
+  }
+
+  @media screen and (max-width: 1200px) {
+    .calendar {
+      padding: 10px;
+      /* Add padding for smaller screens */
+    }
+
+    .mat-calendar {
+      width: 100%;
+      /* Make the calendar fill the entire width */
+    }
+  }
+
+  /* Adjust layout for screens larger than 600px */
+  @media screen and (min-width: 1200px) {
+    .calendar {
+      justify-content: center;
+      /* Center the calendar horizontally */
+    }
+  }
+</style>
+
+

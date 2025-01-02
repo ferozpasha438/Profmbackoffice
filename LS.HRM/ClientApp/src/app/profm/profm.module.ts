@@ -57,6 +57,27 @@ import { BtcresourceallocateComponent } from './B2C/btcresourceallocate.componen
 import { BtctickethistoryComponent } from './B2C/Reports/btctickethistory/btctickethistory.component';
 import { BtcticketsummarybycustComponent } from './B2C/Reports/btcticketsummarybycust/btcticketsummarybycust.component';
 import { BtcticketsummarybyservicetypeComponent } from './B2C/Reports/btcticketsummarybyservicetype/btcticketsummarybyservicetype.component';
+import { AssetmasterComponent } from './AssetMaintenance/assetmaster/assetmaster.component';
+import { SectionlistComponent } from './Section/sectionlist.component';
+import { AddupdatesectionComponent } from './Section/addupdatesection.component';
+import { AddupdateassetmasterComponent } from './AssetMaintenance/assetmaster/addupdateassetmaster/addupdateassetmaster.component';
+import { AddupdateassettaskComponent } from './AssetMaintenance/assetmaster/addupdateassettask/addupdateassettask.component';
+import { JobplanlistComponent } from './AssetMaintenance/jobplan/jobplanlist.component';
+import { AddupdatejobplanComponent } from './AssetMaintenance/jobplan/addupdatejobplan/addupdatejobplan.component';
+import { AddupdatejobplanscheduleComponent } from './AssetMaintenance/jobplan/addupdatejobplanschedule/addupdatejobplanschedule.component';
+import { GeneratedatescheduleComponent } from './AssetMaintenance/jobplan/generatedateschedule/generatedateschedule.component';
+import { JobplannotesComponent } from './AssetMaintenance/jobplan/jobplannotes/jobplannotes.component';
+import { SchedulejobplanlistComponent } from './AssetMaintenance/jobplan/schedulejobplanlist/schedulejobplanlist.component';
+import { AssetjoborderlistComponent } from './AssetMaintenance/jobplan/assetjoborderlist/assetjoborderlist.component';
+import { AssetjoborderchilditemsComponent } from './AssetMaintenance/jobplan/assetjoborderchilditems/assetjoborderchilditems.component';
+import { AssetclosinginfoComponent } from './AssetMaintenance/jobplan/assetclosinginfo/assetclosinginfo.component';
+import { JobplanschedulingComponent } from './AssetMaintenance/jobplan/shared/jobplanscheduling/jobplanscheduling.component';
+import { JobplanschedulingpopupComponent } from './AssetMaintenance/jobplan/jobplanschedulingpopup/jobplanschedulingpopup.component';
+import { AssettasklistpopupComponent } from './AssetMaintenance/jobplan/assettasklistpopup/assettasklistpopup.component';
+import { JobplanscheduleprintComponent } from './AssetMaintenance/jobplan/jobplanscheduleprint/jobplanscheduleprint.component';
+
+
+
 /*import { ActivityDialogComponent } from './Customercontract/Sharedpages/activitydialog.component';*/
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -113,6 +134,25 @@ import { FormsModule } from '@angular/forms';
     BtctickethistoryComponent,
     BtcticketsummarybycustComponent,
     BtcticketsummarybyservicetypeComponent,
+    AssetmasterComponent,
+    SectionlistComponent,
+    AddupdatesectionComponent,
+    AddupdateassetmasterComponent,
+    AddupdateassettaskComponent,
+    JobplanlistComponent,
+    AddupdatejobplanComponent,
+    AddupdatejobplanscheduleComponent,
+    GeneratedatescheduleComponent,
+    JobplannotesComponent,
+    SchedulejobplanlistComponent,
+    AssetjoborderlistComponent,
+    AssetjoborderchilditemsComponent,
+    AssetclosinginfoComponent,
+    JobplanschedulingComponent,
+    JobplanschedulingpopupComponent,
+    AssettasklistpopupComponent,
+    JobplanscheduleprintComponent,
+    
     /*ActivityDialogComponent,*/
   ],
 

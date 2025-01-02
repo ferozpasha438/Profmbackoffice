@@ -12,7 +12,13 @@ namespace CIN.Application
 {
     public static class Extensions
     {
-
+        public static string B2cFrequency(this string freq) => freq switch
+        {
+            "D" => "Daily",
+            "M" => "Monthly",
+            "Y" => "Yearly",
+            _ => string.Empty
+        };
         public static decimal GetMeters(double lat1, double lon1, double lat2, double lon2)
         {
 

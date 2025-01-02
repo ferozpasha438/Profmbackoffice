@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <h4 class="text-center">{{data.title | translate}}</h4>
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<div class="row">
+
+  <div class="col-md-12 col-lg-12" >    
+    <spinner-loader [isLoading]="isLoading"></spinner-loader>
+  </div>
+
+  <div class="col-md-12 col-lg-12" *ngIf="assetChildList.length > 0">
+    <div class="table-responsive" style="width:95%;">
+      <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">
+        <thead>
+          <tr>
+            <th>{{'jobPlan_assetCode' | translate}}</th>
+            <th>{{'jobPlanCode_Code' | translate}}</th>
+            <th>{{'Asset_ChildCode' | translate}}</th>
+            <th>{{'jobPlan_frequency' | translate}}</th>
+            <th>{{'jobPlan_planStartDate' | translate}}</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of assetChildList">
+            <td>
+              {{item.text}}
+            </td>
+            <td>
+              {{data.jobPlanCode}}
+            </td>
+            <td>
+              {{item.textTwo}}
+            </td>
+            <td>
+              <!--{{data.frequency}}-->
+              <select class="custom-select mr-sm-2" [(ngModel)]="item.value" [disabled]="!data.childHasDiffFreq">
+                <option *ngFor="let item of frequencyList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+              </select>
+            </td>
+            <td>
+
+              {{data.planStartDate | date:'dd-MM-yyyy'}}
+            </td>
+            <td>
+              <input type="button" class=""
+                     value="{{'Schedule' | translate}}" (click)="openShcDates(item)" [ngClass]="!item.isGenerated ? 'btn waves-effect waves-light btn-rounded btn-secondary btn-midblock' : 'btn waves-effect waves-light btn-rounded btn-primary btn-midblock'"/>
+              &nbsp;<span [ngClass]="!item.isGenerated ? 'd-none' : 'text-primary'">✓</span>
+            </td>
+
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6" class="text-center">
+              <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+                     value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+              <input type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                     value="{{'save' | translate}}" (click)="save()" />
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
+  </div>
+  
+
+</div>
+
+<style>
+  .mat-tab-body-content {
+    overflow-x: hidden !important;
+  }
+</style>

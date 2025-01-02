@@ -193,6 +193,35 @@ namespace CIN.Application.FomMgtQuery
     }
     #endregion
 
+    #region GetDepartmentSelectList
+
+
+    public class GetDepartmentSelectList : IRequest<List<LanCustomSelectListItem>>
+    {
+        public UserIdentityDto User { get; set; }
+    }
+
+    public class GetDepartmentSelectListHandler : IRequestHandler<GetDepartmentSelectList, List<LanCustomSelectListItem>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public GetDepartmentSelectListHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<List<LanCustomSelectListItem>> Handle(GetDepartmentSelectList request, CancellationToken cancellationToken)
+        {
+            var list = await _context.ErpFomDepartments
+                .Where(e => e.IsActive)
+              .AsNoTracking()
+             .Select(e => new LanCustomSelectListItem { Text = e.NameEng, Value = e.DeptCode, TextAr = e.NameArabic })
+                .ToListAsync(cancellationToken);
+            return list;
+        }
+    }
+    #endregion
 
     #region UploadThumbnailFiles       
 

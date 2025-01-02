@@ -86,6 +86,11 @@ export class UtilityService {
     const mInvDate = mInvDate1(new Date().toLocaleDateString());
     return mInvDate.format('YYYY-MM-DD') + 'T00:00:00';
   }
+  getFormattedDate(date: any): any{
+    let mInvDate1 = moment as any;
+    const mInvDate = mInvDate1(date);
+    return mInvDate.format('MM/DD/YYYY');// + 'T00:00:00';
+  }
 
   getCommonDate(date: any, time: string = '') {
     if (date) {

@@ -63,6 +63,11 @@ namespace CIN.Application.Common
         public string BranchCode { get; set; }
         //public string ConnectionString { get; set; }
         public string ModuleCodes { get; set; }
+
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string LoginType { get; set; }
+        public string Role { get; set; }
     }
     public class UserMobileIdentityDto : UserIdentityDto
     {
@@ -198,6 +203,11 @@ namespace CIN.Application.Common
             var items = await source.Skip((pageIndex) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
 
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+
+        public static async Task<PaginatedList<T>> EmptyListAsync<T>(this T[] source, CancellationToken cancellationToken)
+        {
+            return await source.AsQueryable().PaginationListAsync(0, 0, cancellationToken);
         }
     }
 }

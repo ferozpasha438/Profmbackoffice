@@ -13,6 +13,7 @@ namespace CIN.Application
         public string UserImagePath { get; set; }
         public string QRCodeImagePath { get; set; }
         public string InventoryApi { get; set; }
+        public string ImagesUrl { get; set; }
         public int ReportCount { get; set; }
 
     }

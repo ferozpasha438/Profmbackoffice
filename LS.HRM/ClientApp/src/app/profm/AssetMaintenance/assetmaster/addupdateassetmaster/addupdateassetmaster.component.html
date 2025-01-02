@@ -1,0 +1,304 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{modalTitle}}</h3>
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="assetCode">{{'AssetMaster_Code' | translate}}</label>
+        <input class="form-control input-mandatory" id="assetCode" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_Code' | translate}} " formControlName="assetCode"
+               [readonly]="isReadOnly">
+        <span *ngIf="form.controls.assetCode.hasError('maxlength')" class="text-danger">
+          Maximum(20) length exceeded. &nbsp;&nbsp;
+        </span>
+          <validation-message [control]="form.controls.assetCode"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="name">{{'AssetMaster_Name_EN' | translate}}</label>
+        <input class="form-control input-mandatory" id="name" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_Name' | translate}}" formControlName="name">
+        <validation-message [control]="form.controls.name"></validation-message>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="nameAr">{{'AssetMaster_Name_AR' | translate}}</label>
+        <input class="form-control input-mandatory" id="nameAr" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_Name_Ar' | translate}}" formControlName="nameAr">
+        <validation-message [control]="form.controls.nameAr"></validation-message>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="description">{{'description' | translate}}</label>
+        <textarea class="form-control input-mandatory" id="description" type="text"
+                  placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_description' | translate}}" formControlName="description"></textarea>
+        <validation-message [control]="form.controls.description"></validation-message>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="deptCode">{{'AssetMaster_deptCode' | translate}}</label>
+        <select class="custom-select mr-sm-2 input-mandatory" formControlName="deptCode" (change)="loadActivityForDept($event)">
+          <option value="">{{ 'AssetMaster_deptCode' | translate}}</option>
+          <option *ngFor="let item of departmentSelectList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+        </select>
+        <validation-message [control]="form.controls.deptCode"></validation-message>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="sectionCode">{{'AssetMaster_Section' | translate}}</label>
+        <select class="custom-select mr-sm-2 input-mandatory" formControlName="sectionCode">
+          <option value="">{{ 'AssetMaster_Section' | translate}}</option>
+          <option *ngFor="let item of sectionSelectList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+        </select>
+        <validation-message [control]="form.controls.sectionCode"></validation-message>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="contractCode">{{'AssetMaster_contractCode' | translate}}</label>
+        <select class="custom-select mr-sm-2 input-mandatory" formControlName="contractCode">
+          <option value="">{{ 'AssetMaster_contractCode' | translate}}</option>
+          <option *ngFor="let item of contractSelectList" value="{{item.value}}">{{item.text}}</option>
+        </select>
+        <validation-message [control]="form.controls.contractCode"></validation-message>
+      </div>
+    </div>
+
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="location">{{'AssetMaster_location' | translate}}</label>
+        <input class="form-control" id="location" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_location' | translate}}" formControlName="location">
+
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="classification">{{'AssetMaster_classification' | translate}}</label>
+        <input class="form-control" id="classification" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_classification' | translate}}" formControlName="classification">
+
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="routeGroup">{{'AssetMaster_routeGroup' | translate}}</label>
+        <input class="form-control" id="routeGroup" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_routeGroup' | translate}}" formControlName="routeGroup">
+
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="jobPlan">{{'AssetMaster_jobPlan' | translate}}</label>
+        <input class="form-control" id="jobPlan" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_jobPlan' | translate}}" formControlName="jobPlan" [readonly]="true">
+
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="scale">{{'Asset_Condition' | translate}} &nbsp;&nbsp; ( <!--{{form.controls['assetScale'].value}}--> {{assetScaleValue}} )</label>
+        <input class="form-control" id="scale" type="range" min="0" max="10"
+               placeholder="{{'Please_Enter' | translate}} {{'Asset_Condition' | translate}}" formControlName="assetScale" (change)="assetScale($event)">
+
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'AssetMaster_installDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'AssetMaster_installDate' | translate}}" formControlName="installDate"
+                 [matDatepicker]="picker1">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <!--<validation-message [control]="form.controls.jobPlanDate"></validation-message>-->
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <label class="mr-sm-2">{{'AssetMaster_replacementDate' | translate}}</label>
+      <div class="form-group ">
+        <div class="input-group mb-2">
+          <input class="form-control datapickerinput input-mandatory" placeholder="{{'AssetMaster_replacementDate' | translate}}" formControlName="replacementDate"
+                 [matDatepicker]="picker2">
+          <div class="input-group-prepend datapickericon">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 data-date-format="mm/yyyy"></mat-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="jobPlan">{{'AssetMaster_jobPlan' | translate}}</label>
+        <input class="form-control" id="jobPlan" type="text"
+               placeholder="{{'Please_Enter' | translate}} {{'AssetMaster_jobPlan' | translate}}" formControlName="jobPlan" [readonly]="true">
+
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="isWrittenOff">{{'isWrittenOff' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="isWrittenOff"></mat-slide-toggle>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="isActive">{{'hasChild' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="hasChild" (change)="hasChildEvent($event)"></mat-slide-toggle>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="form-group">
+        <label for="isActive">{{'Is_Active' | translate}}</label>
+        <br />
+        <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <div class="table-responsive" style="width:95%;" *ngIf="isChildSelected">
+        <h4 class="text-center">{{'Adding_childCode' | translate}}</h4>
+        <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">
+          <thead>
+            <tr>
+              <th width="45%">{{'childCode' | translate}}</th>
+              <th width="45%">{{'name' | translate}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input class="form-control" type="text" placeholder="{{'childCode' | translate}}" [(ngModel)]="childCode" [ngModelOptions]="{standalone: true}">
+              </td>
+              <td>
+                <input class="form-control" type="text" placeholder="{{'name' | translate}}" [(ngModel)]="name" [ngModelOptions]="{standalone: true}">
+              </td>
+              <td>
+                <button type="button" class="btn waves-effect waves-light   btn-primary  " (click)="addChild()"><i class="icon-plus"></i></button>
+              </td>
+            </tr>
+          </tbody>
+
+          <thead>
+            <tr>
+              <th>{{'childCode' | translate}}</th>
+              <th>{{'name' | translate}}</th>
+              <th class="text-center"> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listOfAssetChild; let index = i;">
+              <td>{{item.childCode}}</td>
+              <td>{{item.name}}</td>
+              <td class="text-center">
+                <i class="icon-note cpointer" (click)="editChild(item)"> </i> &nbsp;
+                <i class="icon-trash cpointer " (click)="deleteChild(item)"> </i> &nbsp;
+              </td>
+            </tr>
+
+        </table>
+
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="table-responsive" style="width:95%;">
+        <h4 class="text-center">{{'Adding_Task_Activities' | translate}}</h4>
+        <table id="zero_config" class="table  table-bordered no-wrap" style="overflow-x:auto;">
+          <thead>
+            <tr>
+              <th width="45%">{{'ActCode' | translate}}</th>
+              <th width="45%">{{'ResTypeCode' | translate}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <!--<input class="form-control" type="text" placeholder="{{'ActCode' | translate}}" [(ngModel)]="actCode" [ngModelOptions]="{standalone: true}">-->
+                <select class="custom-select mr-sm-2" [(ngModel)]="actCode" [ngModelOptions]="{standalone: true}">
+                  <option value="">{{'ActCode' | translate}}</option>
+                  <option *ngFor="let item of activitySelectList" value="{{item.actCode}}">{{ isArab ? item.actNameAr :item.actName }}</option>
+                </select>
+              </td>
+              <td>
+                <!--<input class="form-control" type="text" placeholder="{{'ResTypeCode' | translate}}" [(ngModel)]="resTypeCode" [ngModelOptions]="{standalone: true}">-->
+                <select class="custom-select mr-sm-2" [(ngModel)]="resTypeCode" [ngModelOptions]="{standalone: true}">
+                  <option value="">{{'ResTypeCode' | translate}}</option>
+                  <option *ngFor="let item of resourseSelectList" value="{{item.text}}">{{isArab ? item.textAr : item.textTwo }}</option>
+                </select>
+              </td>
+              <td>
+                <button type="button" class="btn waves-effect waves-light   btn-primary  " (click)="addTask()"><i class="icon-plus"></i></button>
+              </td>
+            </tr>
+          </tbody>
+
+          <thead>
+            <tr>
+              <th>{{'ActCode' | translate}}</th>
+              <th>{{'ResTypeCode' | translate}}</th>
+              <th class="text-center"> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listOfAssetTasks; let index = i;">
+              <td>{{item.actCode}}</td>
+              <td>{{item.resTypeCode}}</td>
+              <td class="text-center">
+                <i class="icon-note cpointer" (click)="editTask(item)"> </i> &nbsp;
+                <i class="icon-trash cpointer " (click)="deleteTask(item)"> </i> &nbsp;
+              </td>
+            </tr>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="row mt-3 ">
+    <div class="col-md-12 col-lg-12 text-center">
+      <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+             value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+      <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+             value="{{'Save' | translate}}" />
+    </div>
+  </div>
+</form>
