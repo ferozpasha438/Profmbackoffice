@@ -2167,6 +2167,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
     {
         public UserIdentityDto User { get; set; }
         public string[] DeptCodes { get; set; } // Change from string to List<string>
+        public string ContractCode { get; set; }
     }
 
     public class GetDeptActivitiesByDeptCodesHandler : IRequestHandler<GetDeptActivitiesByDeptCodes, List<DisciplineDto>>
@@ -2179,37 +2180,512 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             _context = context;
             _mapper = mapper;
         }
-
         public async Task<List<DisciplineDto>> Handle(GetDeptActivitiesByDeptCodes request, CancellationToken cancellationToken)
         {
-            // Fetch and map the activities from the database
-            var activities = await _context.FomActivities.AsNoTracking()
-                .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
-                .Where(e => request.DeptCodes.Contains(e.DeptCode))
-                .ToListAsync(cancellationToken);
+            List<DisciplineDto> disciplines;
 
-            // Group activities by department to build disciplines
-            var disciplines = activities
-                .GroupBy(a => new { a.DeptCode}) // Ensure DeptName is available in TblErpFomActivitiesDto
-                .Select(group => new DisciplineDto
+            if (!string.IsNullOrWhiteSpace(request.ContractCode) && request.ContractCode != "null")
+            {
+                // Fetch activities from ContractDeptActivity with ContractCode
+                //var contractActivities = await _context.ContractDeptActivity
+                //    .AsNoTracking()
+                //    .Where(e => request.DeptCodes.Contains(e.DeptCode) && e.ContractCode == request.ContractCode)
+                //    .ToListAsync(cancellationToken);
+
+                //// Fetch activities from FomActivities
+                //var fomActivities = await _context.FomActivities
+                //    .AsNoTracking()
+                //    .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+                //    .Where(e => request.DeptCodes.Contains(e.DeptCode))
+                //    .ToListAsync(cancellationToken);
+
+                //// Get unique ActCodes from contractActivities to determine common activities
+                //var contractActivityCodes = new HashSet<string>(contractActivities.Select(a => a.ActCode));
+
+                //// Combine activities with the SelectCheckBox flag and include DeptCode
+                //var combinedActivities = fomActivities.Select(fomActivity => new ActivityDto
+                //{
+                //    DeptCode = fomActivity.DeptCode, // Ensure DeptCode is included
+                //    ActivityName = fomActivity.ActName,
+                //    SelectCheckBox = contractActivityCodes.Contains(fomActivity.ActCode)
+                //}).ToList();
+
+                var contractActivities = await _context.ContractDeptActivity
+                                        .AsNoTracking()
+                                        .Where(e => request.DeptCodes.Contains(e.DeptCode) && e.ContractCode == request.ContractCode)
+                                        .ToListAsync(cancellationToken);
+
+                // Fetch activities from FomActivities
+                var fomActivities = await _context.FomActivities
+                                    .AsNoTracking()
+                                    .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+                                    .Where(e => request.DeptCodes.Contains(e.DeptCode))
+                                    .ToListAsync(cancellationToken);
+
+                //// Get unique ActCodes from contractActivities to determine common activities
+                //var contractActivityCodes = new HashSet<string>(contractActivities.Select(a => a.ActCode));
+
+                //// Combine activities with the SelectCheckBox flag and include DeptCode
+                //var combinedActivities = fomActivities.Select(fomActivity => new ActivityDto
+                //{
+                //    DeptCode = fomActivity.DeptCode, // Ensure DeptCode is included
+                //    ActCode = fomActivity.ActCode,
+                //    SelectCheckBox = true // true if in contractActivities
+                //}).ToList();
+
+               var contractActivityCodes = new HashSet<string>(contractActivities
+                                        .Where(a => !string.IsNullOrWhiteSpace(a.ActCode))
+                                        .Select(a => a.ActCode.Trim().ToLower())
+
+                                );
+
+                // Combine activities with the SelectCheckBox flag and include DeptCode
+                var combinedActivities = fomActivities.Select(fomActivity =>
                 {
-                    DisciplineName = group.Key.DeptCode,
-                    Activities = group.Select(a => new ActivityDto
+                    // Ensure ActCode is not null and trim/convert to lower case for comparison
+                    var normalizedActCode = fomActivity.ActCode?.Trim().ToLower();
+
+                    return new ActivityDto
                     {
-                        ActivityName = a.ActName,
-                        SelectCheckBox = true
-                    }).ToList()
+                        DeptCode = fomActivity.DeptCode,
+                        ActCode = fomActivity.ActCode,
+                        SelectCheckBox = normalizedActCode != null && contractActivityCodes.Contains(normalizedActCode)
+                    };
                 }).ToList();
+
+
+
+                disciplines = combinedActivities
+                                    .GroupBy(a => a.DeptCode)
+                                    .Select(group => new DisciplineDto
+                                    {
+                                        DisciplineName = group.Key, // DeptCode as the DisciplineName
+                                        Activities = group.ToList() // List of ActivityDto
+                                    })
+                                    .ToList();
+
+
+                //    // Group combined activities by DeptCode and create DisciplineDto
+                //    disciplines = combinedActivities
+                //        .GroupBy(a => a.DeptCode)
+                //        .Select(group => new DisciplineDto
+                //        {
+                //            DisciplineName = group.Key, // DeptCode as the DisciplineName
+                //    Activities = group.ToList() // List of ActivityDto
+                //}).ToList();
+
+            }
+            else
+            {
+                // Fetch activities from FomActivities without a specific ContractCode
+                var activities = await _context.FomActivities
+                    .AsNoTracking()
+                    .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+                    .Where(e => request.DeptCodes.Contains(e.DeptCode))
+                    .ToListAsync(cancellationToken);
+
+                // Group activities by department with SelectCheckBox = false for all
+                disciplines = activities
+                    .GroupBy(a => a.DeptCode)
+                    .Select(group => new DisciplineDto
+                    {
+                        DisciplineName = group.Key,
+                        Activities = group.Select(a => new ActivityDto
+                        {
+                            DeptCode = a.DeptCode,
+                            ActCode = a.ActCode,
+                            SelectCheckBox = false
+                        }).ToList()
+                    }).ToList();
+            }
 
             return disciplines;
         }
+
+
+        //public async Task<List<DisciplineDto>> Handle(GetDeptActivitiesByDeptCodes request, CancellationToken cancellationToken)
+        //{
+        //    List<DisciplineDto> disciplines;
+
+        //    var ContractCode = request.ContractCode;
+
+        //    if (ContractCode !="null")
+        //    {
+        //        // Fetch activities without a contract code
+        //        var activities = await _context.ContractDeptActivity
+        //                        .AsNoTracking()
+        //                        .Where(e => request.DeptCodes.Contains(e.DeptCode) && e.ContractCode == request.ContractCode)
+        //                        .ToListAsync(cancellationToken);
+
+        //        // Group activities by department to build disciplines
+        //        disciplines = activities
+        //            .GroupBy(a => new { a.DeptCode })
+        //            .Select(group => new DisciplineDto
+        //            {
+        //                DisciplineName = group.Key.DeptCode, // Map to a more descriptive field if needed
+        //                Activities = group.Select(a => new ActivityDto
+        //                {
+        //                    ActivityName = a.ActCode,
+        //                    SelectCheckBox = true
+        //                }).ToList()
+        //            }).ToList();
+        //    }
+        //    else
+        //    {
+
+        //        // Fetch activities with a contract code
+        //        var activities = await _context.FomActivities.AsNoTracking()
+        //            .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+        //            .Where(e => request.DeptCodes.Contains(e.DeptCode))
+        //            .ToListAsync(cancellationToken);
+
+        //        // Group activities by department to build disciplines
+        //        disciplines = activities
+        //            .GroupBy(a => new { a.DeptCode }) // Ensure DeptName is available in TblErpFomActivitiesDto
+        //            .Select(group => new DisciplineDto
+        //            {
+        //                DisciplineName = group.Key.DeptCode, // Map to a more descriptive field if needed
+        //                Activities = group.Select(a => new ActivityDto
+        //                {
+        //                    ActivityName = a.ActName,
+        //                    SelectCheckBox = false
+        //                }).ToList()
+        //            }).ToList();
+
+
+
+        //    }
+
+        //    return disciplines;
+        //}
     }
+
+    //public class GetDeptActivitiesByDeptCodesHandler : IRequestHandler<GetDeptActivitiesByDeptCodes, List<DisciplineDto>>
+    //{
+    //    private readonly CINDBOneContext _context;
+    //    private readonly IMapper _mapper;
+
+    //    public GetDeptActivitiesByDeptCodesHandler(CINDBOneContext context, IMapper mapper)
+    //    {
+    //        _context = context;
+    //        _mapper = mapper;
+    //    }
+
+    //    public async Task<List<DisciplineDto>> Handle(GetDeptActivitiesByDeptCodes request, CancellationToken cancellationToken)
+    //    {
+
+    //        if(request.ContractCode != null) { 
+    //        // Fetch and map the activities from the database
+    //        var activities = await _context.FomActivities.AsNoTracking()
+    //            .ProjectTo<TblErpFomActivitiesDto>(_mapper.ConfigurationProvider)
+    //            .Where(e => request.DeptCodes.Contains(e.DeptCode))
+    //            .ToListAsync(cancellationToken);
+
+    //        // Group activities by department to build disciplines
+    //        var disciplines = activities
+    //            .GroupBy(a => new { a.DeptCode}) // Ensure DeptName is available in TblErpFomActivitiesDto
+    //            .Select(group => new DisciplineDto
+    //            {
+    //                DisciplineName = group.Key.DeptCode,
+    //                Activities = group.Select(a => new ActivityDto
+    //                {
+    //                    ActivityName = a.ActName,
+    //                    SelectCheckBox = false
+    //                }).ToList()
+    //            }).ToList();
+
+    //    //    return disciplines;
+
+    //        }
+    //        else
+    //        {
+    //            var activities = await _context.ContractDeptActivity.AsNoTracking()
+    //            .Where(e => request.DeptCodes.Contains(e.DeptCode))
+    //            .ToListAsync(cancellationToken);
+
+    //            // Group activities by department to build disciplines
+    //            var disciplines = activities
+    //                .GroupBy(a => new { a.DeptCode }) // Ensure DeptName is available in TblErpFomActivitiesDto
+    //                .Select(group => new DisciplineDto
+    //                {
+    //                    DisciplineName = group.Key.DeptCode,
+    //                    Activities = group.Select(a => new ActivityDto
+    //                    {
+    //                        ActivityName = a.ActCode,
+    //                        SelectCheckBox = false
+    //                    }).ToList()
+    //                }).ToList();
+
+    //        }
+    //        return disciplines;
+    //    }
+    //}
     #endregion
 
     // DTOs for returning the structured result
-    
 
 
+    public class CreateChkUnChkContDeptActivity : IRequest<int>
+    {
+        public UserIdentityDto User { get; set; }
+        public List<TblErpFomContractDeptActDto> InputList { get; set; }
+    }
+
+    public class CreateChkUnChkContDeptActivityHandler : IRequestHandler<CreateChkUnChkContDeptActivity, int>
+    {
+        private readonly CINDBOneContext _context;
+
+        public CreateChkUnChkContDeptActivityHandler(CINDBOneContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<int> Handle(CreateChkUnChkContDeptActivity request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                Log.Info("----Info Create/Update Check UnCheck Contract Discipline Activities method start----");
+
+                foreach (var discipline in request.InputList)
+                {
+                    if (string.IsNullOrEmpty(discipline.DeptCode) || string.IsNullOrEmpty(discipline.ContractCode))
+                        continue; // Skip invalid entries
+
+                    // Remove existing activities for the same ContractCode and DeptCode
+                    var existingActivities = await _context.ContractDeptActivity
+                        .Where(e => e.ContractCode == discipline.ContractCode && e.DeptCode == discipline.DeptCode)
+                        .ToListAsync(cancellationToken);
+
+                    if (existingActivities.Any())
+                    {
+                        _context.ContractDeptActivity.RemoveRange(existingActivities);
+                        await _context.SaveChangesAsync(cancellationToken);
+                    }
+
+                    // Add new activities
+                    foreach (var activity in discipline.Activities)
+                    {
+                        var newActivity = new TblErpFomContractDeptAct
+                        {
+                            ContractId = discipline.ContractId,
+                            ActivityId = activity.ActivityId,
+                            ActCode = activity.ActCode,
+                            DeptCode = discipline.DeptCode,
+                            ContractCode = discipline.ContractCode
+                        };
+
+                        await _context.ContractDeptActivity.AddAsync(newActivity, cancellationToken);
+                    }
+                }
+
+                await _context.SaveChangesAsync(cancellationToken);
+                Log.Info("----Info Check UnCheck Contract Discipline Activities method exit----");
+
+                return 1; // Return a success code
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in Create/Update Check UnCheck Contract Discipline Activities method");
+                Log.Error($"Error occurred at: {DateTime.UtcNow}");
+                Log.Error($"Error message: {ex.Message}");
+                Log.Error($"Error stack trace: {ex.StackTrace}");
+                return 0; // Return a failure code
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+    //#region  Create Chk UnChk ContDeptActivity
+
+    //public class CreateChkUnChkContDeptActivity : IRequest<int>
+    //{
+    //    public UserIdentityDto User { get; set; }
+    //    public TblErpFomContractDeptActDto Input { get; set; }
+    //}
+
+    ////public class CreateChkUnChkContDeptActivityHandler : IRequestHandler<CreateChkUnChkContDeptActivity, int>
+    ////{
+    ////    private readonly CINDBOneContext _context;
+    ////    private readonly IMapper _mapper;
+
+    ////    public CreateChkUnChkContDeptActivityHandler(CINDBOneContext context, IMapper mapper)
+    ////    {
+    ////        _context = context;
+    ////        _mapper = mapper;
+    ////    }
+
+    ////    public async Task<int> Handle(CreateChkUnChkContDeptActivity request, CancellationToken cancellationToken)
+    ////    {
+    ////        try
+    ////        {
+    ////            Log.Info("----Info Create Update Check UnCheck Contract Descipline Activity  method start----");
+
+    ////            var obj = request.Input;
+
+
+    ////            TblErpFomContractDeptAct ChkUnchkActivity = new();
+    ////            if (obj.Id > 0)
+    ////                ChkUnchkActivity = await _context.ContractDeptActivity.AsNoTracking().FirstOrDefaultAsync(e => e.Id == obj.Id);
+
+
+
+    ////            ChkUnchkActivity.ContractId = 0;
+    ////            ChkUnchkActivity.ActivityId = 0;
+    ////            ChkUnchkActivity.ActCode = obj.ActCode;
+    ////            ChkUnchkActivity.DeptCode = obj.DeptCode;
+    ////            ChkUnchkActivity.ContractCode = obj.ContractCode;
+    ////            if (obj.Id > 0)
+    ////            {
+    ////                _context.ContractDeptActivity.Update(ChkUnchkActivity);
+    ////            }
+    ////            else
+    ////            {
+
+
+    ////                ChkUnchkActivity.ContractId = 0;
+    ////                ChkUnchkActivity.ActivityId = 0;
+    ////                ChkUnchkActivity.ActCode = obj.ActCode;
+    ////                ChkUnchkActivity.DeptCode = obj.DeptCode;
+    ////                ChkUnchkActivity.ContractCode = obj.ContractCode;
+
+    ////                await _context.ContractDeptActivity.AddAsync(ChkUnchkActivity);
+    ////            }
+
+    ////            await _context.SaveChangesAsync();
+    ////            Log.Info("----Info  Check UnCheck Contract Descipline Activity  method Exit----");
+    ////            return ChkUnchkActivity.Id;
+    ////        }
+    ////        catch (Exception ex)
+    ////        {
+    ////            Log.Error("Error in Create Update Check UnCheck Contract Descipline Activity  Method");
+    ////            Log.Error("Error occured time : " + DateTime.UtcNow);
+    ////            Log.Error("Error message : " + ex.Message);
+    ////            Log.Error("Error StackTrace : " + ex.StackTrace);
+    ////            return 0;
+    ////        }
+    ////    }
+
+
+    ////}
+    //public class CreateChkUnChkContDeptActivityHandler : IRequestHandler<CreateChkUnChkContDeptActivity, int>
+    //{
+    //    private readonly CINDBOneContext _context;
+    //    private readonly IMapper _mapper;
+
+    //    public CreateChkUnChkContDeptActivityHandler(CINDBOneContext context, IMapper mapper)
+    //    {
+    //        _context = context;
+    //        _mapper = mapper;
+    //    }
+    //    public async Task<int> Handle(CreateChkUnChkContDeptActivity request, CancellationToken cancellationToken)
+    //    {
+    //        try
+    //        {
+    //            Log.Info("----Info Create Update Check UnCheck Contract Discipline Activity method start----");
+
+    //            var obj = request.Input;
+
+    //            // Check if the record exists based on ContractCode, DeptCode, and ActCode
+    //                var existingActivities = await _context.ContractDeptActivity
+    //                                               .Where(e => e.ContractCode == obj.ContractCode && e.DeptCode == obj.DeptCode && obj.ActCode==obj.ActCode)
+    //                                               .ToListAsync(cancellationToken);
+
+    //            if (existingActivities.Any())
+    //            {
+    //                // Remove each matching record
+    //                _context.ContractDeptActivity.RemoveRange(existingActivities);
+    //                await _context.SaveChangesAsync(); // Save changes after deletion
+    //            }
+
+    //            // Insert the new record
+    //            var newActivity = new TblErpFomContractDeptAct
+    //            {
+    //                ContractId = obj.ContractId,
+    //                ActivityId = obj.ActivityId,
+    //                ActCode = obj.ActCode,
+    //                DeptCode = obj.DeptCode,
+    //                ContractCode = obj.ContractCode
+    //            };
+
+    //            await _context.ContractDeptActivity.AddAsync(newActivity);
+    //            await _context.SaveChangesAsync(); // Save changes after adding the new record
+
+    //            Log.Info("----Info Check UnCheck Contract Discipline Activity method Exit----");
+    //            return newActivity.Id;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Log.Error("Error in Create Update Check UnCheck Contract Discipline Activity Method");
+    //            Log.Error("Error occurred time : " + DateTime.UtcNow);
+    //            Log.Error("Error message : " + ex.Message);
+    //            Log.Error("Error StackTrace : " + ex.StackTrace);
+    //            return 0;
+    //        }
+    //    }
+
+    //    //public async Task<int> Handle(CreateChkUnChkContDeptActivity request, CancellationToken cancellationToken)
+    //    //{
+    //    //    try
+    //    //    {
+    //    //        Log.Info("----Info Create Update Check UnCheck Contract Discipline Activity method start----");
+
+    //    //        var obj = request.Input;
+
+    //    //        // Check if the record exists based on ContractCode, DeptCode, and ActCode
+    //    //        var ChkUnchkActivity = await _context.ContractDeptActivity
+    //    //            .AsNoTracking()
+    //    //            .FirstOrDefaultAsync(e => e.ContractCode == obj.ContractCode && e.DeptCode == obj.DeptCode && e.ActCode == obj.ActCode);
+
+    //    //        if (ChkUnchkActivity != null)
+    //    //        {
+    //    //            // Update existing record
+    //    //            ChkUnchkActivity.ContractId = obj.ContractId;
+    //    //            ChkUnchkActivity.ActivityId = obj.ActivityId;
+    //    //            ChkUnchkActivity.ActCode = obj.ActCode;
+    //    //            ChkUnchkActivity.DeptCode = obj.DeptCode;
+    //    //            ChkUnchkActivity.ContractCode = obj.ContractCode;
+
+    //    //            _context.ContractDeptActivity.Update(ChkUnchkActivity);
+    //    //        }
+    //    //        else
+    //    //        {
+    //    //            // Insert new record
+    //    //            ChkUnchkActivity = new TblErpFomContractDeptAct
+    //    //            {
+    //    //                ContractId = obj.ContractId,
+    //    //                ActivityId = obj.ActivityId,
+    //    //                ActCode = obj.ActCode,
+    //    //                DeptCode = obj.DeptCode,
+    //    //                ContractCode = obj.ContractCode
+    //    //            };
+
+    //    //            await _context.ContractDeptActivity.AddAsync(ChkUnchkActivity);
+    //    //        }
+
+    //    //        await _context.SaveChangesAsync();
+    //    //        Log.Info("----Info Check UnCheck Contract Discipline Activity method Exit----");
+    //    //        return ChkUnchkActivity.Id;
+    //    //    }
+    //    //    catch (Exception ex)
+    //    //    {
+    //    //        Log.Error("Error in Create Update Check UnCheck Contract Discipline Activity Method");
+    //    //        Log.Error("Error occurred time : " + DateTime.UtcNow);
+    //    //        Log.Error("Error message : " + ex.Message);
+    //    //        Log.Error("Error StackTrace : " + ex.StackTrace);
+    //    //        return 0;
+    //    //    }
+    //    //}
+    //}
+
+
+
+    //#endregion
 
 
 }

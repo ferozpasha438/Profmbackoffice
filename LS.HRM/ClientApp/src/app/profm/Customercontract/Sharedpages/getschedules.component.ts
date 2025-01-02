@@ -237,8 +237,7 @@ export class GetschedulesComponent extends ParentFomMgtComponent implements OnIn
 
 
   submit() {
-
-    
+ 
     if (this.id > 0)
       if (this.shId > 0) {
         this.form.value['id'] = this.shId;
@@ -252,13 +251,13 @@ export class GetschedulesComponent extends ParentFomMgtComponent implements OnIn
   
       // Construct details data
       const detailsData = [
-        { weekDay: 'Sunday',   time: this.form.controls['timeSun'].value,    remarks: this.form.controls['remarkSun'].value,    isActive: this.form.controls['selectSun'].value==''?false:true },
-        { weekDay: 'Monday', time: this.form.controls['timeMon'].value, remarks: this.form.controls['remarkMon'].value, isActive: this.form.controls['selectMon'].value == '' ? false : true },
-        { weekDay: 'Tuesday', time: this.form.controls['timeTue'].value, remarks: this.form.controls['remarkTue'].value, isActive: this.form.controls['selectTue'].value == '' ? false : true },
-        { weekDay: 'Wednesday', time: this.form.controls['timeWed'].value, remarks: this.form.controls['remarkWed'].value, isActive: this.form.controls['selectWed'].value == '' ? false : true},
-        { weekDay: 'Thursday', time: this.form.controls['timeThu'].value, remarks: this.form.controls['remarkThu'].value, isActive: this.form.controls['selectThu'].value == '' ? false : true },
-        { weekDay: 'Friday', time: this.form.controls['timeFri'].value, remarks: this.form.controls['remarkFri'].value, isActive: this.form.controls['selectFri'].value == '' ? false : true},
-        { weekDay: 'Saturday', time: this.form.controls['timeSat'].value, remarks: this.form.controls['remarkSat'].value, isActive: this.form.controls['selectSat'].value == '' ? false : true }
+        { weekDay: 'Sunday', time: this.form.controls['timeSun'].value, remarks: this.form.controls['remarkSun'].value,     isActive: !!this.form.controls['selectSun'].value || false },
+        { weekDay: 'Monday', time: this.form.controls['timeMon'].value, remarks: this.form.controls['remarkMon'].value,     isActive: !!this.form.controls['selectMon'].value || false },
+        { weekDay: 'Tuesday', time: this.form.controls['timeTue'].value, remarks: this.form.controls['remarkTue'].value,    isActive: !!this.form.controls['selectTue'].value || false },
+        { weekDay: 'Wednesday', time: this.form.controls['timeWed'].value, remarks: this.form.controls['remarkWed'].value,  isActive: !!this.form.controls['selectWed'].value || false },
+        { weekDay: 'Thursday', time: this.form.controls['timeThu'].value, remarks: this.form.controls['remarkThu'].value,   isActive: !!this.form.controls['selectThu'].value || false },
+        { weekDay: 'Friday', time: this.form.controls['timeFri'].value, remarks: this.form.controls['remarkFri'].value,     isActive: !!this.form.controls['selectFri'].value || false },
+        { weekDay: 'Saturday', time: this.form.controls['timeSat'].value, remarks: this.form.controls['remarkSat'].value,   isActive: !!this.form.controls['selectSat'].value || false }
       ];
     
       const formData = {
@@ -305,13 +304,13 @@ export class GetschedulesComponent extends ParentFomMgtComponent implements OnIn
 
       // Construct details data
       const detailsData = [
-        { weekDay: 'Sunday', time: this.form.controls['timeSun'].value, remarks: this.form.controls['remarkSun'].value, isActive: this.form.controls['selectSun'].value },
-        { weekDay: 'Monday', time: this.form.controls['timeMon'].value, remarks: this.form.controls['remarkMon'].value, isActive: this.form.controls['selectMon'].value },
-        { weekDay: 'Tuesday', time: this.form.controls['timeTue'].value, remarks: this.form.controls['remarkTue'].value, isActive: this.form.controls['selectTue'].value },
-        { weekDay: 'Wednesday', time: this.form.controls['timeWed'].value, remarks: this.form.controls['remarkWed'].value, isActive: this.form.controls['selectWed'].value },
-        { weekDay: 'Thursday', time: this.form.controls['timeThu'].value, remarks: this.form.controls['remarkThu'].value, isActive: this.form.controls['selectThu'].value },
-        { weekDay: 'Friday', time: this.form.controls['timeFri'].value, remarks: this.form.controls['remarkFri'].value, isActive: this.form.controls['selectFri'].value },
-        { weekDay: 'Saturday', time: this.form.controls['timeSat'].value, remarks: this.form.controls['remarkSat'].value, isActive: this.form.controls['selectSat'].value }
+        { weekDay: 'Sunday', time: this.form.controls['timeSun'].value, remarks: this.form.controls['remarkSun'].value,    isActive: !!this.form.controls['selectSun'].value || false },
+        { weekDay: 'Monday', time: this.form.controls['timeMon'].value, remarks: this.form.controls['remarkMon'].value,    isActive: !!this.form.controls['selectMon'].value || false },
+        { weekDay: 'Tuesday', time: this.form.controls['timeTue'].value, remarks: this.form.controls['remarkTue'].value,   isActive: !!this.form.controls['selectTue'].value || false },
+        { weekDay: 'Wednesday', time: this.form.controls['timeWed'].value, remarks: this.form.controls['remarkWed'].value, isActive: !!this.form.controls['selectWed'].value || false },
+        { weekDay: 'Thursday', time: this.form.controls['timeThu'].value, remarks: this.form.controls['remarkThu'].value,  isActive: !!this.form.controls['selectThu'].value || false },
+        { weekDay: 'Friday', time: this.form.controls['timeFri'].value, remarks: this.form.controls['remarkFri'].value,    isActive: !!this.form.controls['selectFri'].value || false },
+        { weekDay: 'Saturday', time: this.form.controls['timeSat'].value, remarks: this.form.controls['remarkSat'].value,  isActive: !!this.form.controls['selectSat'].value || false }
       ];
 
       const summaryData = {
@@ -432,25 +431,25 @@ export class GetschedulesComponent extends ParentFomMgtComponent implements OnIn
     //const genButton = document.getElementById("genButton") as HTMLButtonElement | null;
     //const saveButton = document.getElementById("saveButton") as HTMLButtonElement | null;
     this.form.controls.remarkSun.setValue('');
-    this.form.controls.selectSun.setValue('');
+    this.form.controls.selectSun.setValue(false);
     this.form.controls.timeSun.setValue('');
     this.form.controls.remarkMon.setValue('');
-    this.form.controls.selectMon.setValue('');
+    this.form.controls.selectMon.setValue(false);
     this.form.controls.timeMon.setValue('');
     this.form.controls.remarkTue.setValue('');
-    this.form.controls.selectTue.setValue('');
+    this.form.controls.selectTue.setValue(false);
     this.form.controls.timeTue.setValue('');
     this.form.controls.remarkWed.setValue('');
-    this.form.controls.selectWed.setValue('');
+    this.form.controls.selectWed.setValue(false);
     this.form.controls.timeWed.setValue('');
     this.form.controls.remarkThu.setValue('');
-    this.form.controls.selectThu.setValue('');
+    this.form.controls.selectThu.setValue(false);
     this.form.controls.timeThu.setValue('');
     this.form.controls.remarkFri.setValue('');
-    this.form.controls.selectFri.setValue('');
+    this.form.controls.selectFri.setValue(false);
     this.form.controls.timeFri.setValue('');
     this.form.controls.remarkSat.setValue('');
-    this.form.controls.selectSat.setValue('');
+    this.form.controls.selectSat.setValue(false);
     this.form.controls.timeSat.setValue('');
 
 

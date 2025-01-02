@@ -50,21 +50,21 @@
   </div>
   <hr />
 
-  <div class="row">
-    <!--<div class="col-md-4 col-lg-4">-->
-    <!--<div class="form-group d-flex align-items-center">-->
-    <!--<div class="form-group">
-    <label for="deptCodes">{{ 'Department_Codes (Hard Services)' | translate }}</label>
-    <ng-select [multiple]="true" formControlName="contDeptCode" (change)="onDeptCodeChange($event)">
-      <ng-option [value]="'Select All'">Select All</ng-option>
-      <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
-        {{ deptCode.nameEng }}
-      </ng-option>
-    </ng-select>-->
-    <!--<button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>-->
-    <!--<validation-message [control]="form.controls.contDeptCode"></validation-message>-->
-    <!-- Button to trigger the modal -->
-    <!--<button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>
+
+  <!--<div class="col-md-4 col-lg-4">-->
+  <!--<div class="form-group d-flex align-items-center">-->
+  <!--<div class="form-group">
+  <label for="deptCodes">{{ 'Department_Codes (Hard Services)' | translate }}</label>
+  <ng-select [multiple]="true" formControlName="contDeptCode" (change)="onDeptCodeChange($event)">
+    <ng-option [value]="'Select All'">Select All</ng-option>
+    <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+      {{ deptCode.nameEng }}
+    </ng-option>
+  </ng-select>-->
+  <!--<button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>-->
+  <!--<validation-message [control]="form.controls.contDeptCode"></validation-message>-->
+  <!-- Button to trigger the modal -->
+  <!--<button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>
     </div>
   </div>
 
@@ -82,69 +82,69 @@
   </div>
 
   <div class="col-md-4 col-lg-4">-->
-    <!--<div class="form-group d-flex align-items-center">-->
-    <!--<div class="form-group">
-    <label for="deptCodes">{{ 'Department_Codes (Special Services)' | translate }}</label>
-    <ng-select [multiple]="true" formControlName="contDeptSpecialCode" (change)="onDeptSpecialCodeChange($event)">
-      <ng-option [value]="'Select All'">Select All</ng-option>
-      <ng-option *ngFor="let deptCode of DepartmentSpecializedCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
-        {{ deptCode.nameEng }}
-      </ng-option>
-    </ng-select>
-    <validation-message [control]="form.controls.contDeptSpecialCode"></validation-message>
+  <!--<div class="form-group d-flex align-items-center">-->
+  <!--<div class="form-group">
+  <label for="deptCodes">{{ 'Department_Codes (Special Services)' | translate }}</label>
+  <ng-select [multiple]="true" formControlName="contDeptSpecialCode" (change)="onDeptSpecialCodeChange($event)">
+    <ng-option [value]="'Select All'">Select All</ng-option>
+    <ng-option *ngFor="let deptCode of DepartmentSpecializedCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+      {{ deptCode.nameEng }}
+    </ng-option>
+  </ng-select>
+  <validation-message [control]="form.controls.contDeptSpecialCode"></validation-message>
 
-    <button type="button" class="btn btn-primary ml-2" (click)="openSpecialModal()">Activities</button>-->
-    <!-- Button to trigger the modal -->
-    <!--</div>
+  <button type="button" class="btn btn-primary ml-2" (click)="openSpecialModal()">Activities</button>-->
+  <!-- Button to trigger the modal -->
+  <!--</div>
   </div>-->
 
+  <div class="row">
 
-   
-      <!-- Department Codes (Hard Services) -->
-      <div class="col-md-4 col-lg-4">
-        <div class="form-group">
-          <label for="deptCodes">{{ 'Disciplines(Hard Services)' | translate }}</label>
-          <ng-select [multiple]="true" formControlName="contDeptCode" (change)="onDeptCodeChange($event)">
-            <ng-option [value]="'Select All'">Select All</ng-option>
-            <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
-              {{ deptCode.nameEng }}
-            </ng-option>
-          </ng-select>
-          <validation-message [control]="form.controls.contDeptCode"></validation-message>
-          <button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>
-        </div>
+    <!-- Department Codes (Hard Services) -->
+    <div class="col-md-4 col-lg-4">
+      <div class="form-group">
+        <label for="deptCodes">{{ 'Disciplines(Hard Services)' | translate }}</label>
+        <ng-select [multiple]="true" formControlName="contDeptCode" (change)="onDeptCodeChange($event)">
+          <ng-option [value]="'Select All'">Select All</ng-option>
+          <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+            {{ deptCode.nameEng }}
+          </ng-option>
+        </ng-select>
+        <validation-message [control]="form.controls.contDeptCode"></validation-message>
+        <button type="button" class="btn btn-primary ml-2" (click)="openModal()">Activities</button>
       </div>
+    </div>
 
-      <!-- Department Codes (Soft Services) -->
-      <div class="col-md-4 col-lg-4">
-        <div class="form-group">
-          <label for="deptCodes">{{ 'Disciplines(Soft Services)' | translate }}</label>
-          <ng-select [multiple]="true" formControlName="contDeptSoftCode" (change)="onDeptSoftCodeChange($event)">
-            <ng-option [value]="'Select All'">Select All</ng-option>
-            <ng-option *ngFor="let deptCode of DepartmentSoftCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
-              {{ deptCode.nameEng }}
-            </ng-option>
-          </ng-select>
-          <validation-message [control]="form.controls.contDeptSoftCode"></validation-message>
-          <button type="button" class="btn btn-primary ml-2" (click)="openSoftModal()">Activities</button>
-        </div>
+    <!-- Department Codes (Soft Services) -->
+    <div class="col-md-4 col-lg-4">
+      <div class="form-group">
+        <label for="deptCodes">{{ 'Disciplines(Soft Services)' | translate }}</label>
+        <ng-select [multiple]="true" formControlName="contDeptSoftCode" (change)="onDeptSoftCodeChange($event)">
+          <ng-option [value]="'Select All'">Select All</ng-option>
+          <ng-option *ngFor="let deptCode of DepartmentSoftCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+            {{ deptCode.nameEng }}
+          </ng-option>
+        </ng-select>
+        <validation-message [control]="form.controls.contDeptSoftCode"></validation-message>
+        <button type="button" class="btn btn-primary ml-2" (click)="openSoftModal()">Activities</button>
       </div>
+    </div>
 
-      <!-- Department Codes (Special Services) -->
-      <div class="col-md-4 col-lg-4">
-        <div class="form-group">
-          <label for="deptCodes">{{ 'Disciplines(Specialized Services)' | translate }}</label>
-          <ng-select [multiple]="true" formControlName="contDeptSpecialCode" (change)="onDeptSpecialCodeChange($event)">
-            <ng-option [value]="'Select All'">Select All</ng-option>
-            <ng-option *ngFor="let deptCode of DepartmentSpecializedCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
-              {{ deptCode.nameEng }}
-            </ng-option>
-          </ng-select>
-          <validation-message [control]="form.controls.contDeptSpecialCode"></validation-message>
-          <button type="button" class="btn btn-primary ml-2" (click)="openSpecialModal()">Activities</button>
-        </div>
+    <!-- Department Codes (Special Services) -->
+    <div class="col-md-4 col-lg-4">
+      <div class="form-group">
+        <label for="deptCodes">{{ 'Disciplines(Specialized Services)' | translate }}</label>
+        <ng-select [multiple]="true" formControlName="contDeptSpecialCode" (change)="onDeptSpecialCodeChange($event)">
+          <ng-option [value]="'Select All'">Select All</ng-option>
+          <ng-option *ngFor="let deptCode of DepartmentSpecializedCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">
+            {{ deptCode.nameEng }}
+          </ng-option>
+        </ng-select>
+        <validation-message [control]="form.controls.contDeptSpecialCode"></validation-message>
+        <button type="button" class="btn btn-primary ml-2" (click)="openSpecialModal()">Activities</button>
       </div>
-   
+    </div>
+
 
 
   </div>
@@ -396,7 +396,7 @@
           <div *ngFor="let activity of discipline.activities">
             <label>
               <input type="checkbox" [(ngModel)]="activity.selectCheckBox" />
-              {{ activity.activityName }}
+              {{ activity.actCode }}
             </label>
           </div>
         </div>
@@ -405,8 +405,8 @@
         <div class="col-md-12 col-lg-12 text-center">
           <input type="button" class="btn waves-effect waves-light btn-rounded btn-secondary btn-midblock"
                  value="{{'Cancel' | translate}}" (click)="closeModal()" /> &nbsp;
-          <!--<input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
-                 value="{{'Save' | translate}}" (click)="saveActivities()" />-->
+          <input type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                 value="{{'Confirm' | translate}}" (click)="saveActivities()" />
         </div>
       </div>
     </div>

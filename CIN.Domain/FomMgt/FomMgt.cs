@@ -1313,4 +1313,21 @@ namespace CIN.Domain.FomMgt
     }
 
 
+
+
+
+    [Table("tblErpFomContractDeptAct")]
+    public class TblErpFomContractDeptAct
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public int ContractId { get; set; }
+        public int ActivityId { get; set; }
+        public string DeptCode { get; set; }
+        public string ActCode { get; set; }
+        public string ContractCode { get; set; }
+
+    }
+
+
 }

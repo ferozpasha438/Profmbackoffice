@@ -567,10 +567,12 @@ namespace CIN.DB
 
         public DbSet<TblErpFomScheduleWeekdays> FomScheduleWeekdays { get; set; }
 
-       public DbSet<TblFomB2CUserClientLoginMapping> FomB2CUserClientLoginMappings { get; set; }
+        public DbSet<TblFomB2CUserClientLoginMapping> FomB2CUserClientLoginMappings { get; set; }
+
+        public DbSet<TblErpFomContractDeptAct> ContractDeptActivity { get; set; }
 
         #region by SAMBA
-        
+
 
         public DbSet<TblFomB2CJobTicket> FomB2CJobTickets { get; set; }
         public DbSet<TblFomJobTicketPayment> FomJobTicketPayments { get; set; }
