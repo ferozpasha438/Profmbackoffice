@@ -25,8 +25,10 @@ export class AddupdatedisciplinesComponent extends ParentFomMgtComponent impleme
   fileUploadone!: File;
   //thumbNailImageUrl: string | ArrayBuffer | null = null;
   TimePeriodList: Array<LanCustomSelectListItem> = [];
-  file1Url: string = '';
   id: number = 0;
+  selectedTimePeriods = [];
+  file1Url: string = '';
+ 
   isReadOnly: boolean = false;
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdatedisciplinesComponent>,
@@ -45,7 +47,8 @@ export class AddupdatedisciplinesComponent extends ParentFomMgtComponent impleme
   setForm() {
     this.form = this.fb.group(
       {
-        'serviceTimePeriods': [[], Validators.required],
+        'id':0,
+        'serviceTimePeriods': [[]],
         'deptCode': ['', [Validators.required, Validators.maxLength(20)]],
         'nameEng': ['', Validators.required],
         'nameArabic': ['', Validators.required],
@@ -105,6 +108,36 @@ export class AddupdatedisciplinesComponent extends ParentFomMgtComponent impleme
   }
 
 
+
+  selectAllChecked = false;
+
+  onTimePeriodChange(event: any) {
+    if (event && event.includes('Select All')) {
+      this.selectAllChecked = !this.selectAllChecked;
+      if (this.selectAllChecked) {
+        // Select all department codes
+        //  const codes = selectedCodes.map((dept: any) => dept.deptCode);
+        const allCodes = this.TimePeriodList.map((timeP: any) => timeP.text);
+        this.form.controls['serviceTimePeriods'].setValue(allCodes);
+      } else {
+        // Deselect all department codes
+        this.form.controls['serviceTimePeriods'].setValue([]);
+      }
+    }
+
+    const selectedTimePeriod = this.getSelectedTimePeriods();
+    // Perform necessary actions with the selected codes
+    console.log('Selected Time Period on change:', selectedTimePeriod);
+  }
+ 
+
+  getSelectedTimePeriods() {
+    return this.form.get('serviceTimePeriods')?.value || [];
+  }
+
+
+ 
+
   //onFileChanged(event: any, type: number) {
   //  let reader = new FileReader();
   //  if (event.target.files && event.target.files.length > 0) {
@@ -146,49 +179,107 @@ export class AddupdatedisciplinesComponent extends ParentFomMgtComponent impleme
   //    this.utilService.FillUpFields();
   //}
 
+  //submit() {
+  //  if (this.form.valid) {
+  //      if (this.id > 0)
+  //      this.form.value['id'] = this.id;
+
+  //    var periodData = this.form.value['serviceTimePeriods'] as Array<any>;
+     
+  //    this.form.controls['serviceTimePeriods'].setValue(periodData);
+  //    this.form.patchValue({ id: this.id });
+  //    this.apiService.post('FomDiscipline', this.form.value)
+  //      .subscribe(res => {
+  //        if (res && this.fileUploadone != null && this.fileUploadone != undefined) {
+  //          const deptRes = res as any;
+  //          const formData = new FormData();
+  //          formData.append("id", deptRes.id.toString());
+  //          formData.append("WebRoot", this.authService.ApiEndPoint().replace("/api", "") + '/DeptImages/');
+  //          formData.append("Image1IForm", this.fileUploadone);
+  //          this.apiService.post('FomDiscipline/UploadThumbnailFiles', formData)
+  //            .subscribe(res => {
+  //              this.utilService.OkMessage();
+  //              this.dialogRef.close(true);
+  //            },
+  //              error => {
+  //                console.error(error);
+  //                this.utilService.ShowApiErrorMessage(error);
+  //              });
+  //        } else if (res) {
+  //          this.utilService.OkMessage();
+  //          // this.reset();
+  //          this.dialogRef.close(true);
+  //        } else {
+  //          this.notifyService.showWarning("error");
+  //        }
+
+  //      },
+  //        error => {
+  //          console.error(error);
+  //          this.utilService.ShowApiErrorMessage(error);
+  //        });
+
+  //  }
+  //  else
+  //    this.utilService.FillUpFields();
+
+  //}
+
   submit() {
     if (this.form.valid) {
-       if (this.id > 0)
-      this.form.value['id'] = this.id;
+      // Ensure 'id' is always part of the form and updated
+      this.form.patchValue({ id: this.id });
+
+      // Process serviceTimePeriods to ensure it's an array of strings
       var periodData = this.form.value['serviceTimePeriods'] as Array<any>;
-      this.form.value['serviceTimePeriods'] = periodData.map(item => item.text);
-      this.apiService.post('FomDiscipline', this.form.value)
-        .subscribe(res => {
-          if (res && this.fileUploadone != null && this.fileUploadone != undefined) {
-            const deptRes = res as any;
-            const formData = new FormData();
-            formData.append("id", deptRes.id.toString());
-            formData.append("WebRoot", this.authService.ApiEndPoint().replace("/api", "") + '/DeptImages/');
-            formData.append("Image1IForm", this.fileUploadone);
-            this.apiService.post('FomDiscipline/UploadThumbnailFiles', formData)
-              .subscribe(res => {
-                this.utilService.OkMessage();
-                this.dialogRef.close(true);
-              },
-                error => {
-                  console.error(error);
-                  this.utilService.ShowApiErrorMessage(error);
-                });
+      const cleanedPeriodData = periodData.map(item => item?.text || item); // Ensure strings
+      this.form.controls['serviceTimePeriods'].setValue(cleanedPeriodData);
+
+      // Make API call to save the form data
+      this.apiService.post('FomDiscipline', this.form.value).subscribe(
+        (res) => {
+          if (res && this.fileUploadone) {
+            // Handle file upload
+            this.uploadThumbnailFile(res);
           } else if (res) {
             this.utilService.OkMessage();
-            // this.reset();
-            this.dialogRef.close(true);
+            this.dialogRef.close(true); // Close the dialog with success status
           } else {
-            this.notifyService.showWarning("error");
+            this.notifyService.showWarning("Error: No response received");
           }
-
         },
-          error => {
-            console.error(error);
-            this.utilService.ShowApiErrorMessage(error);
-          });
-
+        (error) => {
+          console.error('API Error during FomDiscipline:', error);
+          this.utilService.ShowApiErrorMessage(error);
+        }
+      );
+    } else {
+      this.utilService.FillUpFields(); // Handle invalid form
     }
-    else
-      this.utilService.FillUpFields();
-
   }
 
+  // Helper function for file upload
+  uploadThumbnailFile(response: any) {
+    const deptRes = response as any;
+    const formData = new FormData();
+    formData.append("id", deptRes.id.toString());
+    formData.append(
+      "WebRoot",
+      this.authService.ApiEndPoint().replace("/api", "") + '/DeptImages/'
+    );
+    formData.append("Image1IForm", this.fileUploadone);
+
+    this.apiService.post('FomDiscipline/UploadThumbnailFiles', formData).subscribe(
+      (res) => {
+        this.utilService.OkMessage();
+        this.dialogRef.close(true); // Close the dialog with success status
+      },
+      (error) => {
+        console.error('API Error during file upload:', error);
+        this.utilService.ShowApiErrorMessage(error);
+      }
+    );
+  }
 
 
   reset() {

@@ -792,8 +792,9 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         .subscribe(
           res => {
             this.utilService.OkMessage();
-            this.reset();
-            this.dialogRef.close(true);
+           // this.reset();
+            this.closeModal();
+           // this.dialogRef.close(true);
           },
           error => {
             this.utilService.ShowApiErrorMessage(error);

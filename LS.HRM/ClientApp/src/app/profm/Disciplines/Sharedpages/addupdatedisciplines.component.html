@@ -124,7 +124,8 @@
     <div class="col-md-6 col-lg-6">
       <div class="form-group">
         <label for="serviceTimePeriods">{{'ServiceTime_Periods' | translate}}</label>
-        <ng-select [multiple]="true" formControlName="serviceTimePeriods">
+        <ng-select [multiple]="true" formControlName="serviceTimePeriods" (change)="onTimePeriodChange($event)">
+          <ng-option [value]="'Select All'">Select All</ng-option>
           <ng-option *ngFor="let timePeriod of TimePeriodList" [value]="timePeriod" [disabled]="timePeriod ?.disabled">{{timePeriod.text}}</ng-option>
         </ng-select>
         <validation-message [control]="form.controls.serviceTimePeriods"></validation-message>
