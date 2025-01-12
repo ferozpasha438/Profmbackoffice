@@ -197,6 +197,7 @@ namespace LS.API.FomMobB2C.Controllers
 
                         if (assetMasterList.Count() > 0)
                             result = await Mediator.Send(new ImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
+                        //result = await Mediator.Send(new BulkImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
 
                         FileInfo fi = new FileInfo(filePath);
                         fi.Delete();
@@ -214,7 +215,7 @@ namespace LS.API.FomMobB2C.Controllers
                         else
                             return BadRequest(new ApiMessageDto
                             {
-                                Message = ApiMessageInfo.Failed
+                                Message = result.Message
                             });
                     }
 
@@ -307,6 +308,7 @@ namespace LS.API.FomMobB2C.Controllers
 
                         if (assetMasterList.Count() > 0)
                             result = await Mediator.Send(new ImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
+                        //result = await Mediator.Send(new BulkImportExcelFomAssetMaster() { Input = assetMasterList, User = UserInfo() });
 
                         FileInfo fi = new FileInfo(filePath);
                         fi.Delete();
@@ -324,7 +326,7 @@ namespace LS.API.FomMobB2C.Controllers
                         else
                             return BadRequest(new ApiMessageDto
                             {
-                                Message = ApiMessageInfo.Failed
+                                Message = result.Message
                             });
                     }
 

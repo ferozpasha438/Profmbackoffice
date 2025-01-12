@@ -40,7 +40,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             var list = _context.FomAssetMasters.AsNoTracking();
 
             if (search.Query.HasValue())
-                list = list.Where(e => e.Name.Contains(search.Query) || e.NameAr.Contains(request.Input.Query));
+                list = list.Where(e => e.AssetCode.Contains(search.Query) || e.Name.Contains(search.Query) || e.NameAr.Contains(request.Input.Query));
 
             var filteredlist = await list
                 .Select(e => new TblErpFomAssetMasterDto
@@ -461,7 +461,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
         public async Task<AppCtrollerDto> Handle(ImportExcelFomAssetMaster request, CancellationToken cancellationToken)
         {
-            int savedCount = 0;
+            int savedCount = 0, duplicateCount = 0;
             foreach (var obj in request.Input)
             {
                 var hasAssetCode = await _context.FomAssetMasters.AnyAsync(e => e.AssetCode == obj.AssetCode.Trim().Replace(" ", ""));
@@ -488,6 +488,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                 JobPlan = obj.JobPlan,
                                 HasChild = obj.HasChild,
                                 IsActive = true,
+                                IsWrittenOff = obj.IsWrittenOff,
+                                AssetScale = obj.AssetScale,
                                 Created = DateTime.Now,
                                 CreatedBy = request.User.UserId
                             };
@@ -542,10 +544,14 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                         }
                     }
                 }
+                else
+                    duplicateCount++;
             }
 
             if (savedCount > 0)
                 return ApiMessageInfo.Status(1, savedCount);
+            if (duplicateCount == request.Input.Count)
+                return ApiMessageInfo.Status(ApiMessageInfo.Duplicate("Data"));
             else
                 return ApiMessageInfo.Status(0);
 
@@ -556,6 +562,122 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
 
     #endregion
+
+
+    #region BulkImportExcelFomAssetMaster
+
+    public class BulkImportExcelFomAssetMaster : IRequest<AppCtrollerDto>
+    {
+        public UserIdentityDto User { get; set; }
+        public List<TblErpFomAssetMasterDto> Input { get; set; }
+    }
+
+    public class BulkImportExcelFomAssetMasterHandler : IRequestHandler<BulkImportExcelFomAssetMaster, AppCtrollerDto>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public BulkImportExcelFomAssetMasterHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<AppCtrollerDto> Handle(BulkImportExcelFomAssetMaster request, CancellationToken cancellationToken)
+        {
+            int savedCount = 0;
+            bool hasduplicateCount = false;
+            var assetList = request.Input;
+
+            var fomAssetCodes = _context.FomAssetMasters.Select(e => e.AssetCode);
+            var assetMasters = assetList.Where(ast => !fomAssetCodes.Any(assetCode => assetCode == ast.AssetCode.Trim().Replace(" ", "")));
+            int assetMastersCount = assetMasters.Count();
+            if (assetMastersCount > 0)
+            {
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        Log.Info("----Info BulkImportExcelFomAssetMaster method start----");
+
+                        List<TblErpFomAssetMaster> FomAssetMasters = assetMasters.Select(obj => new TblErpFomAssetMaster()
+                        {
+                            AssetCode = obj.AssetCode.Trim().Replace(" ", "").ToUpper(),
+                            Name = obj.Name,
+                            NameAr = obj.NameAr,
+                            Description = obj.Description,
+                            SectionCode = obj.SectionCode,
+                            DeptCode = obj.DeptCode,
+                            ContractCode = obj.ContractCode,
+                            Location = obj.Location,
+                            Classification = obj.Classification,
+                            RouteGroup = obj.RouteGroup,
+                            JobPlan = obj.JobPlan,
+                            HasChild = obj.HasChild,
+                            IsActive = true,
+                            IsWrittenOff = obj.IsWrittenOff,
+                            AssetScale = obj.AssetScale,
+                            Created = DateTime.Now,
+                            CreatedBy = request.User.UserId
+                        }).ToList();
+
+
+                        await _context.FomAssetMasters.AddRangeAsync(FomAssetMasters);
+                        await _context.SaveChangesAsync();
+
+
+                        var childs = assetMasters.Where(e => e.HasChild).SelectMany(e => e.AssetChilds);
+
+                        if (childs != null && childs.Count() > 0)
+                        {
+                            List<TblErpFomAssetMasterChild> ChildList = childs.Select(child => new TblErpFomAssetMasterChild()
+                            {
+                                AssetCode = child.AssetCode,
+                                ChildCode = child.ChildCode,
+                                Name = child.Name,
+                            }).ToList();
+
+                            if (ChildList.Count > 0)
+                            {
+                                await _context.FomAssetMasterChilds.AddRangeAsync(ChildList);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+
+                        Log.Info("----Info BulkImportExcelFomAssetMaster method Exit----");
+                        await transaction.CommitAsync();
+                        savedCount = assetMastersCount;
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        Log.Error("Error in BulkImportExcelFomAssetMaster Method");
+                        Log.Error("Error occured time : " + DateTime.UtcNow);
+                        Log.Error("Error message : " + ex.Message);
+                        Log.Error("Error StackTrace : " + ex.StackTrace);
+                        return ApiMessageInfo.Status(0);
+                        //return ApiMessageInfo.Status(ex.Message + " " + ex.InnerException?.Message);
+                    }
+                }
+            }
+            else
+                hasduplicateCount = true;
+
+            if (savedCount > 0)
+                return ApiMessageInfo.Status(1, savedCount);
+            if (hasduplicateCount)
+                return ApiMessageInfo.Status(ApiMessageInfo.Duplicate("Data"));
+            else
+                return ApiMessageInfo.Status(0);
+
+        }
+
+    }
+
+
+
+    #endregion
+
 
     #region Delete
     public class DeleteAssetMaster : IRequest<int>
