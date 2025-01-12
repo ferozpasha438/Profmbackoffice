@@ -341,9 +341,15 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
       return;
     }
 
-    const codes  = selectedCodes.map((dept: any) => dept.deptCode);
+    const codes = selectedCodes.map((dept: any) => dept.deptCode);
+    let contarctCode = this.form.value['contractCode'];
+
+    if (contarctCode === "") {
+      contarctCode = null;
+    }
+      //this.contarctCode = null;
    // const codes = this.deptActCodes;
-    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}/${contarctCode}`).subscribe(
       (data) => {
         this.disciplines = data;
         this.isModalOpen = true;
@@ -364,8 +370,10 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
     }
 
     const codes = selectedCodes.map((dept: any) => dept.deptCode);
+
+    const contarctCode = this.form.value['contractCode'];
     // const codes = this.deptActCodes;
-    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}/${contarctCode}`).subscribe(
       (data) => {
         this.disciplines = data;
         this.isModalOpen = true;
@@ -374,6 +382,16 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         console.error('Error fetching activities:', error);
       }
     );
+
+    //this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+    //  (data) => {
+    //    this.disciplines = data;
+    //    this.isModalOpen = true;
+    //  },
+    //  (error) => {
+    //    console.error('Error fetching activities:', error);
+    //  }
+    //);
   }
 
 
@@ -385,8 +403,9 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
     }
 
     const codes = selectedCodes.map((dept: any) => dept.deptCode);
+    const contarctCode = this.form.value['contractCode'];
     // const codes = this.deptActCodes;
-    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}`).subscribe(
+    this.apiService.getall(`fomCustomerContract/GetActivitiesByDeptCodes/${codes}/${contarctCode}`).subscribe(
       (data) => {
         this.disciplines = data;
         this.isModalOpen = true;
@@ -646,12 +665,214 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
   
   
 
+  //saveActivities() {
+  //  interface Activity {
+  //    activityName: string;
+  //    selectCheckBox: boolean;
+  //  }
+
+  //  interface Discipline {
+  //    disciplineName: string;
+  //    activities: Activity[];
+  //  }
+
+  //  const selectedActivities = [];
+  //  //const contractId = 123;  // replace with actual contract ID
+  //  //const deptCode = "DPT001"; // replace with actual department code
+  //  //const contractCode = "CONTRACT123"; // replace with actual contract code
+
+  //  this.disciplines.forEach((discipline: Discipline) => {
+  //    discipline.activities.forEach((activity: Activity) => {
+  //      if (activity.selectCheckBox) {
+  //        selectedActivities.push({
+  //          ContractId: 0,
+  //          ActivityId: 0, // Map activity name to an ID if needed
+  //          DeptCode: this.getdeptCode(discipline.disciplineName),
+  //          ActCode: this.getActCode(activity.activityName), // Map activity name to act code if needed
+  //          ContractCode: this.form.value['contractCode']
+  //        });
+  //      }
+
+  //      this.apiService.post('FomCustomerContract/CreateChkUnChkContDeptActivity', this.form.value)
+  //        .subscribe(res => {
+  //          this.utilService.OkMessage();
+  //          this.reset();
+  //          this.dialogRef.close(true);
+  //        },
+  //          error => {
+  //            this.utilService.ShowApiErrorMessage(error);
+  //          });
+
+
+  //    });
+
+
+
+
+  //  });
+
+
+  //  //if (this.form.valid) {
+  //  //  const payload = {
+  //  //    ...this.form.value,          // Spread form values
+  //  //    selectedActivities: selectedActivities  // Add selected activities
+  //  //  };
+
+  //  //  // Check if there's an ID to update an existing record
+  //  //  if (this.id > 0) {
+  //  //    payload['id'] = this.id;
+  //  //  }
+
+
+
+  //  if (this.form.valid) {
+  //    if (this.id > 0)
+  //      this.form.value['id'] = this.id;
+  //    //this.form.value['ActCode']=ActCode
+  //    this.apiService.post('FomCustomerContract/CreateChkUnChkContDeptActivity', this.form.value)
+  //      .subscribe(res => {
+  //        this.utilService.OkMessage();
+  //        this.reset();
+  //        this.dialogRef.close(true);
+  //      },
+  //        error => {
+  //          this.utilService.ShowApiErrorMessage(error);
+  //        });
+  //  }
+  //  else
+  //    this.utilService.FillUpFields();
+  //  this.closeModal();
+  //}
+
+
+
+
+
   saveActivities() {
-    console.log('Selected activities:', this.disciplines);
-    // Perform the save logic here, such as making an API call
+    interface Activity {
+      actCode: string;
+      selectCheckBox: boolean;
+    }
+
+    interface Discipline {
+      disciplineName: string;
+      activities: Activity[];
+    }
+
+    const disciplinesData: {
+        DeptCode: string; ContractId: number; // Replace with actual contract ID if needed
+        ContractCode: any; Activities: {
+            ActCode: string; ActivityId: number; // Replace with actual activity ID if available
+        }[]; // Attach the list of activities for this discipline
+    }[] = []; // Array to store disciplines with their activities
+
+    // Iterate over disciplines to prepare the data structure
+    this.disciplines.forEach((discipline: Discipline) => {
+      const selectedActivities = discipline.activities
+        .filter(activity => activity.selectCheckBox) // Only include selected activities
+        .map(activity => ({
+          ActCode: this.getActCode(activity.actCode),
+          ActivityId: 0 // Replace with actual activity ID if available
+        }));
+
+      if (selectedActivities.length > 0) {
+        disciplinesData.push({
+          DeptCode: this.getdeptCode(discipline.disciplineName),
+          ContractId: 0, // Replace with actual contract ID if needed
+          ContractCode: this.form.value['contractCode'],
+          Activities: selectedActivities // Attach the list of activities for this discipline
+        });
+      }
+    });
+
+    // Check if there's any data to send
+    if (disciplinesData.length > 0) {
+      // Call API with the list of disciplines and their activities
+      this.apiService.post('FomCustomerContract/CreateChkUnChkContDeptActivity', disciplinesData)
+        .subscribe(
+          res => {
+            this.utilService.OkMessage();
+           // this.reset();
+            this.closeModal();
+           // this.dialogRef.close(true);
+          },
+          error => {
+            this.utilService.ShowApiErrorMessage(error);
+          }
+        );
+    } else {
+      // If no activities are selected
+      this.utilService.OkMessage();
+    }
+
     this.closeModal();
   }
 
+
+
+
+
+
+
+  //saveActivities() {
+  //  interface Activity {
+  //    actCode: string;
+  //    selectCheckBox: boolean;
+  //  }
+
+  //  interface Discipline {
+  //    disciplineName: string;
+  //    activities: Activity[];
+  //  }
+
+   
+
+  //  this.disciplines.forEach((discipline: Discipline) => {
+  //    discipline.activities.forEach((activity: Activity) => {
+  //      if (activity.selectCheckBox) {
+  //        const activityData = {
+  //          ContractId: 0,  // Replace with actual contract ID if needed
+  //          ActivityId: 0,  // Replace with actual activity ID if available
+  //          DeptCode: this.getdeptCode(discipline.disciplineName),
+  //          ActCode: this.getActCode(activity.actCode),
+  //          ContractCode: this.form.value['contractCode']
+  //        };
+
+  //        // Send each selected activity as a separate request
+  //        this.apiService.post('FomCustomerContract/CreateChkUnChkContDeptActivity', activityData)
+  //          .subscribe(
+  //            res => {
+  //              this.utilService.OkMessage();
+  //              this.reset();
+  //              this.dialogRef.close(true);
+  //            },
+  //            error => {
+  //              this.utilService.ShowApiErrorMessage(error);
+  //            }
+  //          );
+  //      }
+  //    });
+  //  });
+
+  //  this.closeModal();
+  //}
+
+
+
+  // Mock functions to map activity name to ID/ActCode
+  getActivityId(activityName: string): number {
+    // Replace with actual mapping logic
+    return Math.floor(Math.random() * 100);  // Example only
+  }
+  getActCode(actCode: string): string {
+    // Replace with actual mapping logic
+    return actCode;  // Example only
+  }
+
+  getdeptCode(disciplineName: string): string {
+    // Replace with actual mapping logic
+    return disciplineName;  // Example only
+  }
 
   // Function to close the modal
   closeModal() {

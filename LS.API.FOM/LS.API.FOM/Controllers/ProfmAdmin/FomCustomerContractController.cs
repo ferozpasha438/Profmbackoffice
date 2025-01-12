@@ -260,11 +260,11 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         }
 
 
-        [HttpGet("GetActivitiesByDeptCodes/{codes}")]
-        public async Task<IActionResult> GetActivitiesByDeptCodes([FromRoute] string codes)
+        [HttpGet("GetActivitiesByDeptCodes/{codes}/{contarctCode}")]
+        public async Task<IActionResult> GetActivitiesByDeptCodes([FromRoute] string codes,string contarctCode)
         {
             var deptCodes = codes.Split(','); // Splitting the codes by comma
-            var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes() { DeptCodes = deptCodes, User = UserInfo() });
+            var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes() { DeptCodes = deptCodes,ContractCode=contarctCode, User = UserInfo() });
             return obj is not null ? Ok(obj) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
         }
 
@@ -277,7 +277,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         //    }
 
         //    // Splitting the comma-separated string into an array of department codes
-             
+
 
         //    var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes
         //    {
@@ -289,6 +289,39 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         //}
 
 
+        [HttpPost("createChkUnChkContDeptActivity")]
+        public async Task<ActionResult> Create([FromBody] List<TblErpFomContractDeptActDto> dtoList)
+        {
+            if (dtoList == null || !dtoList.Any())
+                return BadRequest(new ApiMessageDto { Message = "No data provided." });
+
+            var result = await Mediator.Send(new CreateChkUnChkContDeptActivity { InputList = dtoList, User = UserInfo() });
+
+            if (result > 0)
+                return Created("createChkUnChkContDeptActivity", dtoList);
+            else
+                return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+        }
+
+
+
+
+
+
+
+
+        //[HttpPost("createChkUnChkContDeptActivity")]
+        //public async Task<ActionResult> Create([FromBody] TblErpFomContractDeptActDto dTO)
+        //{
+        //    var id = await Mediator.Send(new CreateChkUnChkContDeptActivity() { Input = dTO, User = UserInfo() });
+        //    if (id > 0)
+        //        return Created($"get/{id}", dTO);
+        //    else if (id == -1)
+        //    {
+        //        return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Duplicate(nameof(dTO.Id)) });
+        //    }
+        //    return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+        //}
     }
 }
 

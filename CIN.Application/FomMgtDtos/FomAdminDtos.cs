@@ -1029,6 +1029,35 @@ namespace CIN.Application.FomMgtDtos
 
     }
 
+    //[AutoMap(typeof(TblErpFomContractDeptAct))]
+    //public class TblErpFomContractDeptActDto
+    //{
+    //    public int Id { get; set; }
+    //    public int ContractId { get; set; }
+    //    public int ActivityId { get; set; }
+    //    public string DeptCode { get; set; }
+    //    public string ActCode { get; set; }
+    //    public string ContractCode { get; set; }
+    //}
+
+
+
+    public class TblErpFomContractDeptActDto
+    {
+        public int ContractId { get; set; }
+        public string ContractCode { get; set; }
+        public string DeptCode { get; set; }
+        public List<ActivityDto1> Activities { get; set; }
+    }
+
+    public class ActivityDto1
+    {
+        public string ActCode { get; set; }
+        public int ActivityId { get; set; }
+    }
+
+
+
 
 
     public class DisciplineDto
@@ -1039,7 +1068,8 @@ namespace CIN.Application.FomMgtDtos
 
     public class ActivityDto
     {
-        public string ActivityName { get; set; }
+        public string DeptCode { get; set; }
+        public string ActCode { get; set; }
         public bool SelectCheckBox { get; set; }
     }
 

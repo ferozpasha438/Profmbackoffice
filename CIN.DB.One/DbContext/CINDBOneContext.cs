@@ -571,6 +571,8 @@ namespace CIN.DB
         public DbSet<TblErpFomScheduleWeekdays> FomScheduleWeekdays { get; set; }
 
         public DbSet<TblFomB2CUserClientLoginMapping> FomB2CUserClientLoginMappings { get; set; }
+
+        public DbSet<TblErpFomContractDeptAct> ContractDeptActivity { get; set; }
         public DbSet<TblErpFomSection> FomSections { get; set; }
         public DbSet<TblErpFomAssetMaster> FomAssetMasters { get; set; }
         public DbSet<TblErpFomAssetMasterChild> FomAssetMasterChilds { get; set; }
@@ -580,6 +582,7 @@ namespace CIN.DB
         public DbSet<TblErpFomJobPlanMessageLog> FomJobPlanMessageLogs { get; set; }
         public DbSet<TblErpFomJobPlanScheduleClosure> FomJobPlanScheduleClosures { get; set; }
         public DbSet<TblErpFomJobPlanScheduleClosureItem> FomJobPlanScheduleClosureItems { get; set; }
+
 
         #region by SAMBA
 
