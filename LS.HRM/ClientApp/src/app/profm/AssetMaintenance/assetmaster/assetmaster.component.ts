@@ -84,11 +84,8 @@ export class AssetmasterComponent extends ParentB2CFrontComponent implements OnI
     }, error => this.utilService.ShowApiErrorMessage(error));
   }
 
-  applyFilter(searchValue: any) {
-    const search = searchValue;//.target.value as string;
-    //if (search && search.length >= 3) {
-    if (search) {
-      this.searchValue = search;
+  applyFilter(searchValue: any) {    
+    if (searchValue) {      
       this.loadList(0, this.pageService.pageCount, this.searchValue, this.sortingOrder);
     }
   }

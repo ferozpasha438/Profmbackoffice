@@ -37,7 +37,7 @@ export class AddupdatejobplanscheduleComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    //console.log(this.data);
+    console.log(this.data);
     this.loadData();
     //const elArr = document.querySelectorAll('.all-date'); // all
 
@@ -53,6 +53,7 @@ export class AddupdatejobplanscheduleComponent implements OnInit {
     this.apiService.getall(`assetMaintenance/getFomAssetMasterChildsByAssetCode?assetCode=${this.data.assetCode}&id=${this.data.id}`).subscribe(res => {
       this.isLoading = false;
       if (res) {
+        debugger
         this.assetChildList = res;
         this.assetChildList.forEach(item => {
           //console.log('item.value',item.value);

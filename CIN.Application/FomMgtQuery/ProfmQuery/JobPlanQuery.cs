@@ -157,6 +157,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     })
                     .FirstOrDefaultAsync();
 
+                obj.HasChild = await _context.FomAssetMasterChilds.AsNoTracking().AnyAsync(e => e.AssetCode == obj.AssetCode);
+
                 return obj;
             }
             catch (Exception ex)

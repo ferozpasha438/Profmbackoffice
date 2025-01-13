@@ -102,7 +102,7 @@ export class AddupdatejobplanComponent implements OnInit {
     this.apiService.get('assetMaintenance/getFomJobPlanMasterById', this.id).subscribe(res => {
       if (res) {
         this.form.patchValue(res);
-
+        this.canGenChildSchSelected = res.hasChild;
         //if (res.hasChild) {
         //  this.displayChilds(res.assetChilds)
         //  this.isChildSelected = true;
@@ -131,6 +131,7 @@ export class AddupdatejobplanComponent implements OnInit {
     this.apiService.getall(`assetMaintenance/GetFomAssetMasterByAssetCode?assetCode=${evt.target.value}`).subscribe(res => {
       if (res) {
         this.form.patchValue(res);
+        this.canGenChildSchSelected = res.hasChild;
       }
     });
   }
@@ -151,6 +152,7 @@ export class AddupdatejobplanComponent implements OnInit {
 
   jobPlanSchedule() {
     if (this.form.valid) {
+      debugger
       this.openDialogManage({
         title: 'Add_New_JobPlanSchedule',
         jobPlanCode: this.form.controls['jobPlanCode'].value,

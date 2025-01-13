@@ -269,8 +269,7 @@ export class AddupdateassetmasterComponent implements OnInit {
           this.utilService.OkMessage();
           this.dialogRef.close(true);
         },
-          error => {
-            console.error(error);
+          error => {           
             this.utilService.ShowApiErrorMessage(error);
           });
 

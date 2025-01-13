@@ -200,6 +200,9 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                     })
                                     .FirstOrDefaultAsync();
 
+            assetMaster.HasChild = await _context.FomAssetMasterChilds.AsNoTracking().AnyAsync(e => e.AssetCode == request.AssetCode);
+
+
             var contract = await _context.FomCustomerContracts.AsNoTracking().Where(c => c.ContractCode == assetMaster.ContractCode)
                 .Select(e => new { e.ContStartDate, e.ContEndDate })
                 .FirstOrDefaultAsync();
@@ -242,6 +245,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                         TextTwo = e.ChildCode,
                                     })
                                     .ToListAsync();
+
+
 
             if (request.Id > 0)
             {
