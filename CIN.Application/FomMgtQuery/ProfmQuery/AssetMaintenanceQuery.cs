@@ -477,7 +477,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             var custContractList = custContractCodes.Except(_context.FomCustomerContracts.AsNoTracking().Select(e => e.ContractCode).AsEnumerable());
 
             if (sectionCodeList != null && sectionCodeList.Count() > 0)
-                return ApiMessageInfo.Status($"Wrong SectionDodes:  {string.Join(", ", sectionCodeList)}");
+                return ApiMessageInfo.Status($"Wrong SectionCodes:  {string.Join(", ", sectionCodeList)}");
             if (departmentList != null && departmentList.Count() > 0)
                 return ApiMessageInfo.Status($"Wrong DeptCodes: {string.Join(", ", departmentList)}");
             if (custContractList != null && custContractList.Count() > 0)
