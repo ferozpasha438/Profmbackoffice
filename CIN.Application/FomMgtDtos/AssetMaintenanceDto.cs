@@ -80,6 +80,7 @@ namespace CIN.Application.FomMgtDtos
         public string Project { get; set; }
         public string ProjectLocation { get; set; }
         public string Status { get; set; }
+        public string CustomerCode { get; set; }
 
     }
 
@@ -267,4 +268,5 @@ namespace CIN.Application.FomMgtDtos
         public string Source { get; set; }
         public DateTime CreatedDate { get; set; }
     }
+
 }

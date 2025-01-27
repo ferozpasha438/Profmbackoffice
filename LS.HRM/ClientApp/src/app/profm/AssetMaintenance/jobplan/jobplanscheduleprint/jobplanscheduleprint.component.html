@@ -50,6 +50,9 @@
               {{'jobPlan_frequency' | translate}}
             </td>
             <td class="text-center font-weight-medium">
+              {{'Status' | translate}}
+            </td>
+            <td class="text-center font-weight-medium">
               {{'remarks' | translate}}
             </td>
 
@@ -71,6 +74,9 @@
             </td>
             <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
               {{item.frequency}}
+            </td>
+            <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
+              {{item.isClosed ? 'Closed' : 'Open'}}
             </td>
             <td style=" padding:5px;text-align: left;font-size:0.875rem !important;color: #000000; font-family: 'Poppins', sans-serif;font-weight: 500;">
               {{item.remarks}}

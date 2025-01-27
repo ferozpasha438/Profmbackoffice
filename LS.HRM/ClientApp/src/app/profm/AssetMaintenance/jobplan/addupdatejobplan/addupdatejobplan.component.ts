@@ -152,7 +152,7 @@ export class AddupdatejobplanComponent implements OnInit {
 
   jobPlanSchedule() {
     if (this.form.valid) {
-      debugger
+     
       this.openDialogManage({
         title: 'Add_New_JobPlanSchedule',
         jobPlanCode: this.form.controls['jobPlanCode'].value,

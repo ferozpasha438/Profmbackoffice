@@ -53,7 +53,7 @@ export class AddupdatejobplanscheduleComponent implements OnInit {
     this.apiService.getall(`assetMaintenance/getFomAssetMasterChildsByAssetCode?assetCode=${this.data.assetCode}&id=${this.data.id}`).subscribe(res => {
       this.isLoading = false;
       if (res) {
-        debugger
+
         this.assetChildList = res;
         this.assetChildList.forEach(item => {
           //console.log('item.value',item.value);
@@ -74,7 +74,15 @@ export class AddupdatejobplanscheduleComponent implements OnInit {
   openShcDates(item: any) {
     this.apiService.post(`assetMaintenance/calculateDatesForFrequencySelected`, { frequency: item.value, id: this.data.id, childCode: item.textTwo, planStartDate: this.utilService.selectedDate(this.data.planStartDate) }).subscribe(res => {
       if (res) {
-        //console.log(res);
+         console.log(res);
+
+        if (this.listofgeneratedschedules.length > 0) {
+          this.listofgeneratedschedules.forEach(litem => {            
+            let schItem = (res as Array<any>).find(rs => item.textTwo === litem.childCode && (rs.planStartDate as string).split('T')[0] == litem.date)
+            if (schItem)
+              schItem.remarks = litem.remarks;
+          })
+        }
 
         let dialogRef = this.utilService.openCrudDialog(this.dialog, GeneratedatescheduleComponent, '95%');
         (dialogRef.componentInstance as any).data = { list: res, frequency: item.value, id: this.data.id, jobPlanCode: this.data.jobPlanCode, childCode: item.textTwo, assetCode: item.text, childHasDiffFreq: this.data.childHasDiffFreq };
@@ -92,7 +100,7 @@ export class AddupdatejobplanscheduleComponent implements OnInit {
   }
   checkDuplicateChilds(array: Array<any>) {
     const singlebj = array[0];
-   // console.log('singlebj', singlebj);
+    // console.log('singlebj', singlebj);
     this.listofgeneratedschedules = this.listofgeneratedschedules.filter(item => item.assetCode == singlebj.assetCode && item.childCode != singlebj.childCode);
     this.isGenerated(singlebj);
   }
@@ -108,7 +116,7 @@ export class AddupdatejobplanscheduleComponent implements OnInit {
   save() {
     for (var i = 0; i < this.assetChildList.length; i++) {
       if (!this.assetChildList[i].isGenerated && this.data.id <= 0) {
-        this.notifyService.showError("generate '" + this.assetChildList[i].textTwo +"' schedules");
+        this.notifyService.showError("generate '" + this.assetChildList[i].textTwo + "' schedules");
         return;
       }
     }

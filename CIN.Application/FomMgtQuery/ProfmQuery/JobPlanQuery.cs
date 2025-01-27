@@ -251,6 +251,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     Frequency = e.Frequency,
                     Date = e.PlanStartDate,
                     Remarks = e.Remarks,
+                    IsClosed = e.IsClosed,
                 }).ToListAsync();
 
             return schList;

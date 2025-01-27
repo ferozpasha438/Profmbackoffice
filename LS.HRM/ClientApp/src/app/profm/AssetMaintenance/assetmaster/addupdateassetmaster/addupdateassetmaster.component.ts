@@ -47,7 +47,7 @@ export class AddupdateassetmasterComponent implements OnInit {
   taskeditsequence: number = 0;
   listOfAssetTasks: Array<any> = [];
   isArab: boolean = false;
-  scales: any[] = ['Worst', 'Bad', 'Medium', 'Medium', 'Good', 'Good', 'Better', 'Better', 'Better', 'Best', 'Best'];
+  scales: any[] = [];
   assetScaleValue: string = '';
   constructor(private fb: FormBuilder, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, public dialogRef: MatDialogRef<AddupdateassetmasterComponent>,
@@ -55,6 +55,7 @@ export class AddupdateassetmasterComponent implements OnInit {
 
   };
   ngOnInit(): void {
+    this.scales = this.utilService.getAssetScales();
     this.isArab = this.utilService.isArabic();
     this.setForm();
     this.loadData();
@@ -262,6 +263,11 @@ export class AddupdateassetmasterComponent implements OnInit {
       if (this.listOfAssetTasks.length > 0) {
         this.form.value['assetTasks'] = this.listOfAssetTasks;
       }
+      else {
+        this.notifyService.showError('Pls add Activities')
+        return;
+      }
+
 
 
       this.apiService.post('assetMaintenance/createUpdateFomAssetMaster', this.form.value)
