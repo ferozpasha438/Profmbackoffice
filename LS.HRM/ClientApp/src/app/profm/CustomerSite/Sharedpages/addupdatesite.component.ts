@@ -93,7 +93,7 @@ export class AddupdatesiteComponent extends ParentFomMgtComponent implements OnI
     if (this.id > 0)
       this.form.value['id'] = this.id;
 
-    let custCode = this.custCodeControl.value as string;
+    let custCode = this.customerCode;
 
     if (this.utilService.hasValue(custCode)) {
       this.form.value['customerCode'] = custCode;

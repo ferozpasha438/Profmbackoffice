@@ -116,5 +116,12 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
         }
 
+        [HttpGet("getDepartmentSelectList")]
+        public async Task<IActionResult> GetDepartmentSelectList()
+        {
+            var obj = await Mediator.Send(new GetDepartmentSelectList() { User = UserInfo() });
+            return obj is not null ? Ok(obj) : NotFound(ApiMessageNotFound());
+        }
+
     }
 }

@@ -182,6 +182,7 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
       //   'custCityId1': [''],
 
       'custMobile1': ['', [Validators.required]],
+      'password': [''],
       'custPhone1': ['', [Validators.required]],
       'custEmail1': ['', [Validators.required, Validators.email]],
       'custContact1': ['', Validators.required],

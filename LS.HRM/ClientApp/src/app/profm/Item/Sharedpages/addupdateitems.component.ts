@@ -817,12 +817,23 @@ export class AddupdateitemsComponent implements OnInit {
 
   public edit() {
     /*this.openDialogManage(id, DBOperation.update, 'Updating Warehouse', 'Update');*/
+   
     this.apiService.get('FomItemMaster', this.id).subscribe(res => {
       if (res) {
         this.isReadOnly = true;
         const filterArray = res['deptCodes'].split(',');
-        var deptdata = this.DepartmentCodeList as Array<any>;
-        res['deptCodes'] = deptdata.filter(item => filterArray.includes(item.deptCode));
+        //this.loadData();
+      
+        const deptdata = this.DepartmentCodeList as Array<any>;
+        if (deptdata.length === 0) {
+          //this.loadData();
+          res['deptCodes'] = filterArray;  // Assign filterArray if deptdata is empty
+        } else {
+          res['deptCodes'] = deptdata.filter(item => filterArray.includes(item.deptCode.toString()));
+        }
+       // res['deptCodes'] = deptdata.filter(item => filterArray.includes(item.deptCode.toString()));
+
+      //  res['deptCodes'] = filterArray;
         /* this.loadSubCategoryCode();*/
         this.onSubCategory(res.itemCat);
        // this.ontype(res.itemType)
@@ -832,112 +843,19 @@ export class AddupdateitemsComponent implements OnInit {
           ItemUOMCodes: res.itemCode,
           ItemBarcodeCodes: res.itemCode,
           ItemNotesCodes: res.itemCode,
-          ItemHistoryCodes: res.itemCode
+          ItemHistoryCodes: res.itemCode,
+          
+          
 
         });
+
         this.form.patchValue(res);
-        //this.loadinventoryHistory(res.itemCode);
-
-        //this.inventoryList.clear();
-        //let inventoryList = res['inventoryList'] as Array<any>;
-        //inventoryList.forEach(item => {
-        //  this.editInventory(item);
-        //});
+        
 
 
-        /*this.listOfInvoices.clear();*/
-       /* let listOfinventory = res['inventoryList'] as Array<any>;*/
-        //listOfinventory.forEach(item => {
-        //  //this.editInvoiceItem(item);
-        //  this.listOfinventory.push({
-        //    sequence: this.getSequence(),
-        //    tranNumber: "0", whCode: item.whCode, qtyOH: item.qtyOH, qtyOnSalesOrder: item.qtyOnSalesOrder, qtyOnPO: item.qtyOnPO, qtyReserved: item.qtyReserved,
-        //    invitemAvgCost: item.invItemAvgCost, itemLastPOCost: item.itemLastPOCost, itemLandedCost: item.itemLandedCost, minQty: item.minQty, maxQty: item.maxQty, eoq: item.eoq
-        //  });
-        //});
 
-        //this.authList.clear();
-        //let authList = res['authList'] as Array<any>;
-        //authList.forEach(item => {
-        //  this.editItem(item);
-        //});
-        //let listOfUOMinventory = res['authList'] as Array<any>;
-        //listOfUOMinventory.forEach(item => {
-        //  //this.editInvoiceItem(item);
-        //  this.listOfUOMinventory.push({
-        //    sequence: this.getSequence(),
-        //    tranNumber: "0",
-        //    itemUOM: item.itemUOM,
-        //    itemConvFactor: item.itemConvFactor,
-        //    itemUOMPrice1: item.itemUOMPrice1,
-        //    itemUOMPrice2: item.itemUOMPrice2,
-        //    itemUOMPrice3: item.itemUOMPrice3,
-        //    itemUOMDiscPer: item.itemUOMDiscPer,
-        //    itemUOMPrice4: item.itemUOMPrice4,
-        //    itemUomAvgCost: item.itemUomAvgCost,
-        //    itemUomLastPOCost: item.itemUomLastPOCost,
-        //    itemUomLandedCost: item.itemUomLandedCost
 
-        //  });
-        //});
-
-        //this.barcodeList.clear();
-        //let barcodeList = res['barcodeList'] as Array<any>;
-        //barcodeList.forEach(item => {
-        //  this.editBarcode(item);
-        //});
-        //let listOfBarcodeinventory = res['barcodeList'] as Array<any>;
-        //listOfBarcodeinventory.forEach(item => {
-        //  //this.editInvoiceItem(item);
-        //  this.listOfBarcodeinventory.push({
-        //    sequence: this.getSequence(),
-        //    tranNumber: "0",
-        //    itemBarUOM: item.itemBarUOM,
-        //    itemBarcode: item.itemBarcode
-        //  });
-        //});
-
-        //this.notesList.clear();
-        //let notesList = res['notesList'] as Array<any>;
-        //notesList.forEach(item => {
-        //  this.editNotes(item);
-        //});
-        //let listOfNotesinventory = res['notesList'] as Array<any>;
-        //listOfNotesinventory.forEach(item => {
-        //  //this.editInvoiceItem(item);
-        //  this.listOfNotesinventory.push({
-        //    sequence: this.getSequence(),
-        //    tranNumber: "0",
-        //    noteDates: item.noteDates,
-        //    name: item.name,
-        //    notes: item.notes
-
-        //  });
-        //});
-        //this.historyList.clear();
-        //let historyList = res['historyList'] as Array<any>;
-        //historyList.forEach(item => {
-        //  this.editHistory(item);
-        //});
-        //let listOfInvoices = res['historyList'] as Array<any>;
-        //listOfInvoices.forEach(item => {
-        //  //this.editInvoiceItem(item);
-        //  this.listOfInvoices.push({
-        //    itemCode: item.itemCode, wHCode: item.whCode, tranDate: item.tranDate, tranNumber: item.tranNumber, tranUnit: item.tranUnit, tranQty: item.tranQty,
-        //    unitConvFactor: item.unitConvFactor, tranTotQty: item.tranTotQty, tranPrice: item.tranPrice, itemAvgCost: item.itemAvgCost, tranRemarks: item.tranRemarks
-        //  });
-        //});
-
-        //this.listOfInvoices.forEach(inv => {
-        //  this.Total += inv.tranPrice;
-        //});
-
-        //this.listOfInvoices = [];
-        //let listOfInvoices = res['historyList'] as Array<any>;
-        //listOfInvoices.forEach(item => {
-        //  this.editHistory(item);
-        //});
-
+    
         this.id = res.id;
       }
     })

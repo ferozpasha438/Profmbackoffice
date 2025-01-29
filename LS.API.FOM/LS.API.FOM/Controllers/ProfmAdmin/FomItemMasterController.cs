@@ -27,7 +27,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         public async Task<IActionResult> Get([FromQuery] PaginationFilterDto filter)
         {
 
-            var list = await Mediator.Send(new GetFomItemMasterList() { Input = filter, User = UserInfo() });
+            var list = await Mediator.Send(new GetFomItemMasterList() { Input = filter.Values(), User = UserInfo() });
             return Ok(list);
         }
 

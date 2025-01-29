@@ -73,7 +73,8 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
   ngOnInit(): void {
     this.id = this.row.id;
     this.isArab = this.utilService.isArabic();
-    // this.initialLoading();
+   //  this.initialLoading();
+   
     this.loadData();
     this.setForm();
     if (this.id > 0)
@@ -150,7 +151,15 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
   }
 
   initialLoading() {
+    const defaultPageIndex = 0; // Start with the first page
+    const defaultPageSize = 10; // Default items per page
+    const defaultQuery = ""; // No query initially
+    const defaultOrderBy = "asc"; // Default sorting order
+
+    // Call the method
+    this.loadListMain(defaultPageIndex, defaultPageSize, defaultQuery, defaultOrderBy);
   //  this.loadList(0, this.pageService.pageCount, "", this.sortingOrder, this.contractCode, this.startDate, this.endDate, this.deptCode);
+    
   }
 
   //old
@@ -228,7 +237,7 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
     this.apiService.getPagination('FomCustomerContract/GetGeneratedScheduleFilter', this.utilService.getQueryFilterContractData(page, pageCount, query, orderBy, contractCode, startDate, endDate, deptCode)).subscribe(result => {
       this.totalItemsCount = 0;
       this.data = new MatTableDataSource(result.items);
-
+      this.scheduleData = result.items;
       this.totalItemsCount = result.totalCount;
 
       setTimeout(() => {
@@ -245,10 +254,59 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
   }
 
 
+  //onPageSwitch(event: PageEvent) {
+  //  this.pageService.change(event);
+  //  this.loadListMain(event.pageIndex, event.pageSize, "", this.sortingOrder);
+  //}
+
+
   onPageSwitch(event: PageEvent) {
+
     this.pageService.change(event);
-    this.loadListMain(event.pageIndex, event.pageSize, "", this.sortingOrder);
+    var contractId = 0;
+    var startDate = "";
+    var endDate = "";
+    //  const deptCode: string = 'AirConditioning';
+    //const contractCode: string = 'ContractCode01';
+    const deptCode: string = this.form.value['deptCode'] as string;
+    const contractCode: string = this.form.get('contractCode')?.value;
+
+    if (this.form.controls['startDate'].value != undefined && this.form.controls['startDate'].value != null && this.form.controls['startDate'].value != '') {
+      let sd = new Date(this.form.controls['startDate'].value);
+      startDate = sd.getFullYear().toString() + "-" + (sd.getMonth() + 1).toString() + "-" + sd.getDate().toString();
+    }
+    if (this.form.controls['endDate'].value != undefined && this.form.controls['endDate'].value != null && this.form.controls['endDate'].value != '') {
+      let ed = new Date(this.form.controls['endDate'].value);
+      endDate = ed.getFullYear().toString() + "-" + (ed.getMonth() + 1).toString() + "-" + ed.getDate().toString();
+    }
+
+    if (deptCode != undefined && deptCode != null && deptCode != '') {
+      this.deptCode = deptCode;
+      this.isShowCalander = true;
+    } else {
+      this.isShowCalander = false;
+      this.deptCode = '';
+    }
+
+    if (endDate == null || endDate == "") {
+      let ed = new Date(this.form.controls['contEndDate'].value);
+      var EndDate = ed.getFullYear().toString() + "-" + (ed.getMonth() + 1).toString() + "-" + ed.getDate().toString();
+      // const EndDate: string = this.form.value['contEndDate'] as string;
+      endDate = EndDate;
+    }
+
+    if (startDate == null || startDate == "") {
+
+      let sd = new Date(this.form.controls['contStartDate'].value);
+      var StartDate = sd.getFullYear().toString() + "-" + (sd.getMonth() + 1).toString() + "-" + sd.getDate().toString();
+      // const StartDate: string = this.form.value['contStartDate'] as string;
+      startDate = StartDate;
+    }
+   // this.loadListMain(event.pageIndex, event.pageSize, "", this.sortingOrder);
+
+    this.loadList(event.pageIndex, event.pageSize, "", this.sortingOrder, contractCode, startDate, endDate, this.deptCode);
   }
+
 
   getShedule() {
 
@@ -277,14 +335,19 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
       this.deptCode = '';
     }
 
-    if (endDate == null) {
-
-      endDate = '';
+    if (endDate == null || endDate == "" ) {
+      let ed = new Date(this.form.controls['contEndDate'].value);
+    var  EndDate = ed.getFullYear().toString() + "-" + (ed.getMonth() + 1).toString() + "-" + ed.getDate().toString();
+     // const EndDate: string = this.form.value['contEndDate'] as string;
+      endDate = EndDate;
     }
 
-    if (startDate == null) {
+    if (startDate == null || startDate == "" ) {
 
-      startDate = '';
+      let sd = new Date(this.form.controls['contStartDate'].value);
+     var StartDate = sd.getFullYear().toString() + "-" + (sd.getMonth() + 1).toString() + "-" + sd.getDate().toString();
+     // const StartDate: string = this.form.value['contStartDate'] as string;
+      startDate = StartDate;
     }
     this.loadList(0, this.pageService.pageCount, "", this.sortingOrder, contractCode, startDate, endDate, this.deptCode);
 
@@ -427,6 +490,7 @@ export class GetschedulelistComponent extends ParentFomMgtComponent implements O
     };
   }
   getCurrentAndLastDateOfMonth() {
+    
     this.selectedDate = new Date();
     if (this.selectedDate) {
       var contractId = this.id;

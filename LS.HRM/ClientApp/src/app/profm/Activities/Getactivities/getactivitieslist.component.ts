@@ -113,6 +113,12 @@ export class GetactivitieslistComponent extends ParentFomMgtComponent implements
   //}
 
 
+  onPageSwitch(event: PageEvent) {
+    this.pageService.change(event);
+    this.loadList(event.pageIndex, event.pageSize, "", this.sortingOrder);
+  }
+
+
   private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
     this.isLoading = true;
 

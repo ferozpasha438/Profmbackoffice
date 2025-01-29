@@ -1,0 +1,290 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'Report' | translate}}
+      </h3>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item text-muted">{{'PROfm_Managment' | translate}} </li>
+            <li class="breadcrumb-item text-muted ">{{'Ticket Summary Report' | translate}}</li>
+            <li class="breadcrumb-item   active" aria-current="page">
+              {{
+                'Status Wise Ticket Summary Report' | translate
+              }}
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row pb-3">
+            <div class="col-md-12 col-lg-12">
+              <h4 class="card-title pt6">{{'Manage Status Wise Ticket Summary Report' | translate}} </h4>
+            </div>
+
+            <div class="col-md-12 col-lg-12 text-right">
+              <a data-toggle="modal" data-target="#createnewbranch" (click)="printReport()"
+                 class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
+                <i class="icon-plus"> </i>{{'Print' | translate}}
+              </a>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <form novalidate class="mt-4">
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group ">
+                    <label class="mr-sm-2">
+                      {{'Date From' | translate}}
+                    </label>
+                    <div class="form-group ">
+
+                      <div class="input-group ">
+                        <input class="form-control" [(ngModel)]="fromDateIp"
+                               [ngModelOptions]="{standalone: true}" [matDatepicker]="picker1"
+                               data-date-format='YYYY-MM-DD'>
+                        <div class="input-group-prepend datapickericon">
+                          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <div class="form-group ">
+                    <label class="mr-sm-2">
+                      {{'Date To' | translate}}
+                    </label>
+                    <div class="form-group ">
+                      <div class="input-group ">
+                        <input class="form-control" [(ngModel)]="toDateIp"
+                               [ngModelOptions]="{standalone: true}" [matDatepicker]="picker2"
+                               data-date-format='YYYY-MM-DD'>
+                        <div class="input-group-prepend datapickericon">
+                          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                          <mat-datepicker #picker2></mat-datepicker>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--<div class="col-md-6 col-lg-6 mt-4">
+          <a data-toggle="modal" data-target="#createnewbranch"
+             class="btn waves-effect waves-light btn-rounded btn-outline-primary" href="#">
+            (click)="loadReport()" <i class="icon-plus"> </i>{{'Generate Report' | translate}}
+          </a>
+        </div>-->
+                <div class="col-md-3 col-lg-3 mt-2">
+                  <input type="submit" style="margin-top: 17px;"
+                         class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                         (click)="loadData()" value="{{'Generate Report' | translate}}" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <label class="mr-sm-2">{{'Disciplines' | translate}}</label>
+                  <ng-select [items]="DisciplineCodeList"
+                             bindLabel="text"
+                             bindValue="value" [(ngModel)]="filter.value" [ngModelOptions]="{standalone: true}"  placeholder="{{'Select_Discipline' |translate}}">
+                  </ng-select>
+                </div>
+
+                <div class="col-md-3 col-lg-3">
+                  <label class="mr-sm-2">{{'Customer' | translate}}</label>
+                  <ng-select [items]="CustomerCodeList"
+                             bindLabel="text"
+                             bindValue="value" [(ngModel)]="filter.custCode" [ngModelOptions]="{standalone: true}" (change)="onCustSiteCode($event.value)" placeholder="{{'Select_Customer' |translate}}">
+                  </ng-select>
+                </div>
+
+                <div class="col-md-3 col-lg-3">
+                  <label class="mr-sm-2">{{'Project' | translate}}</label>
+                  <ng-select [items]="SiteCodeList"
+                             bindLabel="text"
+                             bindValue="value" [(ngModel)]="filter.siteCode" [ngModelOptions]="{standalone: true}" (change)="loadData()" placeholder="{{'Select_Project' |translate}}">
+                  </ng-select>
+                </div>
+
+                <div class="col-md-3 col-lg-3">
+                  <label class="mr-sm-2">{{'Maintenance Type' | translate}}</label>
+                  <ng-select [(ngModel)]="filter.statusStr"
+                             [ngModelOptions]="{standalone: true}"
+                             (change)="onStatusChange($event)"
+                             [placeholder]="'Maintenance_Type' | translate">
+                    <ng-option *ngFor="let option of statusOptions" [value]="option.value">
+                      {{ option.text | translate }}
+                    </ng-option>
+                  </ng-select>
+                    <!-- <validation-message [control]="form.controls.deptServType"></validation-message> -->
+</div>
+              </div>
+
+            </form>
+          </div>
+
+          <div class="cardtitle-divider"></div>
+
+          <div class="table-responsive">
+            <spinner-loader [isLoading]="isLoading"></spinner-loader>
+            <div class="mat-elevation-z8">
+              <ng-container>
+                <table mat-table
+                       [dataSource]="data"
+                       matSortDisableClear
+                       matSort
+                       class="table table-bordered no-wrap">
+                  <!-- Date Column -->
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'Date' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row.date | date: 'yyyy-MM-dd' }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Opening Column -->
+                  <ng-container matColumnDef="opening">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'Opening' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ ((row.opening ?? 0)-((row.foreClosed ?? 0) + (row.closed ?? 0) + (row.completed ?? 0))) }}
+                      <!--{{ row.opening ?? 0 }}-->
+                    </td>
+                  </ng-container>
+
+                  <!-- Received Column -->
+                  <ng-container matColumnDef="received">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'Received' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ (row.totJobs ?? 0)+((row.foreClosed ?? 0) + (row.closed ?? 0) + (row.completed ?? 0)) }}
+                      <!--{{ row.totJobs ?? 0 }}-->
+                    </td>
+                  </ng-container>
+
+                  <!-- WIP Column -->
+                  <!--<ng-container matColumnDef="wip">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ 'WIP' | translate }}
+    </th>
+    <td mat-cell *matCellDef="let row">
+      {{ row.wip }}
+    </td>
+  </ng-container>-->
+                  <!-- InTransit Column -->
+                  <!--<ng-container matColumnDef="inTransit">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ 'InTransit' | translate }}
+    </th>
+    <td mat-cell *matCellDef="let row">
+      {{ row.inTransit }}
+    </td>
+  </ng-container>-->
+                  <!-- Hold Column -->
+                  <!--<ng-container matColumnDef="hold">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ 'Hold' | translate }}
+    </th>
+    <td mat-cell *matCellDef="let row">
+      {{ row.hold }}
+    </td>
+  </ng-container>-->
+                  <!-- ForeClosed Column -->
+                  <ng-container matColumnDef="foreClosed">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'ForeClosed' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row.foreClosed }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Closed Column -->
+                  <ng-container matColumnDef="closed">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'Closed' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row.closed }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Completed Column -->
+                  <ng-container matColumnDef="completed">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'Completed' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row.completed }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="totalClosed">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'TotalClose' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ ((row.foreClosed ?? 0) + (row.closed ?? 0) + (row.completed ?? 0)) }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Totjobs Column -->
+                  <ng-container matColumnDef="totJobs">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="display: none;">
+                      {{ 'TotJobs' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="display: none;">
+                      {{ row.totJobs }}
+                    </td>
+                  </ng-container>
+
+
+                  <!-- Closing Column -->
+                  <ng-container matColumnDef="closing">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      {{ 'Closing' | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ (row.opening ?? 0)+(row.totJobs ?? 0)+((row.foreClosed ?? 0) + (row.closed ?? 0) + (row.completed ?? 0))-((row.foreClosed ?? 0) + (row.closed ?? 0) + (row.completed ?? 0)) }}
+                      <!--{{ (row.opening ?? 0) + (row.received ?? 0) - (row.foreClosed ?? 0) - (row.closed ?? 0) - (row.completed ?? 0) }}-->
+                      
+                    </td>
+                  </ng-container>
+
+
+
+
+                  <!-- Header and Row -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+
+                <!-- Uncomment below for pagination -->
+                <!--<ng-container>
+                  <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
+                                 [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
+                  </mat-paginator>
+                </ng-container>-->
+              </ng-container>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

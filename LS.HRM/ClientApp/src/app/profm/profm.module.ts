@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule,DatePipe } from '@angular/common';
 import { PROfmRoutingModule } from './profm-routing.module';
 import { NgxPrintModule } from 'ngx-print';
 import { SharedModule } from '../sharedcomponent/shared.module';
@@ -82,6 +82,12 @@ import { JobplanscheduleprintComponent } from './AssetMaintenance/jobplan/jobpla
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+import { GetreportresourceslistComponent } from './Resourcereports/getreportresourceslist.component';
+import { GetcustomersreportComponent } from './Customersreport/getcustomersreport.component';
+import { GetreportComponent } from './JobTicket/getjobticket/getreport.component';
+//import { JobticketreportsComponent } from './JobTicketReports/jobticketreports.component';
+import { GetticketsummaryreportComponent } from './GetTicketSummaryReport/getticketsummaryreport.component';
+
 
 
 @NgModule({
@@ -152,8 +158,12 @@ import { FormsModule } from '@angular/forms';
     JobplanschedulingpopupComponent,
     AssettasklistpopupComponent,
     JobplanscheduleprintComponent,
-    
+    GetreportresourceslistComponent,
+    GetcustomersreportComponent,
     /*ActivityDialogComponent,*/
+    GetreportComponent,
+  /*  JobticketreportsComponent,*/
+    GetticketsummaryreportComponent
   ],
 
   imports: [
@@ -171,7 +181,7 @@ import { FormsModule } from '@angular/forms';
     MatCheckboxModule,
     FormsModule
   ],
-
+  providers: [DatePipe],
   exports: [CommonModule],
 })
 export class PROfmModule { }

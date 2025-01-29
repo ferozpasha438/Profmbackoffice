@@ -415,6 +415,7 @@ namespace CIN.Application.FomMgtDtos
     {
         public bool IsFromMobile { get; set; } = false;
         public bool IsFromWeb { get; set; } = false;
+        public string Password { get; set; }
     }
 
 
@@ -1507,7 +1508,7 @@ namespace CIN.Application.FomMgtDtos
     public class InputPaginationCommon
     {
         public int Page { get; set; } = 0;
-        public int PageCount { get; set; } = 10;
+        public int PageCount { get; set; } = 100;
         public string Query { get; set; } = string.Empty;
         public string OrderBy { get; set; } = "id desc";
     }
@@ -1521,6 +1522,23 @@ namespace CIN.Application.FomMgtDtos
         public string ProjectNameArb { get; set; }
         public int LogNotesCount { get; set; }
         public string StatusStr { get; set; }
+    }
+
+
+    public class AggregatedReportDto 
+    {
+        public DateTime Date { get; set; }
+        public int Opening { get; set; }
+        public int Received { get; set; }
+        public int WIP { get; set; }
+        public int InTransit { get; set; }
+        public int Hold { get; set; }
+        public int ForeClosed { get; set; }
+        public int Closed { get; set; }
+        public int Completed { get; set; }
+        public int TotJobs { get; set; }
+        public int IsActive { get; set; }
+
     }
     public class TblFomJobTicketDto 
     {

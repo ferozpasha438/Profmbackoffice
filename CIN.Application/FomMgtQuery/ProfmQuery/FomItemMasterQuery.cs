@@ -41,8 +41,21 @@ namespace CIN.Application.FomMgtQuery
         {
 
 
-            var list = await _context.InvItemMaster.AsNoTracking().ProjectTo<TblErpInvItemMasterDto>(_mapper.ConfigurationProvider)
-                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+            //var list = await _context.InvItemMaster.AsNoTracking().ProjectTo<TblErpInvItemMasterDto>(_mapper.ConfigurationProvider)
+            //                        .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+
+            //return list;
+
+
+            var search = request.Input.Query;
+            var list = await _context.InvItemMaster.AsNoTracking()
+              .Where(e => //e.CompanyId == request.CompanyId &&
+                            (e.ItemCode.Contains(search) || e.ShortName.Contains(search) ||
+                                e.ItemCat.Contains(search) || e.ItemDescription.Contains(search)
+                             ))
+               .OrderBy(request.Input.OrderBy)
+              .ProjectTo<TblErpInvItemMasterDto>(_mapper.ConfigurationProvider)
+                 .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
 
             return list;
         }

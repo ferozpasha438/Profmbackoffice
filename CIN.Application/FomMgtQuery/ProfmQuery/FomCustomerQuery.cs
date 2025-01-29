@@ -121,7 +121,8 @@ namespace CIN.Application.FomMgtQuery
                     Log.Info("----Info Create Update Fom Customer Master method start----");
 
                     var obj = request.FomCustomerMasterDto;
-
+                    if (string.IsNullOrEmpty(obj.Password))
+                        obj.Password = "123456";
 
                     TblSndDefCustomerMaster customer = new();
                     if (obj.Id > 0)
@@ -239,7 +240,7 @@ namespace CIN.Application.FomMgtQuery
                             UserClientLoginCode = customer.CustCode,
                             RegEmail = customer.CustEmail1,
                             RegMobile = customer.CustMobile1,
-                            Password = SecurePasswordHasher.EncodePassword(customer.CustCode),
+                            Password = SecurePasswordHasher.EncodePassword(obj.Password),
                             LoginType = "client",
                             LastLoginDate = null,
                             IsActive = true,
@@ -251,7 +252,7 @@ namespace CIN.Application.FomMgtQuery
                     }
                     else
                     {
-                        loginMapping.Password = SecurePasswordHasher.EncodePassword(customer.CustCode);
+                        loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
                         loginMapping.RegEmail = customer.CustEmail1;
                         loginMapping.RegMobile = customer.CustMobile1;
                         loginMapping.CreatedOn=DateTime.Now;

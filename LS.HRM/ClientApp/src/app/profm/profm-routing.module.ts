@@ -29,6 +29,12 @@ import { SectionlistComponent } from './Section/sectionlist.component';
 import { JobplanlistComponent } from './AssetMaintenance/jobplan/jobplanlist.component';
 import { SchedulejobplanlistComponent } from './AssetMaintenance/jobplan/schedulejobplanlist/schedulejobplanlist.component';
 import { AssetjoborderlistComponent } from './AssetMaintenance/jobplan/assetjoborderlist/assetjoborderlist.component';
+import { GetreportresourceslistComponent } from './Resourcereports/getreportresourceslist.component';
+import { GetcustomersreportComponent } from './Customersreport/getcustomersreport.component';
+import { GetreportComponent } from './JobTicket/getjobticket/getreport.component';
+//import { JobticketreportsComponent } from './JobTicketReports/jobticketreports.component';
+import { GetticketsummaryreportComponent } from './GetTicketSummaryReport/getticketsummaryreport.component';
+
 
 const routes: Routes = [
   { path: 'getdisciplines', component: GetdisciplineslistComponent },
@@ -56,12 +62,17 @@ const routes: Routes = [
   { path: 'btctickethistory', component: BtctickethistoryComponent },
   { path: 'btcticketsummarybycust', component: BtcticketsummarybycustComponent },
   { path: 'btcticketsummarybyservicetype', component: BtcticketsummarybyservicetypeComponent },
-
+  
   { path: 'sectionlist', component: SectionlistComponent },
   { path: 'assetmaster', component: AssetmasterComponent },
   { path: 'createjobplan', component: JobplanlistComponent },
   { path: 'schedulejobplan', component: SchedulejobplanlistComponent },
   { path: 'assetjoborders', component: AssetjoborderlistComponent },
+  { path: 'resourcereports', component: GetreportresourceslistComponent },
+  { path: 'customersreport', component: GetcustomersreportComponent },
+  { path: 'jobticketsreport', component: GetreportComponent },
+  //{ path: 'jobticketsreport2', component: JobticketreportsComponent },
+  { path: 'jobticketsummaryreport', component: GetticketsummaryreportComponent },
 ];
 
 @NgModule({

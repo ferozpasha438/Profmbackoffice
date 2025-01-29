@@ -161,9 +161,9 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
         'custSiteCode': ['', Validators.required],
         'contStartDate': ['', Validators.required],
         'contEndDate': ['', Validators.required ],
-        'contDeptCode': [[], Validators.required],
-        'contDeptSoftCode': [[], Validators.required],
-        'contDeptSpecialCode': [[], Validators.required],
+        'contDeptCode': [[]],
+        'contDeptSoftCode': [[]],
+        'contDeptSpecialCode': [[]],
         'contProjManager': ['', Validators.required],
         'contProjSupervisor': ['', Validators.required],
         'remarks': ['', Validators.required],
@@ -500,6 +500,16 @@ export class AddupdatecustomercontractComponent extends ParentFomMgtComponent im
       var deptSoftData = this.form.value['contDeptSoftCode'] as Array<any>;
       var deptSpecialData = this.form.value['contDeptSpecialCode'] as Array<any>;
       deptdata = [...deptdata, ...deptSoftData];
+
+      // Validate that at least one array has data
+      if ((!deptdata || deptdata.length === 0) &&
+        (!deptSoftData || deptSoftData.length === 0) &&
+        (!deptSpecialData || deptSpecialData.length === 0)) {
+        this.notifyService.showWarning("At least one department must be selected.");
+        return; // Stop execution if validation fails
+      }
+
+
 
       deptdata = [...deptdata, ...deptSpecialData];
       this.form.value['contDeptCode'] = deptdata.map(item => item.deptCode);

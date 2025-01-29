@@ -32,15 +32,16 @@
               </div>
 
             </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="form-group">
-                <label for="deptCodes">{{'Department_Codes' | translate}}</label>
-                <ng-select [multiple]="true" formControlName="deptCodes">
-                  <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
-                </ng-select>
-                <validation-message [control]="form.controls.deptCodes"></validation-message>
-              </div>
-            </div>
+             <div class="col-md-6 col-lg-6">
+               <div class="form-group">
+                 <label for="deptCodes">{{'Department_Codes' | translate}}</label>
+                 <ng-select [multiple]="true" formControlName="deptCodes">
+                   <ng-option *ngFor="let deptCode of DepartmentCodeList" [value]="deptCode" [disabled]="deptCode?.disabled">{{deptCode.nameEng}}</ng-option>
+                 </ng-select>
+                 <validation-message [control]="form.controls.deptCodes"></validation-message>
+               </div>
+               <!--<label class="mr-sm-2">{{deptCodes}}</label>-->
+             </div>
             <div class="col-md-6 col-lg-6">
 
               <div class="form-group ">

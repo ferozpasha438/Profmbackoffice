@@ -175,6 +175,21 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         }
 
 
+        [HttpPost("getJobTicketReport")]
+        public async Task<IActionResult> GetJobTicketReport([FromBody] InputTicketsPaginationFilterDto input)
+        {
+            var res = await Mediator.Send(new GetJobTicketsReportList() { Input = input, User = UserInfo() });
+            return Ok(res);
+        }
+
+
+        [HttpPost("getSummaryJobTicketsReport")]
+        public async Task<IActionResult> GetSummaryJobTicketsReport([FromBody] InputTicketsPaginationFilterDto input)
+        {
+            var res = await Mediator.Send(new GetSummaryJobTicketsReport() { Input = input, User = UserInfo() });
+            return Ok(res);
+        }
+
 
         [HttpGet("GetCustomerContractSelectList")]
         public async Task<IActionResult> GetCustomerContractSelectList()
