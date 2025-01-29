@@ -82,6 +82,11 @@ import { JobplanscheduleprintComponent } from './AssetMaintenance/jobplan/jobpla
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+import { CafmdaywisedetailsComponent } from './AssetMaintenance/reports/cafmdaywisedetails/cafmdaywisedetails.component';
+import { CafmdaywisesummaryComponent } from './AssetMaintenance/reports/cafmdaywisesummary/cafmdaywisesummary.component';
+import { CafmjobanalysisprojectwiseComponent } from './AssetMaintenance/reports/cafmjobanalysisprojectwise/cafmjobanalysisprojectwise.component';
+import { CafmassetdetailsComponent } from './AssetMaintenance/reports/cafmassetdetails/cafmassetdetails.component';
+import { CafmassetcostanalysisComponent } from './AssetMaintenance/reports/cafmassetcostanalysis/cafmassetcostanalysis.component';
 import { GetreportresourceslistComponent } from './Resourcereports/getreportresourceslist.component';
 import { GetcustomersreportComponent } from './Customersreport/getcustomersreport.component';
 import { GetreportComponent } from './JobTicket/getjobticket/getreport.component';
@@ -158,6 +163,12 @@ import { GetticketsummaryreportComponent } from './GetTicketSummaryReport/gettic
     JobplanschedulingpopupComponent,
     AssettasklistpopupComponent,
     JobplanscheduleprintComponent,
+    CafmdaywisedetailsComponent,
+    CafmdaywisesummaryComponent,
+    CafmjobanalysisprojectwiseComponent,
+    CafmassetdetailsComponent,
+    CafmassetcostanalysisComponent,
+    
     GetreportresourceslistComponent,
     GetcustomersreportComponent,
     /*ActivityDialogComponent,*/

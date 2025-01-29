@@ -1,0 +1,175 @@
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 align-self-center">
+      <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
+        {{'CAFM day-wise details' | translate}}
+      </h3>
+    </div>
+  </div>
+</div>
+
+<div class="modal-body">
+  <div class="outer">
+    <div class="outer  ">
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>{{'From_Date' | translate}}</label>
+            <div class="form-group ">
+              <div class="input-group mb-2">
+                <input class="form-control datapickerinput" placeholder="{{'Select_a_Date' | translate}}" [(ngModel)]="dateFrom"
+                       [matDatepicker]="picker2">
+
+                <div class="input-group-prepend datapickericon">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker><br /><br />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label>{{'To_Date' | translate}}</label>
+            <div class="form-group ">
+              <div class="input-group mb-2">
+                <input class="form-control datapickerinput" placeholder="{{'Select_a_Date' | translate}}" [(ngModel)]="dateTo"
+                       [matDatepicker]="picker1">
+
+                <div class="input-group-prepend datapickericon">
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker><br /><br />
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group ">
+            <label class="mr-sm-2">{{'Customer' | translate}}</label>
+            <ng-select [items]="customerList"
+                       bindLabel="text"
+                       bindValue="value" [(ngModel)]="customerCode" (clear)="resetCustomerCode()" (change)="customerChange($event)">
+            </ng-select>            
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group ">
+            <label class="mr-sm-2">{{'AssetMaster_contractCode' | translate}}</label>
+            <ng-select [items]="projectList"
+                       bindLabel="text"
+                       bindValue="value" [(ngModel)]="projCode" (clear)="resetProjectCode()">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="deptCode">{{'AssetMaster_deptCode' | translate}}</label>
+            <select class="custom-select mr-sm-2 input-mandatory" [(ngModel)]="deptCode">
+              <option value="">{{ 'AssetMaster_deptCode' | translate}}</option>
+              <option *ngFor="let item of departmentSelectList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <label for="deptCode">{{'Status' | translate}}</label>
+            <select class="custom-select mr-sm-2 input-mandatory" [(ngModel)]="status">              
+              <option *ngFor="let item of statusList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-6">
+          <div class="form-group">
+            <br />
+            <button type="button" class="btn btn-primary" (click)="search()">Search</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <spinner-loader [isLoading]="isLoading"></spinner-loader>
+
+    <div class="table-responsive" *ngIf="company">
+
+
+      <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock" data-toggle="modal" (click)="openPrint()">
+        {{'Print' | translate}}
+      </button>
+      <br />
+      <br />
+
+      <div class="outer" id="printcontainer">
+
+        <table style="width:100%; padding-bottom:5px;" cellpadding="0" cellspacing="0" width="100%" class="ur_tablestyle">
+          <tr>
+            <td>
+              <div class="font-weight-medium">
+                {{company.companyName}}
+                <br />
+                <!--<br />
+                {{company.branchName}}
+                <br />-->
+                {{company.companyAddress}}
+                <br />
+                {{'Tel_Phone' | translate }} :  {{company.phone}}
+                <br />
+              </div>
+            </td>
+            <td style="text-align:center;">
+              <img src="{{company.logoURL}}" style="width:200px;height:150px;" />
+            </td>
+          </tr>          
+          <tr>
+            <td>
+
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align:center;">
+              <p>
+                The Statement of " CAFM Day-wise Details " for {{dateFrom | date:'dd/MM/yyyy'}} to {{dateTo | date:'dd/MM/yyyy'}}
+              </p>
+
+            </td>
+          </tr>
+        </table>
+
+        <table style="width:100%; padding-bottom:5px;" border="1" cellpadding="0" cellspacing="0" width="100%" class="table  table-bordered no-wrap ur_tablestyle" *ngIf="jobList && jobList.length > 0">
+          <thead>
+            <tr>
+              <th>{{'AssetMaster_Code' | translate}}</th>
+              <th>{{'AssetMaster_Name_EN' | translate}}</th>
+              <th>{{'childCode' | translate}}</th>
+              <th>{{'AssetMaster_location' | translate}}</th>
+              <th>{{'AssetMaster_contractCode' | translate}}</th>
+              <th>{{'AssetMaster_deptCode' | translate}}</th>
+              <th>{{'jobPlan_planStartDate' | translate}}</th>
+              <th>{{'jobPlan_Code' | translate}}</th>
+              <th>{{'jobPlan_Status' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of jobList">
+              <td>{{item.assetCode}}</td>
+              <td>{{item.name}}</td>             
+              <td>{{item.childCode}}</td>             
+              <td>{{item.location}}</td>             
+              <td>{{item.contractCode}}</td>             
+              <td>{{item.deptCode}}</td>             
+              <td>{{item.planStartDate | date:'dd/MM/yyyy'}}</td>             
+              <td>{{item.jobPlanCode}}</td>             
+              <td>{{item.status}}</td>             
+            </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

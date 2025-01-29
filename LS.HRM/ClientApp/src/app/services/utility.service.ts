@@ -233,6 +233,7 @@ export class UtilityService {
     return paymenRoute !== null;
   }
 
+  getAssetScales = (): Array<string> => ['Worst', 'Bad', 'Medium', 'Medium', 'Good', 'Good', 'Better', 'Better', 'Better', 'Best', 'Best'];
 
 
 }

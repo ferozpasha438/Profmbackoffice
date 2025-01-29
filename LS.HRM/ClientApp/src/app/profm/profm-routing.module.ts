@@ -29,6 +29,11 @@ import { SectionlistComponent } from './Section/sectionlist.component';
 import { JobplanlistComponent } from './AssetMaintenance/jobplan/jobplanlist.component';
 import { SchedulejobplanlistComponent } from './AssetMaintenance/jobplan/schedulejobplanlist/schedulejobplanlist.component';
 import { AssetjoborderlistComponent } from './AssetMaintenance/jobplan/assetjoborderlist/assetjoborderlist.component';
+import { CafmdaywisedetailsComponent } from './AssetMaintenance/reports/cafmdaywisedetails/cafmdaywisedetails.component';
+import { CafmdaywisesummaryComponent } from './AssetMaintenance/reports/cafmdaywisesummary/cafmdaywisesummary.component';
+import { CafmjobanalysisprojectwiseComponent } from './AssetMaintenance/reports/cafmjobanalysisprojectwise/cafmjobanalysisprojectwise.component';
+import { CafmassetcostanalysisComponent } from './AssetMaintenance/reports/cafmassetcostanalysis/cafmassetcostanalysis.component';
+import { CafmassetdetailsComponent } from './AssetMaintenance/reports/cafmassetdetails/cafmassetdetails.component';
 import { GetreportresourceslistComponent } from './Resourcereports/getreportresourceslist.component';
 import { GetcustomersreportComponent } from './Customersreport/getcustomersreport.component';
 import { GetreportComponent } from './JobTicket/getjobticket/getreport.component';
@@ -68,6 +73,12 @@ const routes: Routes = [
   { path: 'createjobplan', component: JobplanlistComponent },
   { path: 'schedulejobplan', component: SchedulejobplanlistComponent },
   { path: 'assetjoborders', component: AssetjoborderlistComponent },
+
+  { path: 'cafmdaywisedetails', component: CafmdaywisedetailsComponent },
+  { path: 'cafmdaywisesummary', component: CafmdaywisesummaryComponent },
+  { path: 'cafmjobanalysisprojectwise', component: CafmjobanalysisprojectwiseComponent },
+  { path: 'cafmassetdetails', component: CafmassetdetailsComponent },
+  { path: 'cafmassetcostanalysis', component: CafmassetcostanalysisComponent },
   { path: 'resourcereports', component: GetreportresourceslistComponent },
   { path: 'customersreport', component: GetcustomersreportComponent },
   { path: 'jobticketsreport', component: GetreportComponent },

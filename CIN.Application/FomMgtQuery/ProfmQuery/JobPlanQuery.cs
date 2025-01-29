@@ -157,6 +157,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     })
                     .FirstOrDefaultAsync();
 
+                obj.HasChild = await _context.FomAssetMasterChilds.AsNoTracking().AnyAsync(e => e.AssetCode == obj.AssetCode);
+
                 return obj;
             }
             catch (Exception ex)
@@ -249,6 +251,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     Frequency = e.Frequency,
                     Date = e.PlanStartDate,
                     Remarks = e.Remarks,
+                    IsClosed = e.IsClosed,
                 }).ToListAsync();
 
             return schList;

@@ -200,6 +200,9 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                     })
                                     .FirstOrDefaultAsync();
 
+            assetMaster.HasChild = await _context.FomAssetMasterChilds.AsNoTracking().AnyAsync(e => e.AssetCode == request.AssetCode);
+
+
             var contract = await _context.FomCustomerContracts.AsNoTracking().Where(c => c.ContractCode == assetMaster.ContractCode)
                 .Select(e => new { e.ContStartDate, e.ContEndDate })
                 .FirstOrDefaultAsync();
@@ -242,6 +245,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                         TextTwo = e.ChildCode,
                                     })
                                     .ToListAsync();
+
+
 
             if (request.Id > 0)
             {
@@ -462,6 +467,22 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         public async Task<AppCtrollerDto> Handle(ImportExcelFomAssetMaster request, CancellationToken cancellationToken)
         {
             int savedCount = 0, duplicateCount = 0;
+
+            var sectionCodes = request.Input.Select(e => e.SectionCode).Distinct().ToList();
+            var departmentCodes = request.Input.Select(e => e.DeptCode).Distinct().ToList();
+            var custContractCodes = request.Input.Select(e => e.ContractCode).Distinct().ToList();
+
+            var sectionCodeList = sectionCodes.Except(_context.FomSections.AsNoTracking().Select(e => e.SectionCode).AsEnumerable());
+            var departmentList = departmentCodes.Except(_context.ErpFomDepartments.AsNoTracking().Select(e => e.DeptCode).AsEnumerable());
+            var custContractList = custContractCodes.Except(_context.FomCustomerContracts.AsNoTracking().Select(e => e.ContractCode).AsEnumerable());
+
+            if (sectionCodeList != null && sectionCodeList.Count() > 0)
+                return ApiMessageInfo.Status($"Wrong SectionCodes:  {string.Join(", ", sectionCodeList)}");
+            if (departmentList != null && departmentList.Count() > 0)
+                return ApiMessageInfo.Status($"Wrong DeptCodes: {string.Join(", ", departmentList)}");
+            if (custContractList != null && custContractList.Count() > 0)
+                return ApiMessageInfo.Status($"Wrong ContractCodes: {string.Join(", ", custContractList)}");
+
             foreach (var obj in request.Input)
             {
                 var hasAssetCode = await _context.FomAssetMasters.AnyAsync(e => e.AssetCode == obj.AssetCode.Trim().Replace(" ", ""));

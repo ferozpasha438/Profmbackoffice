@@ -80,6 +80,7 @@ namespace CIN.Application.FomMgtDtos
         public string Project { get; set; }
         public string ProjectLocation { get; set; }
         public string Status { get; set; }
+        public string CustomerCode { get; set; }
 
     }
 
@@ -157,6 +158,7 @@ namespace CIN.Application.FomMgtDtos
         public bool Approve { get; set; }
         public bool IsClosed { get; set; }
         public bool IsVoid { get; set; }
+        public bool HasChild { get; set; }
 
         public List<TblErpFomJobPlanMasterDateScheduleDto> JobPlanSchedules { get; set; }
     }
@@ -171,6 +173,7 @@ namespace CIN.Application.FomMgtDtos
         public string SectionCode { get; set; }
         public DateTime ContStartDate { get; set; }
         public DateTime ContEndDate { get; set; }
+        public bool HasChild { get; set; }
     }
 
     public class CalculateDatesForFrequencySelectedDto
@@ -265,4 +268,5 @@ namespace CIN.Application.FomMgtDtos
         public string Source { get; set; }
         public DateTime CreatedDate { get; set; }
     }
+
 }
