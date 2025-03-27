@@ -98,7 +98,7 @@
                     </table>
                     <ng-container>
                       <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
-                        [pageSizeOptions]="pageService.selectItemsPerPage">
+                                     [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
                       </mat-paginator>
                     </ng-container>
                   </ng-container>

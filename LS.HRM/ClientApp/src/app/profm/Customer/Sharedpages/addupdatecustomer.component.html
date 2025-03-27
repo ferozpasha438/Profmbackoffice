@@ -13,10 +13,19 @@
               <div class="col-md-6 col-lg-6">
                 <div class="form-group">
                   <label>{{'Company_Logo' | translate}}</label>
-                  <div data-type="image-add" class="col-4 pl-2 pr-2 pt-2" style="max-width: 130px;">
+                  <!--<div data-type="image-add" class="col-4 pl-2 pr-2 pt-2" style="max-width: 130px;">
+    <div class="ratio-box text-center" data-type="image-ratio-box">
+      <img data-type="noimage" class="btn btn-light ratio-img img-fluid p-2 image border dashed rounded"
+           src="assets/images/logo-icon.png" style="cursor:pointer;">
+    </div>
+  </div>-->
+                  <div class="col-4 pl-2 pr-2 pt-2" style="max-width: 130px;">
                     <div class="ratio-box text-center" data-type="image-ratio-box">
-                      <img data-type="noimage" class="btn btn-light ratio-img img-fluid p-2 image border dashed rounded"
-                           src="assets/images/logo-icon.png" style="cursor:pointer;">
+                      <input type="file" #fileInput (change)="onFileSelected($event)" hidden>
+                      <img [src]="imageUrl || 'assets/images/logo-icon.png'"
+                           class="btn btn-light ratio-img img-fluid p-2 image border dashed rounded"
+                           style="cursor:pointer;"
+                           (click)="fileInput.click()">
                     </div>
                   </div>
                 </div>

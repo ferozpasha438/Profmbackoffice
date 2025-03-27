@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -53,6 +53,13 @@ export class GetresourcetypeslistComponent extends ParentFomMgtComponent impleme
 
   initialLoading() {
     this.loadList(0, this.pageService.pageCount, "", this.sortingOrder);
+  }
+
+
+
+  onPageSwitch(event: PageEvent) {
+    this.pageService.change(event);
+    this.loadList(event.pageIndex, event.pageSize, this.searchValue, this.sortingOrder);
   }
 
   private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {

@@ -1,0 +1,73 @@
+<div class="customer-logins">
+  <h2>Customer Logins</h2>
+  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+
+
+  <!-- Table for Adding New Login -->
+  <table>
+    <thead>
+      <tr>
+        <th>Login Code</th>
+        <th>Customer Code</th>
+        <th>Name</th>
+        <th>Password</th>
+        <th>Is Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <input [(ngModel)]="newLogin.userClientLoginCode" placeholder="Login Code"  [readonly]="isEditMode" />
+        </td>
+        <td>
+          <input [(ngModel)]="newLogin.custCode" placeholder="Customer Code" readonly/>
+        </td>
+        <td>
+          <input [(ngModel)]="newLogin.custName" placeholder="Name" />
+        </td>
+        <td>
+          <input [(ngModel)]="newLogin.password" placeholder="Password" type="password" />
+        </td>
+        <td>
+          <input type="checkbox" [(ngModel)]="newLogin.isActive" />
+        </td>
+        <td>
+          <button (click)="addLogin()">Add</button>          
+          <!--<button (click)="saveLogin()">Save</button>-->
+          <button (click)="cancelLogin()">Cancel</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Table for Existing Logins -->
+  <table>
+    <thead>
+      <tr>
+        <th>Login Code</th>
+        <th>Customer Code</th>
+        <th>Name</th>
+        <th>Password</th>
+        <th>Is Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let login of existingLogins">
+        <td>{{ login.userClientLoginCode }}</td>
+        <td>{{ login.custCode }}</td>
+        <td>{{ login.custName }}</td>
+        <td>{{ login.password }}</td>
+        <td>{{ login.isActive ? 'True' : 'False' }}</td>
+        <td>
+          <button (click)="deleteLogin(login.id)">Delete</button>
+          <button (click)="editLogin(login)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+       <button (click)="saveLogin()">Save</button>
+       <button (click)="cancel()">Cancel</button>
+</div>

@@ -26,6 +26,8 @@ import * as XLSX from 'xlsx';
 })
 export class GetreportComponent extends ParentFomMgtComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  //@ViewChild(MatPaginator) paginator: MatPaginator;
+
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   filter: any = {
     page: 0,
@@ -46,7 +48,9 @@ export class GetreportComponent extends ParentFomMgtComponent implements OnInit 
   statusSelectionList: Array<any> = [];
   isLoading = false;
   totalItemsCount: number = 0;
+
   data: Array<any> = [];
+  data1!: MatTableDataSource<any> | null;
   customerCode: string = '';
   fromDateIp: any;
   toDateIp: any;
@@ -87,7 +91,22 @@ export class GetreportComponent extends ParentFomMgtComponent implements OnInit 
     
   }
 
-  
+
+  private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {
+    this.isLoading = true;
+
+    this.apiService.getPagination('FomCustomerContract/getJobTicketReport', this.utilService.getQueryString(page, pageCount, query, orderBy)).subscribe(result => {
+      this.totalItemsCount = 0;
+      this.data1 = new MatTableDataSource(result.items);
+
+      this.totalItemsCount = result.totalCount;
+
+      this.data1.paginator = this.paginator;
+      this.data1.sort = this.sort;
+
+      this.isLoading = false;
+    }, error => this.utilService.ShowApiErrorMessage(error));
+  }
 
 
 
@@ -124,22 +143,24 @@ export class GetreportComponent extends ParentFomMgtComponent implements OnInit 
    // this.isLoading = true;
     this.apiService.postFomCpUrl('FomCustomerContract/getJobTicketReport', this.filter).subscribe(result => {
       this.isLoading = false;
+      console.log('API Result:', result); // Debugging line
       this.totalItems = result?.totalCount ?? 0;
+      console.log('Total Items:', this.totalItems); // Debugging line
       this.data = result.items.slice();
+      this.totalItemsCount = result.totalCount;
     });
   }
 
-
+  //change(event: PageEvent) {
+  //  this.filter.page = event.pageIndex;
+  //  this.filter.pageCount= event.pageSize;
+  //}
   onPageSwitch(event: PageEvent) {
+    console.log("Page switched:", event);
     this.filter.page = event.pageIndex;
     this.filter.pageCount = event.pageSize;
-    this.pageService.change(event);
-   // this.loadList(event.pageIndex, event.pageSize, "", this.sortingOrder);
-    // Load the requested page
     this.loadData();
   }
-
- 
   loadReport() {
     this.data = [];
     this.filter.page = 0;

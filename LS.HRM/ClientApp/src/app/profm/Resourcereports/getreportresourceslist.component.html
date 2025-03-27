@@ -86,11 +86,11 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
-                <!--<ng-container>
+                <ng-container>
                   <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
-                                 [pageSizeOptions]="pageService.selectItemsPerPage">
+                                 [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
                   </mat-paginator>
-                </ng-container>-->
+                </ng-container>
               </ng-container>
             </div>
           </div>

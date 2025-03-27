@@ -1158,7 +1158,7 @@ export class GetitemlistsComponent extends ParentFomMgtComponent implements OnIn
   }
 
   setToDefaultBarcode() {
-    this.itemBarUOM = '',
+      this.itemBarUOM = '',
       this.itemBarcode = '';
 
 

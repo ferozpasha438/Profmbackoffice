@@ -15,13 +15,22 @@
         <div class="card-body">
           <div class="row" align="right">
             <!--<div class="col-md-6 col-lg-6">
-        <h4 class="card-title pt6">{{'Sites_List_For' | translate}}{{customerCode}} </h4>
-      </div>-->
+    <h4 class="card-title pt6">{{'Sites_List_For' | translate}}{{customerCode}} </h4>
+  </div>-->
             <div class="col-md-12 col-lg-12 text-right" align="right">
               <a data-toggle="modal" data-target="#addnewcustomersite"
-                class="  btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#"> <i
-                  class="icon-plus"> </i>{{'Add_New_Customer_Site' | translate}} </a>
+                 class="  btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="create()" href="#">
+                <i class="icon-plus"> </i>{{'Add_New_Customer_Site' | translate}}
+              </a>
+              &nbsp;&nbsp;
+              <a data-toggle="modal" data-target="#maplogintosite"
+                 class="  btn waves-effect waves-light btn-rounded btn-outline-primary" (click)="mapsite()" href="#">
+                <i class="icon-plus"> </i>{{'Map_Login_To_Site' | translate}}
+              </a>
             </div>
+            
+           
+
           </div>
           <div class="row">
             <div class="col-md-4 col-lg-4">

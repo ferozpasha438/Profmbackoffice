@@ -22,6 +22,7 @@ import { GetcustomersitesComponent } from '../../CustomerSite/GetCustomerSite/ge
 import { CustomerinvoicestatementComponent } from '../../sharedcomponent/CustomerInvoiceStatement/customerinvoicestatement.component';
 import { CustomerstatementComponent } from '../../sharedcomponent/CustomerStatement/customerstatement.component';
 import { ParentFomMgtComponent } from '../../../sharedcomponent/parentfommgt.component';
+import { AddupdatemultiloginComponent } from '../Sharedpages/addupdatemultilogin.component';
 
 @Component({
   selector: 'app-getcustomerlists',
@@ -132,6 +133,20 @@ export class GetcustomerlistsComponent extends ParentFomMgtComponent implements 
     //});
   }
 
+  private openDialogManageTwo<T>(id: string = '', dbops: DBOperation, modalTitle: string = '', component: T) {
+    let dialogRef = this.utilService.openCrudDialog(this.dialog, component);
+    (dialogRef.componentInstance as any).dbops = dbops;
+    (dialogRef.componentInstance as any).modalTitle = modalTitle;
+    (dialogRef.componentInstance as any).customerCode = id;
+
+    //dialogRef.afterClosed().subscribe(res => {
+    //  if (res && res === true)
+    //    this.initialLoading();
+    //});
+  }
+
+
+
   public createsite() {
     this.openDialogManage(0, DBOperation.create, 'Customer Sites', 'Add', GetcustomersitesComponent);
 
@@ -143,6 +158,12 @@ export class GetcustomerlistsComponent extends ParentFomMgtComponent implements 
   public edit(id: number) {
     console.log("id=" + id);
     this.openDialogManage(id, DBOperation.update, 'Updating_Customer', 'Update', AddupdatecustomerComponent);
+  }
+
+
+  public userMap(customerCode: string) {
+    //console.log("id=" + id);
+    this.openDialogManageTwo(customerCode, DBOperation.update, 'AddUpdate_Customer', AddupdatemultiloginComponent);
   }
 
   public print(customerCode: string) {

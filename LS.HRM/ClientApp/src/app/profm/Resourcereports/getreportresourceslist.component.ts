@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -36,11 +36,11 @@ export class GetreportresourceslistComponent extends ParentFomMgtComponent imple
   isArab: boolean = false;
 
   totalItemsCount: number = 100;
-  pageService = { pageCount: 10, selectItemsPerPage: [10, 20, 50] };
+  //pageService = { pageCount: 10, selectItemsPerPage: [10, 20, 50] };
 
   constructor(private apiService: ApiService, private authService: AuthorizeService, private translate: TranslateService,
     private utilService: UtilityService, private notifyService: NotificationService, public dialog: MatDialog,
-   /* public pageService: PaginationService*/) {
+    public pageService: PaginationService) {
     super(authService);
   }
 
@@ -52,6 +52,11 @@ export class GetreportresourceslistComponent extends ParentFomMgtComponent imple
   refresh() {
     this.searchValue = '';
     this.initialLoading();
+  }
+
+  onPageSwitch(event: PageEvent) {
+    this.pageService.change(event);
+    this.loadList(event.pageIndex, event.pageSize, this.searchValue, this.sortingOrder);
   }
 
   initialLoading() {

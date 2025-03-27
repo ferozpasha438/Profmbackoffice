@@ -31,9 +31,11 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
   dbops!: DBOperation;
   form!: FormGroup;
   id: number = 0;
+  imageUrl: string | ArrayBuffer | null | undefined = '';
   fileUploadone!: File;
   fileUploadtwo!: File;
   fileUploadthree!: File;
+  fileUploadfour!: File;
   custCityCode1!: string;
   custCityCode2!: string;
   CustCategoryCodeList:Array<CustomSelectListItem> =[];
@@ -60,6 +62,7 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
   file1Url: string = '';
   file2Url: string = '';
   file3Url: string = '';
+  selectedFile: File | null = null;
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, private translate: TranslateService, public dialog: MatDialog,
     private notifyService: NotificationService, private validationService: ValidationService, public dialogRef: MatDialogRef<AddupdatecustomerComponent>) {
@@ -252,6 +255,7 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
       'custUDF1': [''],
       'custUDF2': [''],
       'custUDF3': [''],
+      'imageUrl': [''],
       //'isActive': [true],
       'custAllowCrsale': [false],
       'custAlloCrOverride': [false],
@@ -288,6 +292,50 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
       }
     }
   }
+
+
+  //onFileSelected(event: Event) {
+  //  const input = event.target as HTMLInputElement;
+  //  if (input.files && input.files.length) {
+  //    this.selectedFile = input.files[0];
+  //    const reader = new FileReader();
+
+  //    reader.onload = (e) => {
+  //      this.imageUrl = e.target?.result; // Preview Image
+  //    };
+
+  //    reader.readAsDataURL(this.selectedFile);
+  //  }
+  //}
+
+  //onFileSelected(fileInput: any) {
+  //  if (fileInput.target.files.length > 1) {
+  //    this.notifyService.showWarning("Select Only 1 Image");
+  //  } else if (fileInput.target.files.length > 0) {
+         
+  //    this.fileUploadfour = <File>fileInput.target.files[0];
+     
+  //  }
+  //}
+
+  onFileSelected(fileInput: any) {
+    if (fileInput.target.files.length > 1) {
+      this.notifyService.showWarning("Select Only 1 Image");
+      return;
+    }
+
+    if (fileInput.target.files.length > 0) {
+      this.fileUploadfour = fileInput.target.files[0];
+
+      // Preview Image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imageUrl = e.target?.result; // Store base64 URL for preview
+      };
+      reader.readAsDataURL(this.fileUploadfour);
+    }
+  }
+
   submit() {
     if (this.id > 0)
       this.form.value['id'] = this.id;
@@ -362,7 +410,7 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
     if (this.form.valid) {
       this.apiService.post('FomCustomer', this.form.value)
         .subscribe(res => {
-          if (res && this.fileUploadone != null && this.fileUploadone != undefined) {
+          if (res && this.fileUploadfour != null && this.fileUploadfour != undefined) {
             const custRes = res as any;
             const formData = new FormData();
             formData.append("id", custRes.id.toString());
@@ -370,6 +418,7 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
             formData.append("Image1IForm", this.fileUploadone);
             formData.append("Image2IForm", this.fileUploadtwo);
             formData.append("Image3IForm", this.fileUploadthree);
+            formData.append('Image4IForm', this.fileUploadfour);
             this.apiService.post('FomCustomer/UploadCustomerFiles', formData)
               .subscribe(res => {
                 this.utilService.OkMessage();
@@ -404,18 +453,13 @@ export class AddupdatecustomerComponent extends ParentFomMgtComponent implements
   setEditForm() {
     this.apiService.get('FomCustomer', this.id).subscribe(res => {
       if (res) {
-        //this.categoryCodeControl.setValue(res['custCatCode']);
-        //this.salesTermsCodeControl.setValue(res['salesTermsCode']);
-        //this.custARAcControl.setValue(res['custARAc']);
-        //this.custDefExpAcCodeControl.setValue(res['custDefExpAcCode']);
-        //this.custARAdjAcCodeControl.setValue(res['custARAdjAcCode']);
-        //this.custArAcCodeControl.setValue(res['custArAcCode']);
-        //this.custARDiscAcCodeControl.setValue(res['custARDiscAcCode']);
+     
 
         this.form.patchValue(res);
         this.file1Url = res.custUDF1;
         this.file2Url = res.custUDF2;
         this.file3Url = res.custUDF3;
+        this.imageUrl = res.imageUrl;
 
 
         this.apiService.getall('FomCustomer/getStateCountrybyCityCode/' + res['custCityCode1']).subscribe(res => {

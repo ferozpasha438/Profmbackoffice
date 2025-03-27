@@ -160,7 +160,7 @@ namespace CIN.Application.SystemQuery
 
 
 
-                    TblErpFomUserClientLoginMapping loginMapping = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.RegEmail == obj.UserEmail);
+                    TblErpFomUserClientLoginMapping loginMapping = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.LoginId);
 
                     if (loginMapping is null)
                     {

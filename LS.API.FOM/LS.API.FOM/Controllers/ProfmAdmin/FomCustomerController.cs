@@ -57,6 +57,85 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
         }
 
+
+        //[HttpPost("CreateUpdateMultiLoginCustomer")]
+        //public async Task<ActionResult> CreateUpdateMultiLoginCustomer([FromBody] TblErpFomUserClientLoginMappingDto dTO)
+        //{
+        //    var id = await Mediator.Send(new CreateUpdateMultiLoginCustomer() { FomUserClientLoginMapping = dTO, User = UserInfo() });
+        //    if (id > 0)
+        //        return Created($"get/{id}", dTO);
+        //    else if (id == -1)
+        //    {
+        //        return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Duplicate(nameof(dTO.Id)) });
+        //    }
+        //    return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+        //}
+
+        //[HttpPost("CreateUpdateMultiLoginCustomer")]
+        //public async Task<ActionResult> CreateUpdateMultiLoginCustomer([FromBody] List<TblErpFomUserClientLoginMappingDto> dtoList)
+        //// Change to List
+        //{
+        //    foreach (var dTO in dtoList)
+        //    {
+        //        var id = await Mediator.Send(new CreateUpdateMultiLoginCustomer()
+        //        {
+        //            FomUserClientLoginMapping = dTO,
+        //            User = UserInfo()
+        //        });
+
+        //        if (id <= 0)
+        //        {
+        //            return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+        //        }
+        //    }
+
+        //    return Ok(); // Return a general success response
+        //}
+
+        [HttpPost("CreateUpdateMultiLoginCustomer")]
+        public async Task<ActionResult> CreateUpdateMultiLoginCustomer([FromBody] List<TblErpFomUserClientLoginMappingDto> dtoList)
+
+        {
+            var request = new CreateUpdateMultiLoginCustomer
+            {
+                FomUserClientLoginMappingList = dtoList,
+                User = UserInfo()
+            };
+
+            var result = await Mediator.Send(request);
+
+            if (result > 0)
+                return Ok();
+            else
+                return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+        }
+
+
+        [HttpDelete("DeleteMultiLoginCustomer/{id}")]
+        public async Task<IActionResult> DeleteMultiLoginCustomer(int id)
+        {
+            var result = await Mediator.Send(new DeleteMultiLoginCustomer { Id = id });
+
+            if (result)
+            {
+                return Ok(new ApiMessageDto { Message = ApiMessageInfo.Success });
+            }
+            else
+            {
+                return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+            }
+        }
+
+        [HttpGet("GetClientsByCustomerCode/{custCode}")]
+        public async Task<List<TblErpFomUserClientLoginMappingDto>> GetClientsByCustomerCode([FromRoute] string custCode)
+        {
+            var obj = await Mediator.Send(new GetClientsByCustomerCode() { CustomerCode = custCode, User = UserInfo() });
+            return obj;
+        }
+
+
+
+
         [HttpPost("UploadCustomerFiles")]
         public async Task<ActionResult> UploadCustomerFiles([FromForm] InputImageFromCustomerDto dTO)
         {

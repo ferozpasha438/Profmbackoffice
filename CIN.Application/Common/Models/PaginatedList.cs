@@ -1,4 +1,5 @@
-﻿using CIN.Application.OperationsMgtDtos;
+﻿using CIN.Application.FomMgtDtos;
+using CIN.Application.OperationsMgtDtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -166,6 +167,8 @@ namespace CIN.Application.Common
         public int PageIndex { get; }
         public int TotalPages { get; }
         public int TotalCount { get; }
+        public object ChartData { get; internal set; }
+        public object PerformanceStatistics { get; set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
@@ -174,6 +177,8 @@ namespace CIN.Application.Common
             TotalCount = count;
             Items = items;
         }
+
+       
 
         //public bool HasPreviousPage => PageIndex > 1;
 

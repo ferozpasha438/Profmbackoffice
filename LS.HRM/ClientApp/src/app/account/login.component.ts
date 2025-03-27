@@ -50,8 +50,8 @@ export class LoginComponent extends ParentSystemSetupComponent implements OnInit
 
     this.loginForm = this.fb.group({
       'cinNumber': '',
-      'userName': ['admin', Validators.required],
-      'password': ['profm@123', Validators.required]
+      'userName': ['', Validators.required],
+      'password': ['', Validators.required]
     });
   }
 

@@ -92,6 +92,12 @@ import { GetcustomersreportComponent } from './Customersreport/getcustomersrepor
 import { GetreportComponent } from './JobTicket/getjobticket/getreport.component';
 //import { JobticketreportsComponent } from './JobTicketReports/jobticketreports.component';
 import { GetticketsummaryreportComponent } from './GetTicketSummaryReport/getticketsummaryreport.component';
+import { GetdeptwisesummaryreportComponent } from './GetDepartmentWiseReport/getdeptwisesummaryreport.component';
+import { GetprojectwisesummaryreportComponent } from './GetProjectWiseReport/getprojectwisesummaryreport.component';
+import { AddupdatemultiloginComponent } from './Customer/Sharedpages/addupdatemultilogin.component';
+import { MaplogintositeComponent } from './CustomerSite/Sharedpages/maplogintosite.component';
+import { CustomeranalyticsComponent } from './customeranalytics/customeranalytics.component';
+
 
 
 
@@ -167,14 +173,18 @@ import { GetticketsummaryreportComponent } from './GetTicketSummaryReport/gettic
     CafmdaywisesummaryComponent,
     CafmjobanalysisprojectwiseComponent,
     CafmassetdetailsComponent,
-    CafmassetcostanalysisComponent,
-    
+    CafmassetcostanalysisComponent,   
     GetreportresourceslistComponent,
     GetcustomersreportComponent,
     /*ActivityDialogComponent,*/
     GetreportComponent,
   /*  JobticketreportsComponent,*/
-    GetticketsummaryreportComponent
+    GetticketsummaryreportComponent,
+    GetdeptwisesummaryreportComponent,
+    GetprojectwisesummaryreportComponent,
+    CustomeranalyticsComponent,
+    AddupdatemultiloginComponent,
+    MaplogintositeComponent
   ],
 
   imports: [

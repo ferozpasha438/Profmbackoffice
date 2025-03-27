@@ -367,6 +367,9 @@ namespace CIN.Application.FomMgtDtos
         public string CustUDF2 { get; set; }
         [StringLength(200)]
         public string CustUDF3 { get; set; }
+
+        [StringLength(200)]
+        public string ImageUrl { get; set; }
         public bool CustAllowCrsale { get; set; }
         public bool CustAlloCrOverride { get; set; }
         public bool CustOnHold { get; set; }
@@ -400,6 +403,7 @@ namespace CIN.Application.FomMgtDtos
         public IFormFile Image1IForm { get; set; }
         public IFormFile Image2IForm { get; set; }
         public IFormFile Image3IForm { get; set; }
+        public IFormFile Image4IForm { get; set; }
         public string WebRoot { get; set; }
     }
 
@@ -416,6 +420,40 @@ namespace CIN.Application.FomMgtDtos
         public bool IsFromMobile { get; set; } = false;
         public bool IsFromWeb { get; set; } = false;
         public string Password { get; set; }
+    }
+
+    [AutoMap(typeof(TblErpFomUserClientLoginMapping))]
+    public class TblErpFomUserClientLoginMappingDto
+    {
+        
+        public int Id { get; set; }
+
+        [StringLength(20)]
+        public string UserClientLoginCode { get; set; }
+
+        [StringLength(20)]
+        public string CustName { get; set; }
+
+        [StringLength(20)]
+        public string CustCode { get; set; }
+
+        [StringLength(20)]
+        public string SiteCode { get; set; }
+
+        [StringLength(256)]
+        public string RegEmail { get; set; }
+        [StringLength(256)]
+        public string RegMobile { get; set; }
+
+        [StringLength(128)]
+        public string Password { get; set; }
+        [StringLength(15)]
+        public string LoginType { get; set; } //user,client
+        public string LastLoginDate { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string CreatedBy { get; set; }
+
     }
 
 
@@ -1505,12 +1543,41 @@ namespace CIN.Application.FomMgtDtos
         public DateTime? ToDate { get; set; }
 
     }
+
+
+ 
+
+
     public class InputPaginationCommon
     {
         public int Page { get; set; } = 0;
         public int PageCount { get; set; } = 100;
         public string Query { get; set; } = string.Empty;
         public string OrderBy { get; set; } = "id desc";
+    }
+
+
+    public class InputTicketsReportPaginationFilterDto : InputReportPaginationCommon
+    {
+
+        public string TicketNumber { get; set; }
+        public string CustomerCode { get; set; }
+        public string DeptCode { get; set; }
+        public string SiteCode { get; set; }
+        public string Supervisor { get; set; }
+        public string StatusStr { get; set; }      //incomplete,outofscope
+        public int? Status { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+
+    }
+
+    public class InputReportPaginationCommon
+    {
+        public int Page { get; set; } = 0;
+        public int PageCount { get; set; } = 100;
+        public string Query { get; set; } = string.Empty;
+      //  public string OrderBy { get; set; } = "id desc";
     }
     public class RecentTicketsDto : TblFomJobTicketDto
     {
@@ -1524,9 +1591,23 @@ namespace CIN.Application.FomMgtDtos
         public string StatusStr { get; set; }
     }
 
+    //public class ChartDataDto
+    //{
+    //    public short Status { get; set; }
+    //    public int Count { get; set; }
+    //}
 
-    public class AggregatedReportDto 
+    public class ChartDataDto
     {
+        public int Status { get; set; }
+        public int Count { get; set; }
+        public string Name { get; set; } // Added to hold the status text
+    }
+
+    public class AggregatedReportDto : InputReportPaginationCommon
+    {
+        public string ProjectName { get; set; }
+        public string DeptName { get; set; }
         public DateTime Date { get; set; }
         public int Opening { get; set; }
         public int Received { get; set; }
@@ -1537,8 +1618,10 @@ namespace CIN.Application.FomMgtDtos
         public int Closed { get; set; }
         public int Completed { get; set; }
         public int TotJobs { get; set; }
+        public int Closing { get; set; }
+        public double Percentage { get; set; } // Add this field
         public int IsActive { get; set; }
-
+        public string OrderBy { get; set; } = "id desc";
     }
     public class TblFomJobTicketDto 
     {

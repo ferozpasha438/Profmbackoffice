@@ -20,6 +20,8 @@ import { AddupdatesiteComponent } from '../Sharedpages/addupdatesite.component';
 import * as XLSX from "xlsx"
 import { AddupdatesitetocustomerComponent } from '../../sharedcomponent/AddUpdateSiteToCustomer/addupdatesitetocustomer.component';
 import { ParentFomMgtComponent } from '../../../sharedcomponent/parentfommgt.component';
+import { AddupdatemultiloginComponent } from '../../Customer/Sharedpages/addupdatemultilogin.component';
+import { MaplogintositeComponent } from '../Sharedpages/maplogintosite.component';
 @Component({
   selector: 'app-getcustomersites',
   templateUrl: './getcustomersites.component.html',
@@ -148,6 +150,11 @@ export class GetcustomersitesComponent extends ParentFomMgtComponent implements 
 
   public create() {
     this.openDialogManage(0, DBOperation.create, 'Adding_New_Site', 'Add', AddupdatesitetocustomerComponent);
+  }
+
+
+  public mapsite() {
+    this.openDialogManage(0, DBOperation.create, 'Adding_New_Site', 'Add', MaplogintositeComponent);
   }
 
   public editSite(id: number) {

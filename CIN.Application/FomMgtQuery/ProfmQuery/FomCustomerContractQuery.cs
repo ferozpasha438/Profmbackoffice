@@ -17,6 +17,7 @@ using System.Linq.Dynamic.Core;
 using CIN.Domain.SalesSetup;
 using CIN.Domain.FomMgt;
 using CIN.Application.ProfmQuery;
+using Microsoft.Data.SqlClient;
 
 namespace CIN.Application.FomMgtQuery.ProfmQuery
 {
@@ -42,7 +43,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         {
 
             var list = await _context.FomCustomerContracts.AsNoTracking().ProjectTo<TblErpFomCustomerContractDto>(_mapper.ConfigurationProvider)
-                       .OrderByDescending(x=>x.Id)
+                       .OrderByDescending(x => x.Id)
                        .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             return list;
         }
@@ -719,24 +720,24 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             }
             if (result != null)
             {
-                 var list = await _context.FomScheduleDetails.AsNoTracking()
-                                       .Where(e => e.SchId == result.Id && e.ContractId == contractDetails.Id && e.Department == result.DeptCode)
-                                       .Select(e => new FomScheduleDetailsDto
-                                       {
-                                           ContractId = e.ContractId,
-                                           SchDate = e.SchDate,
-                                           Department = e.Department,
-                                           SerType = e.SerType,
-                                           Frequency = e.Frequency,
-                                           TranNumber = e.TranNumber,
-                                           ServiceItem = e.ServiceItem,
-                                           Remarks = e.Remarks,
-                                           Time = e.Time.ToString(@"hh\:mm"),
-                                           IsReschedule = e.IsReschedule,
-                                           IsActive = e.IsActive
+                var list = await _context.FomScheduleDetails.AsNoTracking()
+                                      .Where(e => e.SchId == result.Id && e.ContractId == contractDetails.Id && e.Department == result.DeptCode)
+                                      .Select(e => new FomScheduleDetailsDto
+                                      {
+                                          ContractId = e.ContractId,
+                                          SchDate = e.SchDate,
+                                          Department = e.Department,
+                                          SerType = e.SerType,
+                                          Frequency = e.Frequency,
+                                          TranNumber = e.TranNumber,
+                                          ServiceItem = e.ServiceItem,
+                                          Remarks = e.Remarks,
+                                          Time = e.Time.ToString(@"hh\:mm"),
+                                          IsReschedule = e.IsReschedule,
+                                          IsActive = e.IsActive
 
-                                       }).OrderBy(e => e.SchDate)
-                                       .ToListAsync();
+                                      }).OrderBy(e => e.SchDate)
+                                      .ToListAsync();
                 if (list.Count > 0)
                 {
                     foreach (var item in list)
@@ -804,7 +805,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             {
                 //  return PaginatedList<GeneratedScheduleDetailsDto>.Empty(request.Input.Page, request.Input.PageCount);
                 return new PaginatedList<GeneratedScheduleFilterDto>(new List<GeneratedScheduleFilterDto>(), 0, request.Input.Page, request.Input.PageCount);
-                
+
 
 
             }
@@ -862,32 +863,32 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 })
                 .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
 
-                if (list.TotalCount > 0)
+            if (list.TotalCount > 0)
+            {
+                foreach (var item in list.Items)
                 {
-                    foreach (var item in list.Items)
+                    item.ContractCode = contractDetails.ContractCode;
+
+                    var custDetails = await _context.OprCustomers.AsNoTracking()
+                        .ProjectTo<TblSndDefCustomerMasterDto>(_mapper.ConfigurationProvider)
+                        .SingleOrDefaultAsync(e => e.CustCode == contractDetails.CustCode);
+                    if (custDetails != null)
                     {
-                        item.ContractCode = contractDetails.ContractCode;
+                        item.CustomerName = custDetails.CustName;
+                        item.CustomerNameAr = custDetails.CustArbName;
+                    }
 
-                        var custDetails = await _context.OprCustomers.AsNoTracking()
-                            .ProjectTo<TblSndDefCustomerMasterDto>(_mapper.ConfigurationProvider)
-                            .SingleOrDefaultAsync(e => e.CustCode == contractDetails.CustCode);
-                        if (custDetails != null)
-                        {
-                            item.CustomerName = custDetails.CustName;
-                            item.CustomerNameAr = custDetails.CustArbName;
-                        }
-
-                        var siteDetails = await _context.OprSites.AsNoTracking()
-                            .ProjectTo<TblSndDefSiteMasterDto>(_mapper.ConfigurationProvider)
-                            .SingleOrDefaultAsync(e => e.SiteCode == contractDetails.CustSiteCode);
-                        if (siteDetails != null)
-                        {
-                            item.SiteName = siteDetails.SiteName;
-                            item.SiteNameAr = siteDetails.SiteArbName;
-                        }
+                    var siteDetails = await _context.OprSites.AsNoTracking()
+                        .ProjectTo<TblSndDefSiteMasterDto>(_mapper.ConfigurationProvider)
+                        .SingleOrDefaultAsync(e => e.SiteCode == contractDetails.CustSiteCode);
+                    if (siteDetails != null)
+                    {
+                        item.SiteName = siteDetails.SiteName;
+                        item.SiteNameAr = siteDetails.SiteArbName;
                     }
                 }
-            
+            }
+
             return list;
 
             //result.DetailRows = list.Items;
@@ -1345,21 +1346,22 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate >= startDate && e.SchDate <= endDate) && e.ContractId == request.Input.ContractId)
-                                                   .Select(x=>new RsErpFomScheduleDetailsDto { 
-                                                       ContractId=x.ContractId,
-                                                       Department=x.Department,
-                                                       Frequency=x.Frequency,
-                                                       Id=x.Id,
-                                                       IsActive=x.IsActive,
-                                                       IsReschedule=x.IsReschedule,
-                                                       Remarks=x.Remarks,
-                                                       SchDate=x.SchDate,
-                                                       SchId=x.SchId,
-                                                       SerType=x.SerType,
-                                                       ServiceItem=x.ServiceItem,
-                                                       Time=x.Time,
-                                                       TranNumber=x.TranNumber                                                       
-                                                    })
+                                                   .Select(x => new RsErpFomScheduleDetailsDto
+                                                   {
+                                                       ContractId = x.ContractId,
+                                                       Department = x.Department,
+                                                       Frequency = x.Frequency,
+                                                       Id = x.Id,
+                                                       IsActive = x.IsActive,
+                                                       IsReschedule = x.IsReschedule,
+                                                       Remarks = x.Remarks,
+                                                       SchDate = x.SchDate,
+                                                       SchId = x.SchId,
+                                                       SerType = x.SerType,
+                                                       ServiceItem = x.ServiceItem,
+                                                       Time = x.Time,
+                                                       TranNumber = x.TranNumber
+                                                   })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             else if (request.Input.ContractId == 0 && !string.IsNullOrEmpty(request.Input.StartDate) && !string.IsNullOrEmpty(request.Input.EndDate))
@@ -1534,14 +1536,14 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                 })
                                .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
-            if (list.TotalCount>0)
+            if (list.TotalCount > 0)
             {
                 foreach (var item in list.Items)
                 {
                     var contractDetails = await _context.FomCustomerContracts.AsNoTracking()
                                                 .ProjectTo<TblErpFomCustomerContractDto>(_mapper.ConfigurationProvider)
                                                 .SingleOrDefaultAsync(e => e.Id == item.ContractId);
-                    if (contractDetails!=null)
+                    if (contractDetails != null)
                     {
                         item.ContractCode = contractDetails.ContractCode;
                         var custDetails = await _context.OprCustomers.AsNoTracking()
@@ -1561,7 +1563,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                             item.SiteNameAr = siteDetails.SiteArbName;
                         }
                     }
-                    
+
                 }
 
             }
@@ -1639,7 +1641,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 var contracts = _context.FomCustomerContracts.Where(e => e.ContProjSupervisor == request.User.UserName || e.ContProjManager == request.User.UserName).Select(s => new { s.CustCode, s.CustSiteCode }).AsNoTracking();
                 var search = request.Input.Query;
                 var Customers = _context.OprCustomers.AsNoTracking();
-               
+
                 var Sites = _context.OprSites.AsNoTracking();
                 var departments = _context.ErpFomDepartments.AsNoTracking();
                 var logNotes = _context.FomJobTicketLogNotes.AsNoTracking();
@@ -1722,9 +1724,9 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                 e.DepNameEng.Contains(search) ||
                                 e.DepNameArb.Contains(search) ||
                                 search == "" ||
-                                search == null||
+                                search == null ||
                                 string.IsNullOrEmpty(search))
-                            //&& (contracts.Select(c => c.CustCode).Contains(e.CustomerCode) /*&& contracts.Select(c => c.CustSiteCode).Contains(e.SiteCode))*/
+                         //&& (contracts.Select(c => c.CustCode).Contains(e.CustomerCode) /*&& contracts.Select(c => c.CustSiteCode).Contains(e.SiteCode))*/
                          );
                 if (!string.IsNullOrEmpty(request.Input.CustomerCode))
                 {
@@ -1893,7 +1895,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                 search == "" ||
                                 search == null ||
                                 string.IsNullOrEmpty(search))
-                             // && (contracts.Select(c => c.CustCode).Contains(e.CustomerCode) )
+                         // && (contracts.Select(c => c.CustCode).Contains(e.CustomerCode) )
                          );
                 if (!string.IsNullOrEmpty(request.Input.CustomerCode))
                 {
@@ -1907,7 +1909,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 //{
                 //    list = list.Where(e => e.ContractCode == request.Input.ContractCode);
                 //}
-                if ((request.Input.Status is not null))
+                //list = list.Where(e => e.IsActive && !e.IsVoid);
+                if (request.Input.Status is not null)
                 {
                     list = list.Where(e => e.JOStatus == request.Input.Status);
                 }
@@ -1953,16 +1956,18 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
     #endregion
 
+    // Method to get Status text based on the MetadataJoStatusEnum
+
+
+
 
     #region GetSummaryJobTicketsReport
-
     public class GetSummaryJobTicketsReport : IRequest<PaginatedList<AggregatedReportDto>>
     {
         public UserIdentityDto User { get; set; }
-        public InputTicketsPaginationFilterDto Input { get; set; }
+        public InputTicketsReportPaginationFilterDto Input { get; set; }
 
     }
-
     public class GetSummaryJobTicketsReportHandler : IRequestHandler<GetSummaryJobTicketsReport, PaginatedList<AggregatedReportDto>>
     {
         private readonly CINDBOneContext _context;
@@ -1978,7 +1983,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         {
             try
             {
-                // Adjust the end date to include the full day
+
+                // Temporary Fixed  Update IsClosed status based on IsCompleted status
+                await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE TblFomJobTicket 
+              SET IsClosed = 'false' 
+              WHERE IsClosed = 'true' AND IsCompleted = 'true'");
+                //Temporary Fixed Ends Here
+
+
+                // Adjust ToDate to include the full day
                 if (request.Input.ToDate is not null)
                 {
                     request.Input.ToDate = request.Input.ToDate.Value.AddDays(1);
@@ -1988,7 +2002,230 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 var jobTicketsQuery = _context.FomMobJobTickets.AsNoTracking()
                     .Where(e => e.IsActive && !e.IsVoid);
 
-                // Apply filters
+                // Apply filters dynamically
+                if (request.Input.FromDate is not null && request.Input.ToDate is not null)
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.JODate >= request.Input.FromDate && e.JODate < request.Input.ToDate);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.DeptCode))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.JODeptCode == request.Input.DeptCode);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.CustomerCode))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.CustomerCode == request.Input.CustomerCode);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.SiteCode))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.SiteCode == request.Input.SiteCode);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.StatusStr))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.JobMaintenanceType == request.Input.StatusStr);
+                }
+
+                // Compute Opening Jobs Before Aggregation
+                var jobCounts = await _context.FomMobJobTickets.AsNoTracking()
+                    .Where(j => j.JODate < request.Input.FromDate && !j.IsVoid)
+                    .GroupBy(j => 1) // Single row result
+                    .Select(g => new
+                    {
+                        TotJobs = g.Count(),
+                        Closed = g.Count(j => j.IsClosed),
+                        ForeClosed = g.Count(j => j.IsForeClosed),
+                        Completed = g.Count(j => j.IsCompleted)
+                    })
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                int previousClosing = jobCounts != null ? jobCounts.TotJobs - (jobCounts.Closed + jobCounts.ForeClosed + jobCounts.Completed) : 0;
+
+                // Order before processing
+                var sortedJobTickets = await jobTicketsQuery
+                    .OrderBy(j => j.JODate)
+                    .ToListAsync(cancellationToken);
+
+                List<AggregatedReportDto> aggregatedDataList = new();
+
+                foreach (var group in sortedJobTickets.GroupBy(e => e.JODate.Date))
+                {
+                    int received = group.Count(); // Jobs received that day
+                    int totalJobs = previousClosing + received;
+
+                    var aggregatedData = new AggregatedReportDto
+                    {
+                        Date = group.Key,
+                        Opening = previousClosing,
+                        Received = received,
+                        TotJobs = totalJobs,
+                        ForeClosed = group.Count(e => e.IsForeClosed),
+                        Closed = group.Count(e => e.IsClosed),
+                        Completed = group.Count(e => e.IsCompleted),
+                        Closing = totalJobs - (group.Count(e => e.IsClosed) + group.Count(e => e.IsForeClosed) + group.Count(e => e.IsCompleted)),
+                        Percentage = group.Count(e => e.IsCompleted) * 100.0 / (totalJobs == 0 ? 1 : totalJobs) // Compute %Per
+                    };
+
+                    aggregatedDataList.Add(aggregatedData);
+
+                    // Update previousClosing for the next iteration
+                    previousClosing = aggregatedData.Closing;
+                }
+
+                // Main method
+                var chartDataList = new List<ChartDataDto>();
+
+                using (var connection = _context.Database.GetDbConnection())
+                {
+                    await connection.OpenAsync(cancellationToken);
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = @"
+                                                SELECT JOStatus, COUNT(*) AS Count
+                                                FROM TblFomJobTicket
+                                                WHERE IsVoid = 'false' AND JOStatus NOT IN (8, 9, 11)
+                                                AND JODate >= (SELECT MIN(JODate) FROM TblFomJobTicket)
+                                                AND JODate <= @ToDate
+                                                GROUP BY JOStatus
+                                                ORDER BY JOStatus";
+
+                        var toDateParam = command.CreateParameter();
+                        toDateParam.ParameterName = "@ToDate";
+                        toDateParam.Value = request.Input.ToDate;
+                        command.Parameters.Add(toDateParam);
+
+                        using (var reader = await command.ExecuteReaderAsync(cancellationToken))
+                        {
+                            while (await reader.ReadAsync(cancellationToken))
+                            {
+                                var status = reader.GetInt16(0); // JOStatus is an Int16
+                                var count = reader.GetInt32(1);  // COUNT(*) is an Int32
+
+                                chartDataList.Add(new ChartDataDto
+                                {
+                                    Status = status,
+                                    Count = count,
+                                    Name = GetStatusText(status) // Map the status text
+                                });
+                            }
+                        }
+                    }
+                }
+
+                var totalJobsRecive = aggregatedDataList.Sum(x => x.Received);
+                var totalCompleted = aggregatedDataList.Sum(x => x.Completed);
+                var totalBalance = totalJobsRecive - totalCompleted;
+
+
+                var performanceStats = new
+                {
+                    OpeningJobs = aggregatedDataList.Sum(x => x.Opening),
+                    TotalReceived = aggregatedDataList.Sum(x => x.Received),
+                    TotalJobs = aggregatedDataList.Sum(x => x.TotJobs),
+                    Completed = aggregatedDataList.Sum(x => x.Completed),
+                    Balance = aggregatedDataList.Sum(x => x.Received) - aggregatedDataList.Sum(x => x.Completed),
+                    CompletedPercentage = (totalJobsRecive == 0) ? 0 : (totalCompleted * 100.0 / totalJobsRecive),
+                    BalancePercentage = (totalJobsRecive == 0) ? 0 : (totalBalance * 100.0 / totalJobsRecive),
+                    Percentage = aggregatedDataList.Sum(x => x.Completed) * 100.0 / (aggregatedDataList.Sum(x => x.TotJobs) == 0 ? 1 : aggregatedDataList.Sum(x => x.TotJobs))
+                };
+
+
+                // Apply Pagination
+                int pageNumber = request.Input.Page > 0 ? request.Input.Page : 1;
+                int pageSize = request.Input.PageCount > 0 ? request.Input.PageCount : 10;
+                int totalCount = aggregatedDataList.Count;
+
+                var paginatedList = new PaginatedList<AggregatedReportDto>(
+                    aggregatedDataList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(),
+                    totalCount,
+                    pageNumber,
+                    pageSize
+                );
+
+                // Add chart data to the response (if applicable)
+                paginatedList.ChartData = chartDataList;
+
+                paginatedList.PerformanceStatistics = performanceStats;
+
+                return paginatedList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Handle method: {ex.Message}");
+                return null;
+            }
+        }
+
+
+
+        // Method to get Status text based on MetadataJoStatusEnum
+        private string GetStatusText(int status)
+        {
+            if (Enum.IsDefined(typeof(MetadataJoStatusEnum), status))
+            {
+                return ((MetadataJoStatusEnum)status).ToString(); // Converts the enum value to its name
+            }
+            return "Unknown"; // Default text for undefined status
+        }
+
+
+    }
+
+
+
+
+
+
+    #endregion
+
+
+
+    #region GetDeptWiseSummaryJobTicketsReport
+    public class GetDeptWiseSummaryJobTicketsReport : IRequest<PaginatedList<AggregatedReportDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public InputTicketsReportPaginationFilterDto Input { get; set; }
+
+    }
+    public class GetDeptWiseSummaryJobTicketsReportHandler : IRequestHandler<GetDeptWiseSummaryJobTicketsReport, PaginatedList<AggregatedReportDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public GetDeptWiseSummaryJobTicketsReportHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+
+        public async Task<PaginatedList<AggregatedReportDto>> Handle(GetDeptWiseSummaryJobTicketsReport request, CancellationToken cancellationToken)
+        {
+            try
+            {
+
+                // Temporary Fixed  Update IsClosed status based on IsCompleted status
+                await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE TblFomJobTicket 
+              SET IsClosed = 'false' 
+              WHERE IsClosed = 'true' AND IsCompleted = 'true'");
+                //Temporary Fixed Ends Here
+
+
+                // Adjust ToDate to include the full day
+                if (request.Input.ToDate is not null)
+                {
+                    request.Input.ToDate = request.Input.ToDate.Value.AddDays(1);
+                }
+
+                // Base query for job tickets
+                var jobTicketsQuery = _context.FomMobJobTickets.AsNoTracking()
+                    .Where(e => e.IsActive && !e.IsVoid);
+
+                // Apply filters dynamically
                 if (request.Input.FromDate is not null && request.Input.ToDate is not null)
                 {
                     jobTicketsQuery = jobTicketsQuery.Where(e => e.JODate >= request.Input.FromDate && e.JODate < request.Input.ToDate);
@@ -2009,147 +2246,239 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     jobTicketsQuery = jobTicketsQuery.Where(e => e.JobMaintenanceType == request.Input.StatusStr);
                 }
 
-                var aggregatedDataQuery = jobTicketsQuery
-                    .GroupBy(e => e.JODate.Date)
-                    .Select(g => new AggregatedReportDto
+                // Compute Opening Jobs Before Aggregation
+                var jobCounts = await _context.FomMobJobTickets.AsNoTracking()
+                    .Where(j => j.JODate < request.Input.FromDate && !j.IsVoid)
+                    .GroupBy(j => j.JODeptCode) // Group by Discipline
+                    .Select(g => new
                     {
-                        Date = g.Key,
-                        TotJobs = g.Count(e => e.JODate != null),
-                        Opening = jobTicketsQuery.Count(e => e.IsOpen && e.JODate < request.Input.FromDate),
-                        WIP = g.Count(e => e.IsWorkInProgress),
-                        InTransit = g.Count(e => e.IsTransit),
-                        ForeClosed = g.Count(e => e.IsForeClosed),
-                        Closed = g.Count(e => e.IsClosed),
-                        Completed = g.Count(e => e.IsCompleted),
-                        IsActive = g.Count(e => e.IsActive)
-                    });
+                        Discipline = g.Key,
+                        TotJobs = g.Count(),
+                        Closed = g.Count(j => j.IsClosed),
+                        ForeClosed = g.Count(j => j.IsForeClosed),
+                        Completed = g.Count(j => j.IsCompleted)
+                    })
+                    .ToListAsync(cancellationToken);
 
-                var paginatedReports = await aggregatedDataQuery
-                    //.OrderBy(request.Input.OrderBy ?? "Date") // Dynamic ordering
-                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+                // Convert to Dictionary for quick access
+                var previousClosingDict = jobCounts.ToDictionary(
+                    j => j.Discipline,
+                    j => j.TotJobs - (j.Closed + j.ForeClosed + j.Completed)
+                );
+
+                // Group by Discipline
+                var groupedJobTickets = await jobTicketsQuery
+                    .GroupBy(e => e.JODeptCode)
+                    .Select(group => new AggregatedReportDto
+                    {
+                        DeptName = group.Key,
+                        Opening = previousClosingDict.ContainsKey(group.Key) ? previousClosingDict[group.Key] : 0,
+                        Received = group.Count(), // Jobs received that day
+                        ForeClosed = group.Count(e => e.IsForeClosed),
+                        Closed = group.Count(e => e.IsClosed),
+                        Completed = group.Count(e => e.IsCompleted),
+                        Closing = (previousClosingDict.ContainsKey(group.Key) ? previousClosingDict[group.Key] : 0) + group.Count() - (group.Count(e => e.IsClosed) + group.Count(e => e.IsForeClosed) + group.Count(e => e.IsCompleted)),
+                        // Calculate Completion Percentage
+                        Percentage = group.Count() > 0 ? ((double)group.Count(e => e.IsCompleted) / group.Count()) * 100 : 0
+                    })
+                    //.OrderBy(g => g.) // Order alphabetically
+                    .ToListAsync(cancellationToken);
 
 
-                return paginatedReports;
+                var totalJobsRecive = groupedJobTickets.Sum(x => x.Received);
+                var totalCompleted = groupedJobTickets.Sum(x => x.Completed);
+                var totalBalance = totalJobsRecive - totalCompleted;
+
+
+                var performanceStats = new
+                {
+                    OpeningJobs = groupedJobTickets.Sum(x => x.Opening),
+                    TotalReceived = groupedJobTickets.Sum(x => x.Received),
+                    TotalJobs = groupedJobTickets.Sum(x => x.TotJobs),
+                    Completed = groupedJobTickets.Sum(x => x.Completed),
+                    Balance = groupedJobTickets.Sum(x => x.Received) - groupedJobTickets.Sum(x => x.Completed),
+                    CompletedPercentage = (totalJobsRecive == 0) ? 0 : (totalCompleted * 100.0 / totalJobsRecive),
+                    BalancePercentage = (totalJobsRecive == 0) ? 0 : (totalBalance * 100.0 / totalJobsRecive),
+                    Percentage = groupedJobTickets.Sum(x => x.Completed) * 100.0 / (groupedJobTickets.Sum(x => x.TotJobs) == 0 ? 1 : groupedJobTickets.Sum(x => x.TotJobs))
+                };
+
+
+                // Apply Pagination
+                int pageNumber = request.Input.Page > 0 ? request.Input.Page : 1;
+                int pageSize = request.Input.PageCount > 0 ? request.Input.PageCount : 10;
+                int totalCount = groupedJobTickets.Count;
+
+                var paginatedList = new PaginatedList<AggregatedReportDto>(
+                    groupedJobTickets.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(),
+                    totalCount,
+                    pageNumber,
+                    pageSize
+                );
+
+
+                paginatedList.PerformanceStatistics = performanceStats;
+                return paginatedList;
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging purposes
                 Console.WriteLine($"Error in Handle method: {ex.Message}");
                 return null;
             }
         }
+
     }
 
-
-    //public class GetSummaryJobTicketsReportHandler : IRequestHandler<GetSummaryJobTicketsReport, PaginatedList<AggregatedReportDto>>
-    //{
-    //    private readonly CINDBOneContext _context;
-    //    private readonly IMapper _mapper;
-    //    public GetSummaryJobTicketsReportHandler(CINDBOneContext context, IMapper mapper)
-    //    {
-    //        _context = context;
-    //        _mapper = mapper;
-    //    }
-    //    public async Task<(PaginatedList<RecentTicketsDto>, List<AggregatedReportDto>)> Handle(GetJobTicketsReportList request, CancellationToken cancellationToken)
-    //    {
-    //        try
-    //        {
-    //            // Adjust the end date to include the full day
-    //            if (request.Input.ToDate is not null)
-    //            {
-    //                request.Input.ToDate = request.Input.ToDate.Value.AddDays(1);
-    //            }
-
-    //            // Base query for job tickets
-    //            var jobTicketsQuery = _context.FomMobJobTickets.AsNoTracking()
-    //                .Where(e => e.IsActive && !e.IsVoid);
-
-    //            // Apply filters
-    //            if (request.Input.FromDate is not null && request.Input.ToDate is not null)
-    //            {
-    //                jobTicketsQuery = jobTicketsQuery.Where(e => e.JODate >= request.Input.FromDate && e.JODate < request.Input.ToDate);
-    //            }
-
-    //            if (!string.IsNullOrEmpty(request.Input.CustomerCode))
-    //            {
-    //                jobTicketsQuery = jobTicketsQuery.Where(e => e.CustomerCode == request.Input.CustomerCode);
-    //            }
-
-    //            if (!string.IsNullOrEmpty(request.Input.SiteCode))
-    //            {
-    //                jobTicketsQuery = jobTicketsQuery.Where(e => e.SiteCode == request.Input.SiteCode);
-    //            }
-
-    //            //if (!string.IsNullOrEmpty(request.Input.Type))
-    //            //{
-    //            //    jobTicketsQuery = jobTicketsQuery.Where(e => e.JobType == request.Input.Type);
-    //            //}
-
-    //            //if (!string.IsNullOrEmpty(request.Input.Disciplines))
-    //            //{
-    //            //    jobTicketsQuery = jobTicketsQuery.Where(e => e.JODeptCode == request.Input.Disciplines);
-    //            //}
-
-    //            // Query for detailed records
-    //            var detailedReportsQuery = jobTicketsQuery.Select(e => new RecentTicketsDto
-    //            {
-    //                TicketNumber = e.TicketNumber,
-    //                WorkStartDate = e.WorkStartDate,
-    //                SiteCode = e.SiteCode,
-    //                CustomerCode = e.CustomerCode,
-    //                JODate = e.JODate,
-    //                JOStatus = e.JOStatus,
-    //                IsActive = e.IsActive,
-    //                IsClosed = e.IsClosed,
-    //                IsWorkInProgress = e.IsWorkInProgress,
-    //                IsTransit = e.IsTransit,
-    //                IsForeClosed = e.IsForeClosed,
-    //                IsOpen = e.IsOpen,
-    //               // IsOnHold = e.IsOnHold,
-    //            });
-
-    //            // Apply search filter
-    //            if (!string.IsNullOrEmpty(request.Input.Query))
-    //            {
-    //                var search = request.Input.Query.ToLower();
-    //                detailedReportsQuery = detailedReportsQuery.Where(e =>
-    //                    e.TicketNumber.ToLower().Contains(search) ||
-    //                    e.CustomerCode.ToLower().Contains(search) ||
-    //                    e.SiteCode.ToLower().Contains(search));
-    //            }
-
-    //            // Get paginated list
-    //            var paginatedReports = await detailedReportsQuery
-    //                .OrderBy(request.Input.OrderBy)
-    //                .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
-
-    //            // Query for aggregated data
-    //            var aggregatedData = await jobTicketsQuery.GroupBy(e => e.JODate.Date)
-    //                .Select(g => new AggregatedReportDto
-    //                {
-    //                    Date = g.Key,
-    //                    Opening = g.Count(e => e.IsOpen),
-    //                   // Received = g.Count(e => e.IsReceived),
-    //                    WIP = g.Count(e => e.IsWorkInProgress),
-    //                    InTransit = g.Count(e => e.IsTransit),
-    //                   // Hold = g.Count(e => e.IsOnHold),
-    //                    ForeClosed = g.Count(e => e.IsForeClosed),
-    //                    Closed = g.Count(e => e.IsClosed),
-    //                    IsActive = g.Count(e => e.IsActive)
-    //                }).ToListAsync(cancellationToken);
-
-    //            return (paginatedReports, aggregatedData);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            // Log exception (optional)
-    //            return (null, null);
-    //        }
-    //    }
+    #endregion
 
 
 
-    //}
+    #region GetProjectWiseSummaryJobTicketsReport
+    public class GetProjectWiseSummaryJobTicketsReport : IRequest<PaginatedList<AggregatedReportDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public InputTicketsReportPaginationFilterDto Input { get; set; }
+
+    }
+    public class GetProjectWiseSummaryJobTicketsReportHandler : IRequestHandler<GetProjectWiseSummaryJobTicketsReport, PaginatedList<AggregatedReportDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public GetProjectWiseSummaryJobTicketsReportHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+
+        public async Task<PaginatedList<AggregatedReportDto>> Handle(GetProjectWiseSummaryJobTicketsReport request, CancellationToken cancellationToken)
+        {
+            try
+            {
+
+
+                // Temporary Fixed  Update IsClosed status based on IsCompleted status
+                await _context.Database.ExecuteSqlRawAsync(
+                    @"UPDATE TblFomJobTicket 
+              SET IsClosed = 'false' 
+              WHERE IsClosed = 'true' AND IsCompleted = 'true'");
+                //Temporary Fixed Ends Here
+
+
+
+                // Adjust ToDate to include the full day
+                if (request.Input.ToDate is not null)
+                {
+                    request.Input.ToDate = request.Input.ToDate.Value.AddDays(1);
+                }
+
+                // Base query for job tickets
+                var jobTicketsQuery = _context.FomMobJobTickets.AsNoTracking()
+                    .Where(e => e.IsActive && !e.IsVoid);
+
+                // Apply filters dynamically
+                if (request.Input.FromDate is not null && request.Input.ToDate is not null)
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.JODate >= request.Input.FromDate && e.JODate < request.Input.ToDate);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.CustomerCode))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.CustomerCode == request.Input.CustomerCode);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.SiteCode))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.SiteCode == request.Input.SiteCode);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.StatusStr))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.JobMaintenanceType == request.Input.StatusStr);
+                }
+
+                // Compute Opening Jobs Before Aggregation
+                var jobCounts = await _context.FomMobJobTickets.AsNoTracking()
+                    .Where(j => j.JODate < request.Input.FromDate && !j.IsVoid)
+                    .GroupBy(j => j.SiteCode) // Group by Discipline
+                    .Select(g => new
+                    {
+                        SiteName = g.Key,
+                        TotJobs = g.Count(),
+                        Closed = g.Count(j => j.IsClosed),
+                        ForeClosed = g.Count(j => j.IsForeClosed),
+                        Completed = g.Count(j => j.IsCompleted)
+                    })
+                    .ToListAsync(cancellationToken);
+
+                // Convert to Dictionary for quick access
+                var previousClosingDict = jobCounts.ToDictionary(
+                    j => j.SiteName,
+                    j => j.TotJobs - (j.Closed + j.ForeClosed + j.Completed)
+                );
+
+
+
+                var siteDict = await _context.ProfmDefSiteMaster
+                    .ToDictionaryAsync(s => s.SiteCode, s => s.SiteName);
+
+                var groupedJobTickets = await jobTicketsQuery
+                                    .GroupBy(e => e.SiteCode)
+                                    .Select(group => new AggregatedReportDto
+                                    {
+                                        ProjectName = siteDict.ContainsKey(group.Key) ? siteDict[group.Key] : "Unknown",
+                                        Opening = previousClosingDict.ContainsKey(group.Key) ? previousClosingDict[group.Key] : 0,
+                                        Received = group.Count(),
+                                        ForeClosed = group.Count(e => e.IsForeClosed),
+                                        Closed = group.Count(e => e.IsClosed),
+                                        Completed = group.Count(e => e.IsCompleted),
+                                        Closing = (previousClosingDict.ContainsKey(group.Key) ? previousClosingDict[group.Key] : 0) +
+                                                  group.Count() - (group.Count(e => e.IsClosed) + group.Count(e => e.IsForeClosed) + group.Count(e => e.IsCompleted)),
+                                        Percentage = group.Count() > 0 ? ((double)group.Count(e => e.IsCompleted) / group.Count()) * 100 : 0
+                                    })
+                                    .ToListAsync(cancellationToken);
+
+
+                var totalJobsRecive = groupedJobTickets.Sum(x => x.Received);
+                var totalCompleted = groupedJobTickets.Sum(x => x.Completed);
+                var totalBalance = totalJobsRecive - totalCompleted;
+
+
+                var performanceStats = new
+                {
+                    OpeningJobs = groupedJobTickets.Sum(x => x.Opening),
+                    TotalReceived = groupedJobTickets.Sum(x => x.Received),
+                    TotalJobs = groupedJobTickets.Sum(x => x.TotJobs),
+                    Completed = groupedJobTickets.Sum(x => x.Completed),
+                    Balance = groupedJobTickets.Sum(x => x.Received) - groupedJobTickets.Sum(x => x.Completed),
+                    CompletedPercentage = (totalJobsRecive == 0) ? 0 : (totalCompleted * 100.0 / totalJobsRecive),
+                    BalancePercentage = (totalJobsRecive == 0) ? 0 : (totalBalance * 100.0 / totalJobsRecive),
+                    Percentage = groupedJobTickets.Sum(x => x.Completed) * 100.0 / (groupedJobTickets.Sum(x => x.TotJobs) == 0 ? 1 : groupedJobTickets.Sum(x => x.TotJobs))
+                };
+
+                // Apply Pagination
+                int pageNumber = request.Input.Page > 0 ? request.Input.Page : 1;
+                int pageSize = request.Input.PageCount > 0 ? request.Input.PageCount : 10;
+                int totalCount = groupedJobTickets.Count;
+
+                var paginatedList = new PaginatedList<AggregatedReportDto>(
+                    groupedJobTickets.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(),
+                    totalCount,
+                    pageNumber,
+                    pageSize
+                );
+
+                paginatedList.PerformanceStatistics = performanceStats;
+                return paginatedList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Handle method: {ex.Message}");
+                return null;
+            }
+        }
+
+    }
 
     #endregion
 
@@ -2612,11 +2941,11 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 //    SelectCheckBox = true // true if in contractActivities
                 //}).ToList();
 
-               var contractActivityCodes = new HashSet<string>(contractActivities
-                                        .Where(a => !string.IsNullOrWhiteSpace(a.ActCode))
-                                        .Select(a => a.ActCode.Trim().ToLower())
+                var contractActivityCodes = new HashSet<string>(contractActivities
+                                         .Where(a => !string.IsNullOrWhiteSpace(a.ActCode))
+                                         .Select(a => a.ActCode.Trim().ToLower())
 
-                                );
+                                 );
 
                 // Combine activities with the SelectCheckBox flag and include DeptCode
                 var combinedActivities = fomActivities.Select(fomActivity =>

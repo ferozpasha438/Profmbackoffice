@@ -36,18 +36,12 @@
                                  bindLabel="text"
                                  bindValue="value" [(ngModel)]="filter.custCode" [ngModelOptions]="{standalone: true}"  (change)="onCustSiteCode($event.value)" placeholder="{{'Select_Customer' |translate}}">
                       </ng-select>
-                   <!--<select class="custom-select mr-sm-2" formControlName="custCode">
-                  <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
-                  <ng-container *ngIf="CustomerCodeList">
-                    <option *ngFor="let item of CustomerCodeList" value="{{item.custCode}}">{{ isArab ? item.custCode : item.custCode  }}</option>
-                  </ng-container>
-                </select>-->
+                   
 
                     </div>
                     <div class="col-md-2 col-lg-3">
                       <label class="mr-sm-2">{{'Project' | translate}}</label>
-                      <!--<ng-select placeholder="{{'Select_Project' |translate}}">
-  </ng-select>-->
+                     
                       <ng-select [items]="SiteCodeList"
                                  bindLabel="text"
                                  bindValue="value" [(ngModel)]="filter.siteCode" [ngModelOptions]="{standalone: true}" (change)="loadData()" placeholder="{{'Select_Project' |translate}}">
@@ -56,55 +50,57 @@
 
                   </div>
                     &nbsp;
-                    <div class="row">
-                        <div class="col-md-3 col-lg-3">
-                            <div class="form-group ">
-                                <label class="mr-sm-2">
-                                    {{'From' | translate}}
-                                </label>
-                                <div class="input-group ">
-                                  <input class="form-control" [(ngModel)]="fromDateIp"
-                                         [ngModelOptions]="{standalone: true}" [matDatepicker]="picker1"
-                                         data-date-format='YYYY-MM-DD'>
-                                  <div class="input-group-prepend datapickericon">
-                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker1></mat-datepicker>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-lg-3">
-                            <div class="form-group ">
-                                <label class="mr-sm-2">
-                                    {{'To' | translate}}
-                                </label>
-                                <div class="input-group ">
-                                  <input class="form-control" [(ngModel)]="toDateIp"
-                                         [ngModelOptions]="{standalone: true}" [matDatepicker]="picker2"
-                                         data-date-format='YYYY-MM-DD'>
-                                  <div class="input-group-prepend datapickericon">
-                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker2></mat-datepicker>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-lg-3 mt-2">
-                            <input type="submit" style="margin-top: 17px;"
-                                class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
-                                (click)="loadData()" value="{{'Generate Report' | translate}}" />
-                        </div>
-                        <div  class="col-md-1 col-lg-1 mt-2">
-                            <input type="submit" style="margin-top: 17px;"
-                                class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
-                                (click)="exportToExcel()" value="{{'Export' | translate}}" />
-                        </div>
-                        <div class="col-md-1 col-lg-1 mt-2">
-                            <input type="submit" style="margin-top: 17px;"
-                                class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
-                                (click)="resetFilter()" value="{{'Reset' | translate}}" />
-                        </div>
+                  <div class="row">
+                    <div class="col-md-3 col-lg-3">
+      <div class="form-group ">
+          <label class="mr-sm-2">
+              {{'From' | translate}}
+          </label>
+          <div class="input-group ">
+            <input class="form-control" [(ngModel)]="fromDateIp"
+                   [ngModelOptions]="{standalone: true}" [matDatepicker]="picker1"
+                   data-date-format='YYYY-MM-DD'>
+            <div class="input-group-prepend datapickericon">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </div>
+          </div>
+      </div>
+  </div>
+                    <div class="col-md-3 col-lg-3">
+      <div class="form-group ">
+          <label class="mr-sm-2">
+              {{'To' | translate}}
+          </label>
+          <div class="input-group ">
+            <input class="form-control" [(ngModel)]="toDateIp"
+                   [ngModelOptions]="{standalone: true}" [matDatepicker]="picker2"
+                   data-date-format='YYYY-MM-DD'>
+            <div class="input-group-prepend datapickericon">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </div>
+          </div>
+      </div>
+  </div>
+                    <div class="col-md-3 col-lg-3 mt-2">
+      <input type="submit" style="margin-top: 17px;"
+          class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+          (click)="loadData()" value="{{'Generate Report' | translate}}" />
+  </div>
+                    
+
+                    <div class="col-md-1 col-lg-1 mt-2">
+                      <input type="submit" style="margin-top: 17px;"
+                             class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                             (click)="exportToExcel()" value="{{'Export' | translate}}" />
                     </div>
+                    <div class="col-md-1 col-lg-1 mt-2">
+                      <input type="submit" style="margin-top: 17px;"
+                             class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+                             (click)="resetFilter()" value="{{'Reset' | translate}}" />
+                    </div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -145,9 +141,7 @@
                                     <th style="color:black">
                                       Status
                                     </th>
-                                    <!--<th style="color:black;border-radius: 0px 15px 15px 0px;">
-        Action
-      </th>-->
+                                   
                                   </tr>
                                   <ng-container *ngFor="let row of data; let i=index;">
                                     <tr>
@@ -173,42 +167,20 @@
                                       <td>
                                         {{row.statusStr}}
                                       </td>
-                                      <!--<td style="border-radius: 0px 15px 15px 0px;">
-        &nbsp;
-        <a class="tableicons" matTooltip="Ticket Details"
-           (click)="ticketdetail(row.ticketNumber)"><i class="icon-list"> </i></a>
-        &nbsp;-->
-                                      <!--<a class="tableicons" matTooltip="Ticket Details"
-           (click)="editTicket(row.ticketNumber)"><i class="icon-list"> </i></a>
-        &nbsp;-->
-                                      <!--</td>-->
+                                     
                                     </tr>
                                   </ng-container>
                                 </table>
                                 <mat-paginator [length]="totalItemsCount" [pageSize]="pageService.pageCount"
                                                [pageSizeOptions]="pageService.selectItemsPerPage" (page)="onPageSwitch($event)">
                                 </mat-paginator>
-                  <!--<mat-paginator [length]="totalItemsCount"
-                 [pageSize]="pageService.pageCount"
-                 [pageSizeOptions]="pageService.selectItemsPerPage"
-                 (page)="onPageSwitch($event)">
-  </mat-paginator>-->
+                 
                               </div>
                             </ng-container>
                           </div>
                         </div>
-                        <!--<div class="row">
-                          <div class="col-md-4 col-lg-4"></div>
-                          <div class="col-md-4 col-lg-4"></div>
-                          <div class="col-md-4 col-lg-4">
-                            <div class="btn-group  container text-left mt-2">
-                              <button class="btn btn-primary" id="leftBtn" (click)="clickPaginationButton('leftBtn')"><i class="fas fa-arrow-left"></i>Left</button>-->
-                              <!--<button class="btn btn-primary" id="upBtn" (click)="clickPaginationButton('upBtn')"><i class="fas fa-arrow-up"></i></button>
-                              <button class="btn btn-primary" id="downBtn" (click)="clickPaginationButton('downBtn')"><i class="fas fa-arrow-down"></i></button>-->
-                              <!--<button class="btn btn-primary" id="rightBtn" (click)="clickPaginationButton('rightBtn')"><i class="fas fa-arrow-right"></i>Right</button>
-                            </div>
-                          </div>
-                        </div>-->
+                        
+                             
                       </div>
                     </div>
                 </div>

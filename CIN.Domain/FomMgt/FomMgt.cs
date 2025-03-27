@@ -215,11 +215,21 @@ namespace CIN.Domain.FomMgt
     public class TblErpFomUserClientLoginMapping
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int Id { get; set; }
 
-        [Key]
         [StringLength(20)]
         public string UserClientLoginCode { get; set; }
+
+        [StringLength(20)]
+        public string CustName { get; set; }
+
+        [StringLength(20)]
+        public string CustCode { get; set; }
+
+        [StringLength(20)]
+        public string SiteCode { get; set; }
+
         [StringLength(256)]
         public string RegEmail { get; set; }
         [StringLength(256)]

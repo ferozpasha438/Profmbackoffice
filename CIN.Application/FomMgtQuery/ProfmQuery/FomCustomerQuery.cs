@@ -169,6 +169,7 @@ namespace CIN.Application.FomMgtQuery
                     customer.CustUDF1 = obj.CustUDF1;
                     customer.CustUDF2 = obj.CustUDF2;
                     customer.CustUDF3 = obj.CustUDF3;
+                    customer.ImageUrl = obj.ImageUrl;
                     customer.VATNumber = obj.VATNumber;
                     customer.SalesTermsCode = obj.SalesTermsCode;
                     customer.CustAddress1 = obj.CustAddress1;
@@ -495,7 +496,436 @@ namespace CIN.Application.FomMgtQuery
 
     #endregion
 
+    //#region Create_And_Update_Multi_Login
 
+    //public class CreateUpdateMultiLoginCustomer : IRequest<int>
+    //{
+    //    public UserIdentityDto User { get; set; }
+    //    public TblErpFomUserClientLoginMappingDto FomUserClientLoginMapping { get; set; }
+    //}
+
+    //public class CreateUpdateMultiLoginCustomerHandler : IRequestHandler<CreateUpdateMultiLoginCustomer, int>
+    //{
+    //    private readonly CINDBOneContext _context;
+    //    private readonly IMapper _mapper;
+
+    //    public CreateUpdateMultiLoginCustomerHandler(CINDBOneContext context, IMapper mapper)
+    //    {
+    //        _context = context;
+    //        _mapper = mapper;
+    //    }
+
+    //    public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
+    //    {
+
+
+    //            try
+    //            {
+    //                Log.Info("----Info Create Update Multi Login Customer method start----");
+
+    //            var obj = request.FomUserClientLoginMapping;
+
+    //            TblErpFomUserClientLoginMapping loginMapping = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.UserClientLoginCode) ?? new();
+
+
+
+
+    //            if (obj.Id > 0)
+    //            {
+    //                loginMapping.CustCode = obj.CustCode;
+    //                loginMapping.CustName = obj.CustName;
+    //                loginMapping.RegEmail = obj.RegEmail;
+    //                loginMapping.RegMobile = obj.RegMobile;
+    //                loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
+    //                loginMapping.LoginType = "client";
+    //                loginMapping.LastLoginDate = null;
+    //                loginMapping.IsActive = obj.IsActive;
+    //                loginMapping.CreatedOn = DateTime.Now;
+    //                _context.ErpFomUserClientLoginMapping.Update(loginMapping);
+    //            }
+    //            else
+    //            {
+    //                loginMapping.UserClientLoginCode = obj.UserClientLoginCode;
+    //                loginMapping.CustCode = obj.CustCode;
+    //                loginMapping.CustName = obj.CustName;
+    //                loginMapping.RegEmail = obj.RegEmail;
+    //                loginMapping.RegMobile = obj.RegMobile;
+    //                loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
+    //                loginMapping.LoginType = "client";
+    //                loginMapping.LastLoginDate = null;
+    //                loginMapping.IsActive = obj.IsActive;
+    //                loginMapping.CreatedOn = DateTime.Now;
+    //                await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
+    //            }
+
+    //            await _context.SaveChangesAsync();
+
+
+
+    //                Log.Info("----Info Create Update Fom Customer Master method Exit----");
+    //                return loginMapping.Id;
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //               // await transaction.RollbackAsync();
+    //                Log.Error("Error in Create Update Fom Customer Master method");
+    //                Log.Error("Error occured time : " + DateTime.UtcNow);
+    //                Log.Error("Error message : " + ex.Message);
+    //                Log.Error("Error StackTrace : " + ex.StackTrace);
+    //                return 0;
+    //            }
+
+
+    //    }
+    //}
+
+
+
+    //#endregion
+
+
+    //#region Create_And_Update_Multi_Login
+
+    //public class CreateUpdateMultiLoginCustomer : IRequest<int>
+    //{
+    //    public UserIdentityDto User { get; set; }
+    //    public TblErpFomUserClientLoginMappingDto FomUserClientLoginMapping { get; set; }
+    //}
+
+    //public class CreateUpdateMultiLoginCustomerHandler : IRequestHandler<CreateUpdateMultiLoginCustomer, int>
+    //{
+    //    private readonly CINDBOneContext _context;
+    //    private readonly IMapper _mapper;
+
+    //    public CreateUpdateMultiLoginCustomerHandler(CINDBOneContext context, IMapper mapper)
+    //    {
+    //        _context = context;
+    //        _mapper = mapper;
+    //    }
+
+    //    public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
+    //    {
+    //        try
+    //        {
+    //            Log.Info("----Info Create Update Multi Login Customer method start----");
+
+    //            var obj = request.FomUserClientLoginMapping;
+
+    //            if (obj == null || string.IsNullOrEmpty(obj.CustCode))
+    //            {
+    //                Log.Error("Invalid request data");
+    //                return 0;
+    //            }
+
+    //            TblErpFomUserClientLoginMapping loginMapping = await _context
+    //                .ErpFomUserClientLoginMapping
+    //                .FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.UserClientLoginCode);
+
+    //            if (loginMapping != null) // ✅ Update existing record
+    //            {
+    //                loginMapping.CustCode = obj.CustCode;
+    //                loginMapping.CustName = obj.CustName;
+    //                loginMapping.RegEmail = obj.RegEmail;
+    //                loginMapping.RegMobile = obj.RegMobile;
+
+    //                // ✅ Update password only if provided (avoid overwriting with null/empty)
+    //                if (!string.IsNullOrEmpty(obj.Password))
+    //                {
+    //                    loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
+    //                }
+
+    //                loginMapping.LoginType = "client";
+    //                loginMapping.LastLoginDate = null;
+    //                loginMapping.IsActive = obj.IsActive;
+    //                loginMapping.CreatedOn = DateTime.UtcNow;
+
+    //                _context.ErpFomUserClientLoginMapping.Update(loginMapping);
+    //            }
+    //            else // ✅ Create new record
+    //            {
+    //                loginMapping = new TblErpFomUserClientLoginMapping
+    //                {
+    //                    UserClientLoginCode = obj.UserClientLoginCode,
+    //                    CustCode = obj.CustCode,
+    //                    CustName = obj.CustName,
+    //                    RegEmail = obj.RegEmail,
+    //                    RegMobile = obj.RegMobile,
+    //                    Password = SecurePasswordHasher.EncodePassword(obj.Password),
+    //                    LoginType = "client",
+    //                    LastLoginDate = null,
+    //                    IsActive = obj.IsActive,
+    //                    CreatedOn = DateTime.UtcNow
+    //                };
+
+    //                await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
+    //            }
+
+    //            await _context.SaveChangesAsync();
+
+    //            Log.Info("----Info Create Update Fom Customer Master method Exit----");
+    //            return loginMapping.Id;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Log.Error("Error in Create Update Fom Customer Master method");
+    //            Log.Error("Error occurred time : " + DateTime.UtcNow);
+    //            Log.Error("Error message : " + ex.Message);
+    //            Log.Error("Error StackTrace : " + ex.StackTrace);
+    //            return 0;
+    //        }
+    //    }
+    //}
+
+    //#endregion
+
+
+    #region Create_And_Update_Multi_Login
+    public class CreateUpdateMultiLoginCustomer : IRequest<int>
+    {
+        public UserIdentityDto User { get; set; }
+        public List<TblErpFomUserClientLoginMappingDto> FomUserClientLoginMappingList { get; set; }
+    }
+    public class CreateUpdateMultiLoginCustomerHandler : IRequestHandler<CreateUpdateMultiLoginCustomer, int>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public CreateUpdateMultiLoginCustomerHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        //public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
+        //{
+        //    try
+        //    {
+        //        Log.Info("----Info Create Update Multi Login Customer method start----");
+
+        //        if (request.FomUserClientLoginMappingList == null || !request.FomUserClientLoginMappingList.Any())
+        //        {
+        //            Log.Error("Invalid request data");
+        //            return 0;
+        //        }
+
+        //        foreach (var obj in request.FomUserClientLoginMappingList)
+        //        {
+        //            if (string.IsNullOrEmpty(obj.CustCode))
+        //            {
+        //                Log.Error("Invalid request data");
+        //                continue;
+        //            }
+
+        //            var loginMapping = await _context.ErpFomUserClientLoginMapping
+        //                .FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.UserClientLoginCode);
+
+        //            if (loginMapping != null) // ✅ Update existing record
+        //            {
+        //                loginMapping.CustCode = obj.CustCode;
+        //                loginMapping.CustName = obj.CustName;
+        //                loginMapping.RegEmail = obj.RegEmail;
+        //                loginMapping.RegMobile = obj.RegMobile;
+
+        //                if (!string.IsNullOrEmpty(obj.Password))
+        //                {
+        //                    loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
+        //                }
+
+        //                loginMapping.LoginType = "client";
+        //                loginMapping.IsActive = obj.IsActive;
+        //                loginMapping.CreatedOn = DateTime.UtcNow;
+
+        //                _context.ErpFomUserClientLoginMapping.Update(loginMapping);
+        //            }
+        //            else // ✅ Create new record
+        //            {
+        //                loginMapping = new TblErpFomUserClientLoginMapping
+        //                {
+        //                    UserClientLoginCode = obj.UserClientLoginCode,
+        //                    CustCode = obj.CustCode,
+        //                    CustName = obj.CustName,
+        //                    RegEmail = obj.RegEmail,
+        //                    RegMobile = obj.RegMobile,
+        //                    Password = SecurePasswordHasher.EncodePassword(obj.Password),
+        //                    LoginType = "client",
+        //                    IsActive = obj.IsActive,
+        //                    CreatedOn = DateTime.UtcNow
+        //                };
+
+        //                await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
+        //            }
+        //        }
+
+        //        await _context.SaveChangesAsync();
+
+        //        Log.Info("----Info Create Update Fom Customer Master method Exit----");
+        //        return 1; // ✅ Return success
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error("Error in Create Update Fom Customer Master method");
+        //        Log.Error("Error occurred time : " + DateTime.UtcNow);
+        //        Log.Error("Error message : " + ex.Message);
+        //        Log.Error("Error StackTrace : " + ex.StackTrace);
+        //        return 0;
+        //    }
+        //}
+
+        public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                Log.Info("----Info Create Update Multi Login Customer method start----");
+
+                if (request.FomUserClientLoginMappingList == null || !request.FomUserClientLoginMappingList.Any())
+                {
+                    Log.Error("Invalid request data");
+                    return 0;
+                }
+
+                using (var transaction = await _context.Database.BeginTransactionAsync(cancellationToken))
+                {
+                    foreach (var obj in request.FomUserClientLoginMappingList)
+                    {
+                        if (string.IsNullOrEmpty(obj.CustCode))
+                        {
+                            Log.Error("Invalid request data");
+                            continue;
+                        }
+
+                        var loginMapping = await _context.ErpFomUserClientLoginMapping
+                            .FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.UserClientLoginCode && e.CustName==obj.CustName);
+
+                        if (loginMapping != null) // ✅ Update existing record
+                        {
+                            loginMapping.CustCode = obj.CustCode;
+                            loginMapping.CustName = obj.CustName;
+                            loginMapping.RegEmail = obj.RegEmail;
+                            loginMapping.RegMobile = obj.RegMobile;
+
+                            if (!string.IsNullOrEmpty(obj.Password))
+                            {
+                                loginMapping.Password =obj.Password;
+                            }
+
+                            loginMapping.LoginType = "client";
+                            loginMapping.IsActive = obj.IsActive;
+                            loginMapping.CreatedOn = DateTime.UtcNow;
+
+                            _context.ErpFomUserClientLoginMapping.Update(loginMapping);
+                        }
+                        else // ✅ Create new record
+                        {
+                            loginMapping = new TblErpFomUserClientLoginMapping
+                            {
+                                UserClientLoginCode = obj.UserClientLoginCode,
+                                CustCode = obj.CustCode,
+                                CustName = obj.CustName,
+                                RegEmail = obj.RegEmail,
+                                RegMobile = obj.RegMobile,
+                                Password = obj.Password,
+                                LoginType = "client",
+                                IsActive = obj.IsActive,
+                                CreatedOn = DateTime.UtcNow
+                            };
+
+                            await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
+                        }
+                    }
+
+                    // ✅ Save all records at once
+                    await _context.SaveChangesAsync();
+
+                    // ✅ Commit transaction only after saving all records
+                    await transaction.CommitAsync();
+
+                    Log.Info("----Info Create Update Fom Customer Master method Exit----");
+                    return 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in Create Update Fom Customer Master method");
+                Log.Error("Error occurred time : " + DateTime.UtcNow);
+                Log.Error("Error message : " + ex.Message);
+                Log.Error("Error StackTrace : " + ex.StackTrace);
+                return 0;
+            }
+        }
+
+    }
+  #endregion
+
+
+    #region DeleteMultiLoginCustomer
+    public class DeleteMultiLoginCustomer : IRequest<bool>
+    {
+        public int Id { get; set; }
+    }
+
+    public class DeleteMultiLoginCustomerHandler : IRequestHandler<DeleteMultiLoginCustomer, bool>
+    {
+        private readonly CINDBOneContext _context;
+
+        public DeleteMultiLoginCustomerHandler(CINDBOneContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<bool> Handle(DeleteMultiLoginCustomer request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var entity = await _context.ErpFomUserClientLoginMapping
+                    .FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
+
+                if (entity != null)
+                {
+                    _context.ErpFomUserClientLoginMapping.Remove(entity);
+                    await _context.SaveChangesAsync(cancellationToken);
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error deleting customer login with ID: {request.Id}");
+                Log.Error(ex.Message);
+                return false;
+            }
+        }
+    }
+    #endregion
+
+    #region GetCustomerByCustomerCode
+    public class GetClientsByCustomerCode : IRequest<List<TblErpFomUserClientLoginMappingDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public string CustomerCode { get; set; }
+    }
+
+    public class GetClientsByCustomerCodeHandler : IRequestHandler<GetClientsByCustomerCode, List<TblErpFomUserClientLoginMappingDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public GetClientsByCustomerCodeHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<List<TblErpFomUserClientLoginMappingDto>> Handle(GetClientsByCustomerCode request, CancellationToken cancellationToken)
+        {
+            TblErpFomUserClientLoginMappingDto obj = new();
+            var Clients = await _context.ErpFomUserClientLoginMapping.AsNoTracking().Where(e => e.CustCode == request.CustomerCode).ProjectTo<TblErpFomUserClientLoginMappingDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+
+            return Clients;
+
+        }
+    }
+
+    #endregion
 
     #region UploadCustomerFiles       
 
@@ -548,6 +978,15 @@ namespace CIN.Application.FomMgtQuery
                     if (res)
                     {
                         customer.CustUDF3 = obj.WebRoot + fileName;
+                    }
+                }
+
+                if (request.Input.Image4IForm != null && request.Input.Image4IForm.Length > 0)
+                {
+                    var (res, fileName) = FileUploads.FileUploadWithIform(customer.CustCode, request.WebRoot, request.Input.Image4IForm);
+                    if (res)
+                    {
+                        customer.ImageUrl = obj.WebRoot + fileName;
                     }
                 }
                 _context.OprCustomers.Update(customer);

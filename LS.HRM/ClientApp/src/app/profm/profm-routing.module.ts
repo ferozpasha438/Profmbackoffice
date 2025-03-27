@@ -39,7 +39,9 @@ import { GetcustomersreportComponent } from './Customersreport/getcustomersrepor
 import { GetreportComponent } from './JobTicket/getjobticket/getreport.component';
 //import { JobticketreportsComponent } from './JobTicketReports/jobticketreports.component';
 import { GetticketsummaryreportComponent } from './GetTicketSummaryReport/getticketsummaryreport.component';
-
+import { GetdeptwisesummaryreportComponent } from './GetDepartmentWiseReport/getdeptwisesummaryreport.component';
+import { GetprojectwisesummaryreportComponent } from './GetProjectWiseReport/getprojectwisesummaryreport.component';
+import { CustomeranalyticsComponent } from './customeranalytics/customeranalytics.component';
 
 const routes: Routes = [
   { path: 'getdisciplines', component: GetdisciplineslistComponent },
@@ -84,6 +86,9 @@ const routes: Routes = [
   { path: 'jobticketsreport', component: GetreportComponent },
   //{ path: 'jobticketsreport2', component: JobticketreportsComponent },
   { path: 'jobticketsummaryreport', component: GetticketsummaryreportComponent },
+  { path: 'jobticketdeptwisereport', component: GetdeptwisesummaryreportComponent },
+  { path: 'jobticketprojectwisereport', component: GetprojectwisesummaryreportComponent },
+  { path: 'getcustomeranalitics', component: CustomeranalyticsComponent },
 ];
 
 @NgModule({

@@ -112,7 +112,10 @@ namespace CIN.Domain.OpeartionsMgt
         public string CustUDF2 { get; set; }
         [StringLength(200)]
         public string CustUDF3 { get; set; }
-     // public bool CustIsActive { get; set; }
+
+        [StringLength(200)]
+        public string ImageUrl { get; set; }
+        // public bool CustIsActive { get; set; }
         public bool CustAllowCrsale { get; set; }
         public bool CustAlloCrOverride { get; set; }
         public bool CustOnHold { get; set; }
