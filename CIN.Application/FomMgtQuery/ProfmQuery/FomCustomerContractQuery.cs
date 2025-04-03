@@ -1956,6 +1956,183 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
     #endregion
 
+
+    #region GetCustomerAnalytics
+
+    public class GetCustomerAnalytics : IRequest<PaginatedList<AggregatedReportDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public InputTicketsPaginationFilterDto Input { get; set; }
+        public bool IsInScope { get; set; }
+
+    }
+    public class GetCustomerAnalyticsHandler : IRequestHandler<GetCustomerAnalytics, PaginatedList<AggregatedReportDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+
+        public GetCustomerAnalyticsHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<PaginatedList<AggregatedReportDto>> Handle(GetCustomerAnalytics request, CancellationToken cancellationToken)
+        {
+            try
+            {
+
+                //  // Temporary Fixed  Update IsClosed status based on IsCompleted status
+                //  await _context.Database.ExecuteSqlRawAsync(
+                //      @"UPDATE TblFomJobTicket 
+                //SET IsClosed = 'false' 
+                //WHERE IsClosed = 'true' AND IsCompleted = 'true'");
+                //  //Temporary Fixed Ends Here
+
+
+
+
+                // Base query for job tickets
+                var jobTicketsQuery = _context.FomMobJobTickets.AsNoTracking()
+                    .Where(e => e.IsActive && !e.IsVoid && e.IsInScope == request.IsInScope);
+
+                if (!string.IsNullOrEmpty(request.Input.CustomerCode))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.CustomerCode == request.Input.CustomerCode);
+                }
+
+                if (!string.IsNullOrEmpty(request.Input.StatusStr))
+                {
+                    jobTicketsQuery = jobTicketsQuery.Where(e => e.JobMaintenanceType == request.Input.StatusStr);
+                }
+
+                // Apply filters dynamically
+                if (request.Input.FromDate is not null)
+                {
+                    // Adjust ToDate to include the full day
+                    request.Input.FromDate = request.Input.FromDate.Value.AddDays(1);
+
+                    //var openingTickets = jobTicketsQuery.Where(e => EF.Functions.DateFromParts(e.JODate.Year, e.JODate.Month, e.JODate.Day) <= request.Input.FromDate);
+                    //var receivedTickets = jobTicketsQuery.Where(e => EF.Functions.DateFromParts(e.JODate.Year, e.JODate.Month, e.JODate.Day) > request.Input.FromDate );
+
+                }
+
+
+                // Compute Opening Jobs Before Aggregation
+                var jobCounts = _context.FomMobJobTickets.AsNoTracking()
+                    .Where(j => j.JODate < request.Input.FromDate && !j.IsVoid && j.IsInScope == request.IsInScope)
+                    .GroupBy(j => j.CustomerCode) // Single row result
+                    .Select(g => new
+                    {
+                        Key = g.Key,
+                        TotJobs = g.Count(),
+                        Closed = g.Count(j => j.IsClosed),
+                        ForeClosed = g.Count(j => j.IsForeClosed),
+                        Completed = g.Count(j => j.IsCompleted)
+                    });
+                    //.FirstOrDefaultAsync(cancellationToken);
+
+
+                // Order before processing
+                var sortedJobTickets = await jobTicketsQuery                     
+                    .OrderBy(j => j.JODate)
+                    .ToListAsync(cancellationToken);
+
+                List<AggregatedReportDto> aggregatedDataList = new();
+
+                foreach (var group in sortedJobTickets.GroupBy(e => e.CustomerCode))
+                {
+                    var custWiseCount = await jobCounts.FirstOrDefaultAsync(e => e.Key == group.Key);
+                    int openingJobs = jobCounts != null && custWiseCount is not null ? custWiseCount.TotJobs - (custWiseCount.Closed + custWiseCount.ForeClosed + custWiseCount.Completed) : 0;
+                    int received = group
+                        .Where(j => new DateTime(j.JODate.Year, j.JODate.Month, j.JODate.Day) > request.Input.FromDate)
+                        .Count(); // Jobs received that day
+                    int totalJobs = openingJobs + received;
+                    int closedJobs = group.Count(e => e.IsClosed);
+                    var aggregatedData = new AggregatedReportDto
+                    {
+                        CustCode = group.Key,
+                        Opening = openingJobs,
+                        Received = received,
+                        TotJobs = totalJobs,
+
+                        ForeClosed = group.Count(e => e.IsForeClosed),
+                        Closed = closedJobs,
+                        Completed = group.Count(e => e.IsCompleted),
+                        //Closing = totalJobs - (group.Count(e => e.IsClosed) + group.Count(e => e.IsForeClosed) + group.Count(e => e.IsCompleted)),
+                        //Percentage = group.Count(e => e.IsCompleted) * 100.0 / (totalJobs == 0 ? 1 : totalJobs) // Compute %Per
+                    };
+                    aggregatedData.Balance = aggregatedData.TotJobs - aggregatedData.Completed;
+                    aggregatedDataList.Add(aggregatedData);
+
+                    // Update previousClosing for the next iteration
+                    openingJobs = aggregatedData.Closing;
+                }
+
+                // Main method
+                var chartDataList = new List<ChartDataDto>();
+                var totalJobsRecive = aggregatedDataList.Sum(x => x.Received);
+                var totalCompleted = aggregatedDataList.Sum(x => x.Completed);// + aggregatedDataList.Sum(x => x.Closed);
+                //var totalBalance = totalJobsRecive - totalCompleted;
+                var totalJobTickets = aggregatedDataList.Sum(x => x.TotJobs);
+
+                var performanceStats = new
+                {
+                    OpeningJobs = aggregatedDataList.Sum(x => x.Opening),
+                    TotalReceived = aggregatedDataList.Sum(x => x.Received),
+                    TotalJobs = totalJobTickets,
+
+                    //Completed = totalCompleted,//aggregatedDataList.Sum(x => x.Completed),
+                    //Balance = totalJobTickets - totalCompleted, //aggregatedDataList.Sum(x => x.Received) - aggregatedDataList.Sum(x => x.Completed),
+                    //CompletedPercentage = (totalJobsRecive == 0) ? 0 : (totalCompleted * 100.0 / totalJobsRecive),
+                    //BalancePercentage = (totalJobsRecive == 0) ? 0 : (totalBalance * 100.0 / totalJobsRecive),
+                    //Percentage = aggregatedDataList.Sum(x => x.Completed) * 100.0 / (aggregatedDataList.Sum(x => x.TotJobs) == 0 ? 1 : aggregatedDataList.Sum(x => x.TotJobs))
+                };
+
+
+                // Apply Pagination
+                int pageNumber = request.Input.Page > 0 ? request.Input.Page : 1;
+                int pageSize = request.Input.PageCount > 0 ? request.Input.PageCount : 10;
+                int totalCount = aggregatedDataList.Count;
+
+                var paginatedList = new PaginatedList<AggregatedReportDto>(
+                    aggregatedDataList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(),
+                    totalCount,
+                    pageNumber,
+                    pageSize
+                );
+
+                // Add chart data to the response (if applicable)
+                paginatedList.ChartData = chartDataList;
+
+                paginatedList.PerformanceStatistics = performanceStats;
+
+                return paginatedList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Handle method: {ex.Message}");
+                throw;
+            }
+        }
+
+
+
+        // Method to get Status text based on MetadataJoStatusEnum
+        private string GetStatusText(int status)
+        {
+            if (Enum.IsDefined(typeof(MetadataJoStatusEnum), status))
+            {
+                return ((MetadataJoStatusEnum)status).ToString(); // Converts the enum value to its name
+            }
+            return "Unknown"; // Default text for undefined status
+        }
+    }
+
+
+    #endregion
+
+
     // Method to get Status text based on the MetadataJoStatusEnum
 
 

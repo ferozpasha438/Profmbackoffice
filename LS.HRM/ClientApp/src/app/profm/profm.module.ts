@@ -97,6 +97,7 @@ import { GetprojectwisesummaryreportComponent } from './GetProjectWiseReport/get
 import { AddupdatemultiloginComponent } from './Customer/Sharedpages/addupdatemultilogin.component';
 import { MaplogintositeComponent } from './CustomerSite/Sharedpages/maplogintosite.component';
 import { CustomeranalyticsComponent } from './customeranalytics/customeranalytics.component';
+import { CustomeranalyticsoutscopeComponent } from './customeranalytics/customeranalyticsoutscope.component';
 
 
 
@@ -183,6 +184,7 @@ import { CustomeranalyticsComponent } from './customeranalytics/customeranalytic
     GetdeptwisesummaryreportComponent,
     GetprojectwisesummaryreportComponent,
     CustomeranalyticsComponent,
+    CustomeranalyticsoutscopeComponent,
     AddupdatemultiloginComponent,
     MaplogintositeComponent
   ],

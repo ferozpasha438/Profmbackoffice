@@ -35,7 +35,7 @@ namespace LS.API.FOM.Helper
 
             services.AddDbContext<CINDBOneContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DMCConnection"),
+                    configuration.GetConnectionString("CINDBOneConnection"),
                     b => b.MigrationsAssembly(typeof(CINDBOneContext).Assembly.FullName)));
 
             services.AddDbContext<DMCContext>(options =>

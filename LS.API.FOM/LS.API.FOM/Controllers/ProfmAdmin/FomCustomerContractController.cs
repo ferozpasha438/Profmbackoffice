@@ -182,6 +182,13 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             return Ok(res);
         }
 
+        [HttpPost("getCustomerAnalyticsInScope")]
+        public async Task<IActionResult> GetCustomerAnalytics([FromQuery]string outscope, [FromBody] InputTicketsPaginationFilterDto input)
+        {
+            var res = await Mediator.Send(new GetCustomerAnalytics() { Input = input, IsInScope = outscope.HasValue() ? false : true, User = UserInfo() });
+            return Ok(res);
+        }
+
 
         [HttpPost("getSummaryJobTicketsReport")]
         public async Task<IActionResult> GetSummaryJobTicketsReport([FromBody] InputTicketsReportPaginationFilterDto input)

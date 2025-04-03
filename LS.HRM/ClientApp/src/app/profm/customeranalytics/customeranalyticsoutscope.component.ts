@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthorizeService } from 'src/app/api-authorization/AuthorizeService';
 import { ApiService } from 'src/app/services/api.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -18,7 +18,6 @@ import {
   ApexPlotOptions,
   ApexStroke
 } from "ng-apexcharts";
-import { CustomSelectListItem } from '../../models/MenuItemListDto';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -30,19 +29,18 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-customeranalytics',
-  templateUrl: './customeranalytics.component.html',
+  selector: 'app-customeranalyticsoutscope',
+  templateUrl: './customeranalyticsoutscope.component.html',
   styleUrls: [
 
   ]
 })
-export class CustomeranalyticsComponent extends ParentFomMgtComponent implements OnInit {
+export class CustomeranalyticsoutscopeComponent extends ParentFomMgtComponent implements OnInit, OnChanges {
   @ViewChild("chart") chart!: ChartComponent;
+  @Input() form!: FormGroup;
+  @Input() noOfClicks: number = 0;
   public chartOptions: Partial<ChartOptions>;
-  CustomerCodeList: Array<any> = [];
 
-  noOfClicks: number = 0;
-  form!: FormGroup;
   searchValue: string = '';
   displayedColumns: string[] = ['opening', 'received', 'total', 'closed', 'pending', 'completion', 'isActive',];
   displayedColumns1: string[] = ['opening', 'received', 'total', 'closed', 'pending', 'completion', 'isActive',];
@@ -66,36 +64,27 @@ export class CustomeranalyticsComponent extends ParentFomMgtComponent implements
 
 
   }
-
-
-  customerList = [
-    { id: 1, name: 'CUST00001' },
-    { id: 2, name: 'CUST00002' },
-    { id: 3, name: 'CUST00003' },
-    { id: 4, name: 'CUST00004' }
-  ];
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initialLoading();
+  }
 
   ngOnInit(): void {
     // this.initialLoading();
-    this.form = this.fb.group({
-      customerCode: '',
-      statusStr: '',
-      fromDate: ['', Validators.required],
-    });
-
-    this.apiService.getFomUrlPagination('FomCustomer', this.utilService.getQueryString(0, 1000, '', '')).subscribe(res => {
-      if (res)
-        this.CustomerCodeList = res['items'];
-    });
+    //this.form = this.fb.group({
+    //  customerCode: '',
+    //  statusStr: '',
+    //  fromDate: '',
+    //});
   }
 
   initialLoading() {
-    // this.loadList(0, this.pageService.pageCount, "", this.sortingOrder);
+    if (this.form.valid)
+      this.loadList(0, this.pageService.pageCount, "", this.sortingOrder);
   }
 
   private loadList(page: number, pageCount: number, query: string | null, orderBy: string | null) {
     this.isLoading = true;
-    this.apiService.post('fomCustomerContract/getCustomerAnalyticsInScope', this.form.value).subscribe({
+    this.apiService.post('fomCustomerContract/getCustomerAnalyticsInScope?outscope=outscope', this.form.value).subscribe({
       next: (result: any) => {
         this.totalItemsCount = 0;
         this.data = new MatTableDataSource(result.items);
@@ -131,7 +120,7 @@ export class CustomeranalyticsComponent extends ParentFomMgtComponent implements
         { name: "Closed", data: this.getChatPopData('completed'), color: '#000fff' },
         { name: "Pending", data: this.getChatPopData('balance'), color: '#ff000f' },
       ],
-      chart: { type: "bar", height: '550' },
+      chart: { type: "bar", height: 550 },
       plotOptions: {
         bar: { horizontal: true, dataLabels: { position: "top" } }
       },
@@ -156,15 +145,4 @@ export class CustomeranalyticsComponent extends ParentFomMgtComponent implements
     this.initialLoading();
   }
 
-
-  applyFilter(searchValue: any) {
-    if (this.form.valid) {
-      //this.form.valueChanges;
-      this.noOfClicks++;
-      this.form.controls['fromDate'].setValue(this.utilService.selectedDate(this.form.controls['fromDate'].value));
-      this.loadList(0, this.pageService.pageCount, this.searchValue, this.sortingOrder);
-    }
-    else
-      this.notifyService.showError('select a Date')
-  }
 }

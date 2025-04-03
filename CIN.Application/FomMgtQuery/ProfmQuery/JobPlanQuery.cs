@@ -58,10 +58,18 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
             foreach (var item in filteredlist.Items)
             {
-                var astMaster = await _context.FomAssetMasters.FirstOrDefaultAsync(e => e.AssetCode == item.AssetCode);
-                var custMaster = await _context.OprCustomers.FirstOrDefaultAsync(e => e.CustCode == item.Customer);
-                item.Location = astMaster?.Location ?? string.Empty;
-                item.Customer = custMaster?.CustName ?? string.Empty;
+                try
+                {
+                    var astMaster = await _context.FomAssetMasters.FirstOrDefaultAsync(e => e.AssetCode == item.AssetCode);
+                    var custMaster = await _context.OprCustomers.FirstOrDefaultAsync(e => e.CustCode == item.Customer);
+                    item.Location = astMaster?.Location ?? string.Empty;
+                    item.Customer = custMaster?.CustName ?? string.Empty;
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
             }
             return filteredlist;
 
