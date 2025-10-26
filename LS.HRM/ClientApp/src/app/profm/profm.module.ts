@@ -98,6 +98,9 @@ import { AddupdatemultiloginComponent } from './Customer/Sharedpages/addupdatemu
 import { MaplogintositeComponent } from './CustomerSite/Sharedpages/maplogintosite.component';
 import { CustomeranalyticsComponent } from './customeranalytics/customeranalytics.component';
 import { CustomeranalyticsoutscopeComponent } from './customeranalytics/customeranalyticsoutscope.component';
+import { TicketstatusactionComponent } from './Tickets/shared/ticketstatusaction/ticketstatusaction.component';
+import { ToolsMatLabInfoComponent } from './AssetMaintenance/jobplan/tools-mat-lab-info/tools-mat-lab-info.component';
+import { ScheduleDetailComponent } from './GetScheduling/scheduledetail/scheduledetail.component';
 
 
 
@@ -186,7 +189,10 @@ import { CustomeranalyticsoutscopeComponent } from './customeranalytics/customer
     CustomeranalyticsComponent,
     CustomeranalyticsoutscopeComponent,
     AddupdatemultiloginComponent,
-    MaplogintositeComponent
+    MaplogintositeComponent,
+    TicketstatusactionComponent,
+    ScheduleDetailComponent,
+    ToolsMatLabInfoComponent
   ],
 
   imports: [

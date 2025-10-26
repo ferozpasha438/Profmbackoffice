@@ -5,6 +5,7 @@ import { NotificationService } from '../../../../services/notification.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AuthorizeService } from '../../../../api-authorization/AuthorizeService';
 import { AssetclosinginfoComponent } from '../assetclosinginfo/assetclosinginfo.component';
+import { ToolsMatLabInfoComponent } from '../tools-mat-lab-info/tools-mat-lab-info.component';
 
 @Component({
   selector: 'app-assetjoborderchilditems',
@@ -50,7 +51,12 @@ export class AssetjoborderchilditemsComponent implements OnInit {
         this.loadChildData();
       }
     });
+  }
 
+  toolsMatLabInfo(citem: any) {
+    const data = { lab: citem.laborHours, mat: citem.materials, tl: citem.tools, assetCode: citem.assetCode, childCode: citem.childCode };
+    let dialogRef = this.utilService.openCrudDialog(this.dialog, ToolsMatLabInfoComponent, '60%');
+    (dialogRef.componentInstance as any).data = data;    
   }
 
   closeModel() {

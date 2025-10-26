@@ -437,7 +437,7 @@ namespace CIN.Application.FomMgtDtos
         [StringLength(20)]
         public string CustCode { get; set; }
 
-        [StringLength(20)]
+        [StringLength(450)]
         public string SiteCode { get; set; }
 
         [StringLength(256)]
@@ -908,6 +908,7 @@ namespace CIN.Application.FomMgtDtos
         public string File1 { get; set; }
         public string File2 { get; set; }
         public string File3 { get; set; }
+        public bool IsUserApproved { get; set; }
 
 
     }
@@ -1384,6 +1385,7 @@ namespace CIN.Application.FomMgtDtos
         public DateTime? ApproveDate { get; set; }
         public string ApprovedBy { get; set; }
         public bool? IsSchGenerated { get; set; }
+        public int? MoreItemsIndex { get; set; }
         public List<ErpFomScheduleWeekdaysDto> TableRows { get; set; }
     }
 
@@ -1392,8 +1394,7 @@ namespace CIN.Application.FomMgtDtos
     {
         public int SchId { get; set; }
         public DateTime contStartDate { get; set; }
-        public DateTime contEndDate { get; set; }
-      
+        public DateTime contEndDate { get; set; }        
 
     }
 
@@ -1401,8 +1402,11 @@ namespace CIN.Application.FomMgtDtos
     {
         public string WeekDay { get; set; }
         public string Time { get; set; }
+        public string Shifts { get; set; }
+        public string UiShifts { get; set; }
         public string Remarks { get; set; }  
         public bool IsActive { get; set; }
+        public int? Index { get; set; }
     }
 
 
@@ -1490,6 +1494,8 @@ namespace CIN.Application.FomMgtDtos
         public string Remarks { get; set; }
         public TimeSpan Time { get; set; }
         public bool IsReschedule { get; set; }
+        public int? PptStatus { get; set; }
+        public string Shifts { get; set; }
         public bool IsActive { get; set; }
     }
     public class RsErpFomScheduleDetailsDto
@@ -1512,6 +1518,9 @@ namespace CIN.Application.FomMgtDtos
         public string SiteName { get; set; }
         public string SiteNameAr { get; set; }
         public string ContractCode { get; set; }
+        public int? PptStatus { get; set; }
+        public string StatusStr { get; set; }
+        public string Shifts { get; set; }
     }
 
     public class RQDashBoardFiltersDto
@@ -1776,6 +1785,26 @@ namespace CIN.Application.FomMgtDtos
         public bool IsPoRecieved { get; set; } = false;
         public bool IsHold { get; set; } = false;
     }
+    public class CommonChangeJobStatusForTicketDto
+    {
+        public short Status { get; set; }        
+        public string Remarks { get; set; }
+        public string UserName { get; set; }
+    }
+    public class ChangeJobStatusForTicketDto : CommonChangeJobStatusForTicketDto
+    {
+        public string TicketNumber { get; set; }
+    }
+    public class ChangePptMgmtStatusForPptDto : CommonChangeJobStatusForTicketDto
+    {
+        [Required]
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
+        public string ImageName { get; set; }
+        public string Image1Name { get; set; }
+        public string Image1Url { get; set; }
+    }
+
     public class ViewTicketDto : TblFomJobTicketDataDto
     {
         public string Requester { get; set; }        //customerName
@@ -1791,8 +1820,12 @@ namespace CIN.Application.FomMgtDtos
         public string Image1WithFullPath { get; set; }
         public string Image2WithFullPath { get; set; }
         public string Image3WithFullPath { get; set; }
-
-
+    }
+    public class ViewScheduleDetailtDto : ViewTicketDto
+    {
+        public string Image1Name { get; set; }
+        public string Image2Name { get; set; }
+        public string Remarks { get; set; }
 
     }
 

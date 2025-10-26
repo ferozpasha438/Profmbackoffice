@@ -25,16 +25,27 @@
         </div>
       </div>
       <validation-message [control]="form.controls.jobPlanDate"></validation-message>
-    </div>   
+    </div>
   </div>
   <div class="row">
     <div class="col-md-6 col-lg-6">
       <div class="form-group">
         <label for="assetCode">{{'jobPlan_assetCode' | translate}}</label>
-        <select class="custom-select mr-sm-2 input-mandatory" formControlName="assetCode" (change)="loadAssetFor_AstCode($event)">
+        <!--<input type="text"
+               class="form-control"
+               formControlName="assetCode"
+               (input)="loadAssetFor_AstCode($event)"
+               list="assetSelectList" />
+        <datalist id="assetSelectList">
+          <option *ngFor="let item of assetSelectList" [value]="item.value">{{isArab ? item.textAr : item.text}}</option>
+        </datalist>-->
+        <!--<select class="custom-select mr-sm-2 input-mandatory" formControlName="assetCode" (change)="loadAssetFor_AstCode($event)">
           <option value="">{{ 'jobPlan_assetCode' | translate}}</option>
           <option *ngFor="let item of assetSelectList" value="{{item.value}}">{{isArab ? item.textAr : item.text}}</option>
-        </select>
+        </select>-->
+        <ng-select [items]="assetSelectList" bindLabel="text" bindValue="value" [multiple]="false" [searchable]="true"
+                   formControlName="assetCode" placeholder="jobPlan_assetCode" (change)="loadAssetFor_AstCode($event)" (clear)="resetAssetInfo()">
+        </ng-select>
         <validation-message [control]="form.controls.assetCode"></validation-message>
       </div>
     </div>
@@ -188,10 +199,10 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-6">
-     
+
     </div>
     <div class="col-md-6 col-lg-6">
-     
+
     </div>
 
   </div>
@@ -204,10 +215,10 @@
              value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
 
       <input type="button" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
-             value="{{'Generate_P_P_M_Schedule' | translate}}" (click)="jobPlanSchedule()" *ngIf="canGenChildSchSelected"/> &nbsp;
+             value="{{'Generate_P_P_M_Schedule' | translate}}" (click)="jobPlanSchedule()" *ngIf="canGenChildSchSelected" /> &nbsp;
 
       <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
-             value="{{'Save_Schedules' | translate}}" [disabled]="isSaving"/>
+             value="{{'Save_Schedules' | translate}}" [disabled]="isSaving" />
     </div>
   </div>
 </form>

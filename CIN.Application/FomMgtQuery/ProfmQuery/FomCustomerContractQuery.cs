@@ -18,6 +18,9 @@ using CIN.Domain.SalesSetup;
 using CIN.Domain.FomMgt;
 using CIN.Application.ProfmQuery;
 using Microsoft.Data.SqlClient;
+using System.Net.NetworkInformation;
+using CIN.Domain.OpeartionsMgt;
+using Newtonsoft.Json.Linq;
 
 namespace CIN.Application.FomMgtQuery.ProfmQuery
 {
@@ -41,10 +44,20 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         }
         public async Task<PaginatedList<TblErpFomCustomerContractDto>> Handle(GetFomCustomerContractList request, CancellationToken cancellationToken)
         {
-
+            var userAuthority = await _context.LoginAuthority.FirstOrDefaultAsync(e => e.LoginID == request.User.UserId);
             var list = await _context.FomCustomerContracts.AsNoTracking().ProjectTo<TblErpFomCustomerContractDto>(_mapper.ConfigurationProvider)
                        .OrderByDescending(x => x.Id)
                        .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+
+            Parallel.ForEach(list.Items, item =>
+            {
+                item.IsUserApproved = userAuthority?.VoidAfterApproval ?? false;
+            });
+
+            foreach (var item in list.Items)
+            {
+                item.CustSiteCode = (await _context.OprSites.FirstOrDefaultAsync(e => e.SiteCode == item.CustSiteCode))?.SiteName;
+            }
             return list;
         }
 
@@ -294,9 +307,22 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                         _context.FomScheduleWeekdays.RemoveRange(details);
                         await _context.SaveChangesAsync();
                     }
+
                     List<TblErpFomScheduleWeekdays> resData = new();
+
+                    obj.TableRows = obj.TableRows.Where(e => e.IsActive == true).ToList();
+
+                    obj.TableRows = obj.MoreItemsIndex switch
+                    {
+                        2 => obj.TableRows.Where(e => e.Index == 0 || e.Index == 1).ToList(),
+                        3 => obj.TableRows.Where(e => e.Index != 3).ToList(),
+                        4 => obj.TableRows,
+                        _ => obj.TableRows.Where(e => e.Index == 0).ToList()
+                    };
+
                     foreach (var item in obj.TableRows)
                     {
+
                         TblErpFomScheduleWeekdays scheduleWeekdaysDetails = new();
                         scheduleWeekdaysDetails.SchId = scheduleSummarytHeader.Id;
                         scheduleWeekdaysDetails.ContractId = scheduleSummarytHeader.ContractId;
@@ -308,6 +334,9 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                         scheduleWeekdaysDetails.AllDayLong = false;
                         scheduleWeekdaysDetails.IsActive = item.IsActive;
                         scheduleWeekdaysDetails.Remarks = item.Remarks;
+                        scheduleWeekdaysDetails.Shifts = item.Shifts;
+                        scheduleWeekdaysDetails.BoxIndex = item.Index;
+
                         resData.Add(scheduleWeekdaysDetails);
 
                     }
@@ -452,9 +481,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                      IsApproved = x.IsApproved,
                                      DeptCode = x.DeptCode,
                                      ApproveDate = x.ApproveDate,
-                                     IsSchGenerated = x.IsSchGenerated
-
-
+                                     IsSchGenerated = x.IsSchGenerated,
                                  })
                                  .FirstOrDefaultAsync();
             }
@@ -462,12 +489,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             {
                 result.TableRows = await _context.FomScheduleWeekdays.AsNoTracking()
                                        .Where(e => e.SchId == result.Id && e.ContractId == contractDetails.Id)
+                                       .OrderBy(e => e.BoxIndex)
                                        .Select(e => new ErpFomScheduleWeekdaysDto
                                        {
                                            WeekDay = e.WeekDay,
                                            Time = e.Time.ToString(@"hh\:mm"),
                                            Remarks = e.Remarks,
-                                           IsActive = e.IsActive
+                                           UiShifts = e.Shifts,
+                                           Shifts = e.Shifts,
+                                           Index = e.BoxIndex != null ? e.BoxIndex : 0,
+                                           IsActive = e.IsActive,
 
                                        })
                                        .ToListAsync();
@@ -542,6 +573,14 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                         DoW.Add(DayOfWeek.Saturday);
                         DoW.Add(DayOfWeek.Sunday);
 
+                        scheduleDetailItems = request.Input.MoreItemsIndex switch
+                        {
+                            2 => scheduleDetailItems.Where(e => e.Index == 0 || e.Index == 1).ToList(),
+                            3 => scheduleDetailItems.Where(e => e.Index != 3).ToList(),
+                            4 => scheduleDetailItems,
+                            _ => scheduleDetailItems.Where(e => e.Index == 0).ToList()
+                        };
+
                         foreach (var obj in scheduleDetailItems)
                         {
                             if (obj.WeekDay == "Monday")
@@ -576,6 +615,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                             Dow2 = DoW[iDow];
                             var DateDOW = Enumerable.Range(start.DayOfYear, end.Subtract(start).Days + 1).Select(n => start.AddDays(n - start.DayOfYear)).Where(d => d.DayOfWeek == Dow2);
 
+
                             foreach (var Dt in DateDOW)
                             {
                                 TblErpFomScheduleDetailsObj = new();
@@ -588,6 +628,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                 TblErpFomScheduleDetailsObj.SchId = schId;
                                 TblErpFomScheduleDetailsObj.SerType = "";
                                 TblErpFomScheduleDetailsObj.ServiceItem = "";
+                                TblErpFomScheduleDetailsObj.Shifts = obj.Shifts;
                                 TblErpFomScheduleDetailsObj.Remarks = obj.Remarks;
                                 TblErpFomScheduleDetailsObj.Time = TimeSpan.Parse("0:" + obj.Time.Split(':')[0] + ":" + obj.Time.Split(':')[1] + ":0.0000000");
                                 TblErpFomScheduleDetailsObj.TranNumber = contractId.ToString(); //Contract Id;
@@ -595,8 +636,6 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
 
                             }
-
-
                         }
                         //Start saving the schedule     TblErpFomScheduleSummary
 
@@ -1338,11 +1377,22 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         public async Task<PaginatedList<RsErpFomScheduleDetailsDto>> Handle(GetAllSchedulingList request, CancellationToken cancellationToken)
         {
             PaginatedList<RsErpFomScheduleDetailsDto> list;
+
+            IQueryable<TblErpFomScheduleDetails> fomScheduleDetails = _context.FomScheduleDetails;
+            if (request.Input.Approval.HasValue())
+            {
+                int statusId = int.Parse(request.Input.Approval);
+                if (statusId == 0)
+                    fomScheduleDetails = fomScheduleDetails.Where(e => e.PptStatus == null);
+                else
+                    fomScheduleDetails = fomScheduleDetails.Where(e => e.PptStatus == statusId);
+            }
+
             if (request.Input.ContractId > 0 && !string.IsNullOrEmpty(request.Input.StartDate) && !string.IsNullOrEmpty(request.Input.EndDate))
             {
                 var startDate = new DateTime(Convert.ToInt32(request.Input.StartDate.Split('-')[0]), Convert.ToInt32(request.Input.StartDate.Split('-')[1]), Convert.ToInt32(request.Input.StartDate.Split('-')[2]));
                 var endDate = new DateTime(Convert.ToInt32(request.Input.EndDate.Split('-')[0]), Convert.ToInt32(request.Input.EndDate.Split('-')[1]), Convert.ToInt32(request.Input.EndDate.Split('-')[2]));
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate >= startDate && e.SchDate <= endDate) && e.ContractId == request.Input.ContractId)
@@ -1360,7 +1410,9 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
@@ -1368,7 +1420,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
             {
                 var startDate = new DateTime(Convert.ToInt32(request.Input.StartDate.Split('-')[0]), Convert.ToInt32(request.Input.StartDate.Split('-')[1]), Convert.ToInt32(request.Input.StartDate.Split('-')[2]));
                 var endDate = new DateTime(Convert.ToInt32(request.Input.EndDate.Split('-')[0]), Convert.ToInt32(request.Input.EndDate.Split('-')[1]), Convert.ToInt32(request.Input.EndDate.Split('-')[2]));
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate >= startDate && e.SchDate <= endDate))
@@ -1386,14 +1438,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             else if (request.Input.ContractId > 0 && !string.IsNullOrEmpty(request.Input.StartDate) && string.IsNullOrEmpty(request.Input.EndDate))
             {
                 var startDate = new DateTime(Convert.ToInt32(request.Input.StartDate.Split('-')[0]), Convert.ToInt32(request.Input.StartDate.Split('-')[1]), Convert.ToInt32(request.Input.StartDate.Split('-')[2]));
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate >= startDate) && e.ContractId == request.Input.ContractId)
@@ -1411,14 +1465,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             else if (request.Input.ContractId > 0 && string.IsNullOrEmpty(request.Input.StartDate) && !string.IsNullOrEmpty(request.Input.EndDate))
             {
                 var endDate = new DateTime(Convert.ToInt32(request.Input.EndDate.Split('-')[0]), Convert.ToInt32(request.Input.EndDate.Split('-')[1]), Convert.ToInt32(request.Input.EndDate.Split('-')[2]));
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate <= endDate) && e.ContractId == request.Input.ContractId)
@@ -1436,13 +1492,15 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             else if (request.Input.ContractId > 0 && string.IsNullOrEmpty(request.Input.StartDate) && string.IsNullOrEmpty(request.Input.EndDate))
             {
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => e.ContractId == request.Input.ContractId)
@@ -1460,14 +1518,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             else if (request.Input.ContractId == 0 && !string.IsNullOrEmpty(request.Input.StartDate) && string.IsNullOrEmpty(request.Input.EndDate))
             {
                 var startDate = new DateTime(Convert.ToInt32(request.Input.StartDate.Split('-')[0]), Convert.ToInt32(request.Input.StartDate.Split('-')[1]), Convert.ToInt32(request.Input.StartDate.Split('-')[2]));
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate >= startDate))
@@ -1485,14 +1545,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             else if (request.Input.ContractId == 0 && string.IsNullOrEmpty(request.Input.StartDate) && !string.IsNullOrEmpty(request.Input.EndDate))
             {
                 var endDate = new DateTime(Convert.ToInt32(request.Input.EndDate.Split('-')[0]), Convert.ToInt32(request.Input.EndDate.Split('-')[1]), Convert.ToInt32(request.Input.EndDate.Split('-')[2]));
-                list = await _context.FomScheduleDetails
+                list = await fomScheduleDetails
                                                    .AsNoTracking()
                                                    .ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                                    .Where(e => (e.SchDate <= endDate))
@@ -1510,14 +1572,16 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                                        SerType = x.SerType,
                                                        ServiceItem = x.ServiceItem,
                                                        Time = x.Time,
-                                                       TranNumber = x.TranNumber
+                                                       TranNumber = x.TranNumber,
+                                                       Shifts = x.Shifts,
+                                                       PptStatus = x.PptStatus
                                                    })
                                                    .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
 
             }
             else
             {
-                list = await _context.FomScheduleDetails.AsNoTracking().ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
+                list = await fomScheduleDetails.AsNoTracking().ProjectTo<TblErpFomScheduleDetailsDto>(_mapper.ConfigurationProvider)
                                 .Select(x => new RsErpFomScheduleDetailsDto
                                 {
                                     ContractId = x.ContractId,
@@ -1532,14 +1596,30 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                     SerType = x.SerType,
                                     ServiceItem = x.ServiceItem,
                                     Time = x.Time,
-                                    TranNumber = x.TranNumber
+                                    TranNumber = x.TranNumber,
+                                    Shifts = x.Shifts,
+                                    PptStatus = x.PptStatus
                                 })
                                .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             }
             if (list.TotalCount > 0)
             {
+                StringBuilder taskRemarks = new();
                 foreach (var item in list.Items)
                 {
+                    if (item.Remarks.HasValue())
+                    {
+                        taskRemarks.Append($"{item.Shifts}-Shift : ");
+                        item.Remarks.Split("✓").Select((ritem, index) => new { index, ritem }).ToList().ForEach(item =>
+                        {
+                            taskRemarks.Append($" {(item.index + 1)}) {item.ritem}.  ");
+                        });
+                        item.Remarks = taskRemarks.ToString();
+                        taskRemarks.Clear();
+                    }
+
+                    item.PptStatus = item.PptStatus ?? 0;
+                    item.StatusStr = ((PPTMgmtStatusEnum)item.PptStatus).ToString();
                     var contractDetails = await _context.FomCustomerContracts.AsNoTracking()
                                                 .ProjectTo<TblErpFomCustomerContractDto>(_mapper.ConfigurationProvider)
                                                 .SingleOrDefaultAsync(e => e.Id == item.ContractId);
@@ -2030,11 +2110,11 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                         ForeClosed = g.Count(j => j.IsForeClosed),
                         Completed = g.Count(j => j.IsCompleted)
                     });
-                    //.FirstOrDefaultAsync(cancellationToken);
+                //.FirstOrDefaultAsync(cancellationToken);
 
 
                 // Order before processing
-                var sortedJobTickets = await jobTicketsQuery                     
+                var sortedJobTickets = await jobTicketsQuery
                     .OrderBy(j => j.JODate)
                     .ToListAsync(cancellationToken);
 
@@ -2073,7 +2153,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 var chartDataList = new List<ChartDataDto>();
                 var totalJobsRecive = aggregatedDataList.Sum(x => x.Received);
                 var totalCompleted = aggregatedDataList.Sum(x => x.Completed);// + aggregatedDataList.Sum(x => x.Closed);
-                //var totalBalance = totalJobsRecive - totalCompleted;
+                                                                              //var totalBalance = totalJobsRecive - totalCompleted;
                 var totalJobTickets = aggregatedDataList.Sum(x => x.TotJobs);
 
                 var performanceStats = new
@@ -2939,7 +3019,61 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
     }
     #endregion
 
+    #region ViewTicket
 
+    public class ViewScheduleById : IRequest<ViewScheduleDetailtDto>
+    {
+        public UserIdentityDto User { get; set; }
+        public int Id { get; set; }
+
+    }
+
+    public class ViewScheduleByIdHandler : IRequestHandler<ViewScheduleById, ViewScheduleDetailtDto>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public ViewScheduleByIdHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<ViewScheduleDetailtDto> Handle(ViewScheduleById request, CancellationToken cancellationToken)
+        {
+
+            var obj = new ViewScheduleDetailtDto();
+            var data = await _context.FomScheduleDetails.FirstOrDefaultAsync(e => e.Id == request.Id);
+            if (obj is not null)
+            {
+                var contract = await _context.FomCustomerContracts.FirstOrDefaultAsync(e => e.Id == data.ContractId);
+                obj.Image1WithFullPath = data.ImageUrl;
+                obj.Image2WithFullPath = data.Image1Url;
+                obj.Image1Name = data.ImageName;
+                obj.Image2Name = data.Image1Name;
+                obj.Remarks = (data.PptStatus ?? 0) == 1 ? data.CompletedReasonCode : (data.PptStatus == 0 ? string.Empty : data.VoidReasonCode);
+                obj.JODescription = data.Remarks;
+                obj.JODate = data.SchDate;
+                obj.Requester = _context.OprCustomers.FirstOrDefault(e => e.CustCode == contract.CustCode).CustName ?? "NA";
+                obj.RequesterAr = _context.OprCustomers.FirstOrDefault(e => e.CustCode == contract.CustCode).CustArbName ?? "NA";
+                obj.ProjectName = _context.OprSites.FirstOrDefault(e => e.SiteCode == contract.CustSiteCode).SiteName ?? "NA";
+                obj.ProjectNameAr = _context.OprSites.FirstOrDefault(e => e.SiteCode == contract.CustSiteCode).SiteArbName ?? "NA";
+                obj.RequestStatus = ((PPTMgmtStatusEnum)(data.PptStatus ?? 0)).ToString();
+                obj.MobileNumber = _context.OprCustomers.FirstOrDefault(e => e.CustCode == contract.CustCode).CustMobile1 ?? "NA";
+
+                var service = await _context.ErpFomDepartments.FirstOrDefaultAsync(e => e.DeptCode == data.Department);
+                obj.ServiceType = service is null ? "-NA-" : service.NameEng;
+                obj.ServiceTypeAr = service is null ? "-NA-" : service.NameArabic;
+
+                var serviceCategory = service is null ? null : await _context.DepartmentTypes.FirstOrDefaultAsync(e => e.ServiceTypeCode == service.DeptServType);
+                obj.ServiceCategory = serviceCategory is null ? "-NA-" : serviceCategory.ServiceTypeName;
+                obj.ServiceCategoryAr = serviceCategory is null ? "-NA-" : serviceCategory.ServiceTypeName_Ar;
+            }
+
+            return obj;
+
+        }
+    }
+    #endregion
 
     #region UploadCustomerContractFiles       
 
@@ -3014,6 +3148,122 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
 
     #endregion
+
+
+    #region ChangeJobStatusForTicket
+    public class ChangeJobStatusForTicket : IRequest<AppCtrollerDto>
+    {
+        public UserIdentityDto User { get; set; }
+        public ChangeJobStatusForTicketDto Input { get; set; }
+    }
+
+    public class ChangeJobStatusForTicketHandler : IRequestHandler<ChangeJobStatusForTicket, AppCtrollerDto>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public ChangeJobStatusForTicketHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<AppCtrollerDto> Handle(ChangeJobStatusForTicket request, CancellationToken cancellationToken)
+        {
+            var obj = request.Input;
+            var ticket = await _context.FomMobJobTickets.FirstOrDefaultAsync(e => e.TicketNumber == obj.TicketNumber);
+            if (ticket is not null)
+            {
+                var workOrder = await _context.FomJobWorkOrders.FirstOrDefaultAsync(e => e.TicketNumber == obj.TicketNumber);
+                ticket.JOStatus = obj.Status;
+                if (ticket.JOStatus == (short)MetadataJoStatusEnum.Void)
+                {
+                    ticket.IsCompleted = false;
+                    ticket.IsClosed = false;
+                    ticket.CancelBy = obj.UserName;
+                    ticket.CancelDate = DateTime.Now;
+                    ticket.CancelReasonCode = obj.Remarks;
+                }
+                else if (ticket.JOStatus == (short)MetadataJoStatusEnum.Approved)
+                {
+                    ticket.IsApproved = true;
+                    ticket.ApprovedReasonCode = obj.Remarks;
+                }
+                else if (ticket.JOStatus == (short)MetadataJoStatusEnum.WorkInProgress)
+                {
+                    ticket.IsWorkInProgress = true;
+                }
+                else if (ticket.JOStatus == (short)MetadataJoStatusEnum.Closed)
+                {
+                    ticket.IsClosed = true;
+                    ticket.ClosedBy = obj.UserName;
+                    ticket.ClosedReasonCode = obj.Remarks;
+
+                }
+                else if (ticket.JOStatus == (short)MetadataJoStatusEnum.Completed)
+                {
+                    ticket.IsCompleted = true;
+                    ticket.CompletedReasonCode = obj.Remarks;
+                }
+                if (workOrder is not null)
+                {
+                    workOrder.JOStatus = ticket.JOStatus;
+                    _context.FomJobWorkOrders.Update(workOrder);
+                }
+                await _context.SaveChangesAsync();
+                return ApiMessageInfo.Status(1, ticket.Id);
+            }
+
+            return ApiMessageInfo.Status(0);
+        }
+    }
+    #endregion
+
+    #region ChangePptMgmtStatusForPpt
+
+    public class ChangePptMgmtStatusForPpt : IRequest<AppCtrollerDto>
+    {
+        public UserIdentityDto User { get; set; }
+        public ChangePptMgmtStatusForPptDto Input { get; set; }
+    }
+
+    public class ChangePptMgmtStatusForPptHandler : IRequestHandler<ChangePptMgmtStatusForPpt, AppCtrollerDto>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public ChangePptMgmtStatusForPptHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<AppCtrollerDto> Handle(ChangePptMgmtStatusForPpt request, CancellationToken cancellationToken)
+        {
+            var obj = request.Input;
+            var ticket = await _context.FomScheduleDetails.FirstOrDefaultAsync(e => e.Id == obj.Id);
+            if (ticket is not null)
+            {
+                ticket.PptStatus = obj.Status;
+                ticket.ImageUrl = obj.ImageUrl;
+                ticket.ImageName = obj.ImageName;
+
+                ticket.Image1Name = obj.Image1Name;
+                ticket.Image1Url = obj.Image1Url;
+
+                if (ticket.PptStatus == (short)PPTMgmtStatusEnum.Cancel)
+                    ticket.VoidReasonCode = obj.Remarks;
+                if (ticket.PptStatus == (short)PPTMgmtStatusEnum.Completed)
+                    ticket.CompletedReasonCode = obj.Remarks;
+
+                await _context.SaveChangesAsync();
+                return ApiMessageInfo.Status(1, ticket.Id);
+            }
+
+            return ApiMessageInfo.Status(2);
+        }
+    }
+
+
+
+    #endregion
+
 
 
     //#region GetActivitiesByDeptCode
@@ -3310,6 +3560,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
     // DTOs for returning the structured result
 
 
+    #region CreateChkUnChkContDeptActivity
     public class CreateChkUnChkContDeptActivity : IRequest<int>
     {
         public UserIdentityDto User { get; set; }
@@ -3379,6 +3630,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         }
     }
 
+    #endregion
 
 
 

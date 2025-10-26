@@ -111,12 +111,10 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 var obj = request.SysLoginAuthority;
 
 
-                TblErpFomSysLoginAuthority LoginAuthority = new();
-                if (obj.Id > 0)
-                    LoginAuthority = await _context.LoginAuthority.AsNoTracking().FirstOrDefaultAsync(e => e.Id == obj.Id);
+                TblErpFomSysLoginAuthority LoginAuthority = await _context.LoginAuthority.AsNoTracking().FirstOrDefaultAsync(e => e.LoginID == obj.LoginID) ?? new();
 
 
-                LoginAuthority.Id = obj.Id;
+                //LoginAuthority.Id = obj.Id;
                 LoginAuthority.LoginID = obj.LoginID;
                 LoginAuthority.RaiseTicket = obj.RaiseTicket;
                 LoginAuthority.VoidTicket = obj.VoidTicket;
@@ -127,20 +125,13 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 LoginAuthority.ModifyTicket = obj.ModifyTicket;
                 LoginAuthority.VoidAfterApproval = obj.VoidAfterApproval;
 
-
-
-
-                if (obj.Id > 0)
+                if (LoginAuthority.Id > 0)
                 {
-
-                    _context.LoginAuthority.Update(LoginAuthority);
-                    
+                    _context.LoginAuthority.Update(LoginAuthority);                    
                 }
                 else
                 {
-
-                    await _context.LoginAuthority.AddAsync(LoginAuthority);
-                    
+                    await _context.LoginAuthority.AddAsync(LoginAuthority);                    
                 }
                 await _context.SaveChangesAsync();
                 Log.Info("----Info Create Update  Fom Sys Authorities method Exit----");

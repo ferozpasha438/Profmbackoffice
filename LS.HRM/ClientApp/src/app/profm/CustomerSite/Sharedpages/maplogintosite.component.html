@@ -1,220 +1,67 @@
-
-
-<!--<button class="btn btn-primary" (click)="openModal()">Map Login to Site</button>-->
+<h3 class="modal-title">{{'Map_Login_To_Site'| translate}}</h3>
 <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
-<!-- Modal -->
-<div class="modal fade" id="mapLoginModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Map Customer Logins to Site</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <form [formGroup]="customerForm">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="form-group">
+            <label>{{'Select_Customer_Code' | translate}}</label>
+            <input type="text"
+                   class="form-control"
+                   formControlName="custCode"
+                   (input)="onCustomerSelect($event)"
+                   list="customerList" />
+            <datalist id="customerList">
+              <option *ngFor="let code of CustomerCodeList" [value]="code.value">{{code.text}}</option>
+            </datalist>
+            <validation-message [control]="customerForm.controls.custCode"></validation-message>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-12">
+          <div class="form-group">
+            <label>{{'Select_Customer_LoginCode' | translate}}</label>
+            <select class="custom-select mr-sm-2" formControlName="userClientLoginCode" (change)="onCustomerLoginCodeSelect($event)">
+              <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
+              <ng-container *ngIf="CustomerLoginList">
+                <option *ngFor="let item of CustomerLoginList" value="{{item.value}}">{{ item.text }}</option>
+              </ng-container>
+            </select>
+            <validation-message [control]="customerForm.controls.userClientLoginCode"></validation-message>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <form [formGroup]="customerForm">
-          <label>Select Customer Code</label>
-          <input type="text"
-                 class="form-control"
-                 formControlName="customerCode"
-                 (input)="onCustomerSelect($event)"
-                 list="customerList" />
-          <datalist id="customerList">
-            <option *ngFor="let code of customerCodes" [value]="code.customerCode"></option>
-          </datalist>
-        </form>
+    </form>
 
-        <table class="table mt-3">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox"
-                       (change)="selectAll($event.target.checked)" />
-              </th>
-              <th>Site Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let site of loginSites">
-              <td>
-                <input type="checkbox"
-                       [(ngModel)]="site.checked" />
-              </td>
-              <td>{{ site.siteCode }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" (click)="saveMapping()">Save</button>
-        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <th>Site Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of sitesList">
+          <td>
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+          <td>{{ (row.text + ' (' + row.value +')' )}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-
-
-<!--<div>-->
-  <!--<h3 class="modal-title">{{modalTitle | translate}}</h3>
-  <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-4">
-    <div class="row">
-      <div class="col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>{{'Site_Id' | translate}}</label>
-          <input class="form-control" type="text" placeholder="{{'Please_Enter' | translate}} {{'Site_Id' | translate}}"
-                 formControlName="siteCode" readonly>
-          <validation-message [control]="form.controls.siteCode"></validation-message>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-6">
-        <div class="form-group">
-          <label>{{'Site_Eng_Name' | translate}}</label>
-          <input class="form-control" type="text"
-                 placeholder="{{'Please_Enter' | translate}} {{'Site_Eng_Name' | translate}}" formControlName="siteName">
-          <validation-message [control]="form.controls.siteName"></validation-message>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-6">
-
-        <div class="form-group mb-4">
-          <label class="mr-sm-2" for="city">{{'Site_Arb_Name' | translate}}</label>
-          <input class="form-control" type="text"
-                 placeholder="{{'Please_Enter' | translate}} {{'Site_Arb_Name' | translate}}" formControlName="siteArbName">
-          <validation-message [control]="form.controls.siteArbName"></validation-message>
-        </div>
-
-      </div>-->
-  <!--<div class="col-md-6 col-lg-6">
-    <div class="form-group">
-      <label>{{'Customer_Code' | translate}}</label>-->
-  <!--<input class="form-control" type="text"
-  placeholder="{{'Please_Enter' | translate}} {{'Customer_Code' | translate}}" formControlName="customerCode">-->
-  <!--<auto-loader [isLoading]="isDataLoading"></auto-loader>
-  <input type="text" class="form-control" readonly={{readonly}}
-         placeholder="{{'Please_Enter' | translate}} {{'Customer_Code' | translate}}"
-         [formControl]="custCodeControl"
-         matInput
-         [matAutocomplete]="auto3">
-  <mat-autocomplete #auto3="matAutocomplete">
-    <mat-option *ngFor="let option of filteredCustCodes | async"
-                [value]="option.value">-->
-  <!--[value]="option.text + '-' + option.value"> (optionSelected)="selectedOption($event)" -->
-  <!--{{option.value}}
-    </mat-option>
-  </mat-autocomplete>-->
-  <!--<validation-message [control]="custCodeControl"></validation-message>-->
-  <!--</div>
-  </div>-->
-  <!--<div class="col-md-6 col-lg-6 col-sm-6">
-    <div class="form-group">
-      <label>{{'Customer_Code' | translate}}</label>
-      <select class="custom-select mr-sm-2" formControlName="customerCode">
-        <option value="">{{'Select' | translate}} {{'Customer_Code' | translate}} </option>
-        <ng-container *ngIf="CustomerCodeList">
-          <option *ngFor="let item of CustomerCodeList" value="{{item.custCode}}">{{ isArab ? item.custCode : item.custCode  }}</option>
-        </ng-container>
-      </select>
-
-      <validation-message [control]="form.controls.customerCode"></validation-message>
-    </div>
-  </div>
-
+<div class="row">
   <div class="col-md-12 col-lg-12">
-    <div class="form-group">
-      <label>{{'Address' | translate}}</label>
-      <input class="form-control" type="text" placeholder="{{'Please_Enter' | translate}} {{'Address' | translate}}"
-             formControlName="siteAddress">
-      <validation-message [control]="form.controls.siteAddress"></validation-message>
-    </div>
-
-  </div>-->
-  <!--<div class="col-md-6 col-lg-6">
-  <div class="form-group">
-    <label>{{'City' | translate}}</label>-->
-  <!--<input class="form-control" type="text"
-  placeholder="{{'Please_Enter' | translate}} {{'City ' | translate}}" formControlName="siteCityCode">-->
-  <!--<select class="custom-select mr-sm-2" formControlName="siteCityCode">
-        <option value="">{{'Select' | translate}} {{'City' | translate}} </option>
-        <option *ngFor="let cty of cityList" value="{{cty.value}}">{{cty.text}}</option>
-      </select>
-      <validation-message [control]="form.controls.siteCityCode"></validation-message>
-    </div>
-  </div>-->
-  <!--<div class="col-md-6 col-lg-6">
-    <div class="form-group">
-      <label>{{'City' | translate}}</label>-->
-  <!--<input class="form-control" type="text"
-   placeholder="{{'Please_Enter' | translate}} {{'City ' | translate}}" formControlName="siteCityCode">-->
-  <!--<select class="custom-select mr-sm-2" formControlName="siteCityCode">
-        <option value="">{{'Select' | translate}} {{'City' | translate}} </option>
-        <option *ngFor="let cty of cityList1" value="{{cty.value}}">{{cty.value}}-{{cty.text}}</option>
-      </select>
-    </div>
+    <button class="btn btn-primary" (click)="saveMapping()">Save</button> &nbsp;&nbsp;
+    <button class="btn btn-secondary" data-dismiss="modal" (click)="closeModel()">Cancel</button>
   </div>
-  <div class="col-md-6 col-lg-6">
-    <div class="form-group">
-      <label>{{'Geo_Location' | translate}}</label>
-      <input class="form-control" type="number" step="0.0001"
-             placeholder="{{'Please_Enter' | translate}} {{'Geo_Location' | translate}}" formControlName="siteGeoLatitude">
-      <validation-message [control]="form.controls.siteGeoLatitude"></validation-message>
-    </div>
-  </div>
-
-  <div class="col-md-6 col-lg-6">
-    <div class="form-group">
-      <label>{{'Geo_Location' | translate}}</label>
-      <input class="form-control" type="number" step="0.0001"
-             placeholder="{{'Please_Enter' | translate}} {{'Geo_Location' | translate}}"
-             formControlName="siteGeoLongitude">
-      <validation-message [control]="form.controls.siteGeoLongitude"></validation-message>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-6">
-
-    <div class="form-group ">
-      <label class="mr-sm-2">{{'Gain_Height' | translate}}</label>
-      <input class="form-control" type="number" step="0.0001"
-             placeholder="{{'Please_Enter' | translate}} {{'Gain_Height' | translate}}" formControlName="siteGeoGain">
-      <validation-message [control]="form.controls.siteGeoGain"></validation-message>
-    </div>
-
-  </div>-->
-  <!--<div class="col-md-6 col-lg-6">
-    <div class="form-group ">
-      <mat-slide-toggle color="primary" formControlName="isChildCustomer" (change)="isChildCustomerChecked($event)">
-      </mat-slide-toggle>
-      <label class="mr-sm-2"> &nbsp; &nbsp; {{'Is_Child_Customer' | translate}} </label>
-    </div>
-  </div>-->
-  <!--<div class="col-md-6 col-lg-6">
-
-    <div class="form-group ">
-      <label class="mr-sm-2" for="GST/VAT Number">{{'GST_VAT_Number' | translate}} </label>
-      <input class="form-control" id="GST" type="text"
-             placeholder="{{'Please_Enter' | translate}} {{'GST_VAT_Number' | translate}}" formControlName="vatNumber">
-    </div>
-
-  </div>-->
-  <!--</div>
-    <div class="row">
-      <div class="col-md-6 col-lg-6">
-        <div class="form-group">
-          <label for="isActive">{{'Is_Active' | translate}}</label>
-          <br />
-          <mat-slide-toggle color="primary" formControlName="isActive"></mat-slide-toggle>
-        </div>
-      </div>
-    </div>
-    <div class="row customrow">
-      <div class="col-lg-12 col-md-12 text-center">
-        <input type="button" class="btn btn-secondary" value="{{'Cancel' | translate}}" (click)="closeModel()" />
-
-        &nbsp;&nbsp;
-        <input type="submit" class="btn waves-effect waves-light   btn-primary  " value="{{'Save' | translate}}">
-
-      </div>
-    </div>
-  </form>-->
-<!--</div>-->
+</div>

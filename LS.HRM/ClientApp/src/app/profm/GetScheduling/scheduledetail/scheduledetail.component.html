@@ -3,26 +3,28 @@
   <div class="row">
     <div class="col-12 align-self-center">
       <div class="d-flex align-items-center">
-        <nav aria-label="breadcrumb">
+        <!--<nav aria-label="breadcrumb">
           <ol class="breadcrumb m-0 p-0">
             <li class="breadcrumb-item text-muted"><a routerLink="/dashboard" class="text-primary">Dashboard</a></li>
-            <li class="breadcrumb-item text-muted "><a routerLink="/dashboard/profm/getworkorders" class="text-primary">Work Order</a></li>
-            <li class="breadcrumb-item text-muted ">Work Order Details</li>
+            <li class="breadcrumb-item text-muted "><a routerLink="/dashboard/profm/tickets" class="text-primary">PPT</a></li>
+            <li class="breadcrumb-item text-muted ">PPT Details</li>
           </ol>
-        </nav>
+        </nav>-->
       </div>
+       
       <br>
       <div class="row">
         <div class="col-md-6 col-lg-6">
           <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
-            <i data-feather="file-text"></i>&nbsp;Work Order Details
+            <i data-feather="file-text"></i>&nbsp;PPM Details
           </h3>
         </div>
         <div class="col-md-6 col-lg-6 text-right">
-          <a class="tableicons" matTooltip="Print Ticket Details">
-            <i class="icon-printer">
-            </i>
-          </a>
+          <!--<a class="tableicons" matTooltip="Print Ticket Details">
+    <i class="icon-printer">
+    </i>
+  </a>-->
+          <button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
         </div>
       </div>
       <hr>
@@ -40,9 +42,8 @@
             <div class="col-md-6 col-lg-6">
               <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Requester </p>
             </div>
-            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
-              <!-- <p>{{ticketHead?.requester}} </p>-->
-              <p>{{ticketHead?.joBookedBy}} </p>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">              
+              <p>{{ticketHead?.requester}} </p>
             </div>
           </div>
           <div class="row">
@@ -71,18 +72,26 @@
           </div>
           <div class="row">
             <div class="col-md-6 col-lg-6">
-              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Ticket Number</p>
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Request time </p>
             </div>
             <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
-              <p> {{ticketHead?.ticketNumber}} </p>
+              <p>{{data?.timeFormat}}</p>
+            </div>
+          </div>         
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> PPM Status </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{ticketHead?.requestStatus}} </p>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 col-lg-6">
-              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Ticket Status </p>
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Remarks</p>
             </div>
             <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
-              <p> {{ticketHead?.requestStatus}} </p>
+              <p> {{ticketHead?.remarks}} </p>
             </div>
           </div>
         </div>
@@ -92,6 +101,14 @@
       <h3 style="color: black;">Maintainence Details</h3>
       <div class="card" style="border-radius: 10px;border: 1px solid #C7D0DE;">
         <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Contract Code </p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
+              <p> {{data?.contractCode}} </p>
+            </div>
+          </div>
           <div class="row">
             <div class="col-md-6 col-lg-6">
               <p style="color: #5F76E8;font-size: larger;font-weight: bold;"> Maintainence Type </p>
@@ -124,17 +141,17 @@
               <p>{{ticketHead?.joDate|date:'dd-MM-YYYY'}}</p>
             </div>
           </div>
-          <div class="row">
+          <!--<div class="row">
             <div class="col-md-6 col-lg-6">
               <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Problem/Request</p>
             </div>
             <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
               <p> {{ticketHead?.joSubject}} </p>
             </div>
-          </div>
+          </div>-->
           <div class="row">
             <div class="col-md-6 col-lg-6">
-              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Problem Description </p>
+              <p style="color: #5F76E8;font-size: larger; font-weight: bold;"> Description </p>
             </div>
             <div class="col-md-6 col-lg-6 text-left" style="font-size: larger; font-weight: bold;">
               <p> {{ticketHead?.joDescription}} </p>
@@ -153,8 +170,9 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div *ngIf="ticketHead?.image1WithFullPath!=''" class="col-md-4 col-lg-3">
-              <img src="{{ticketHead?.image1WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
+            <div *ngIf="image1WithFullPath" class="col-md-4 col-lg-3">
+              <label>Before Image</label> <br /><br />
+              <img src="{{image1WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
             </div>
             <!--<div class="col-md-4 col-lg-2">
               <img src="../../../../assets/images/Reportimg1.svg" alt="">
@@ -166,12 +184,10 @@
               <img src="../../../../assets/images/Reportimg3.svg" alt="">
             </div>-->
 
-            <div *ngIf="ticketHead?.image2WithFullPath!=''" class="col-md-4 col-lg-3">
-              <img src="{{ticketHead?.image2WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
-            </div>
-            <div *ngIf="ticketHead?.image3WithFullPath!=''" class="col-md-4 col-lg-3">
-              <img src="{{ticketHead?.image3WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
-            </div>
+            <div *ngIf="image2WithFullPath" class="col-md-4 col-lg-3">
+              <label>After Image</label> <br /><br />
+              <img src="{{image2WithFullPath}}" height="200" alt="" style="border-radius: 26px; gap:10px">
+            </div>           
           </div>
         </div>
       </div>

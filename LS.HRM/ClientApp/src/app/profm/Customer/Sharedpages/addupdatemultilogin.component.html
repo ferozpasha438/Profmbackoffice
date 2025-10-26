@@ -7,7 +7,7 @@
   <table>
     <thead>
       <tr>
-        <th>Login Code</th>
+        <th>User Login Name</th>
         <th>Customer Code</th>
         <th>Name</th>
         <th>Password</th>
@@ -18,7 +18,7 @@
     <tbody>
       <tr>
         <td>
-          <input [(ngModel)]="newLogin.userClientLoginCode" placeholder="Login Code"  [readonly]="isEditMode" />
+          <input [(ngModel)]="newLogin.userClientLoginCode" placeholder="Login Code"  [readonly]="isEditMode" (blur)="checkLoginCodeExists()" />
         </td>
         <td>
           <input [(ngModel)]="newLogin.custCode" placeholder="Customer Code" readonly/>
@@ -33,7 +33,7 @@
           <input type="checkbox" [(ngModel)]="newLogin.isActive" />
         </td>
         <td>
-          <button (click)="addLogin()">Add</button>          
+          <button (click)="addLogin()" [disabled]="!isEditMode && isDuplicateLoginCode">Add</button>          
           <!--<button (click)="saveLogin()">Save</button>-->
           <button (click)="cancelLogin()">Cancel</button>
         </td>
@@ -45,7 +45,7 @@
   <table>
     <thead>
       <tr>
-        <th>Login Code</th>
+        <th>User Login Name</th>
         <th>Customer Code</th>
         <th>Name</th>
         <th>Password</th>
@@ -58,7 +58,7 @@
         <td>{{ login.userClientLoginCode }}</td>
         <td>{{ login.custCode }}</td>
         <td>{{ login.custName }}</td>
-        <td>{{ login.password }}</td>
+        <td><input type="password" value="{{ login.password }}" readonly disabled /></td>
         <td>{{ login.isActive ? 'True' : 'False' }}</td>
         <td>
           <button (click)="deleteLogin(login.id)">Delete</button>

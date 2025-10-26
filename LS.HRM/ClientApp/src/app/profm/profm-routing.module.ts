@@ -59,7 +59,7 @@ const routes: Routes = [
   { path: 'getcustomersites', component: GetcustomersitesComponent },
   { path: 'getscheduleslist', component: GetscheduleslistdatesComponent },
   { path: 'tickets', component: TicketsComponent },
-  { path: 'ticketdetail', component: TicketdetailComponent },
+  { path: 'ticketdetail', component: TicketdetailComponent },  
   { path: 'getworkorders', component: WorkOrdersComponent },
   { path: 'workorderdetail', component: WorkOrderDetailComponent },
   { path: 'getserviceitems', component: GetserviceitemComponent },

@@ -118,6 +118,10 @@ export class AddupdatejobplanComponent implements OnInit {
     this.apiService.getall(`assetMaintenance/getFomAssetMasterSelectList`).subscribe(res => {
       if (res) {
         this.assetSelectList = res;
+        this.assetSelectList.map((i) => {
+          i.text = `(${i.value}) ${(!this.isArab ? i.text : i.textTwo)}`;
+          return i;
+        });
       }
     });
     this.apiService.getall(`assetMaintenance/getJobPlanFrequecies`).subscribe(res => {
@@ -126,9 +130,15 @@ export class AddupdatejobplanComponent implements OnInit {
       }
     });
   }
-
+  resetAssetInfo() {
+    this.loadAssetDetailsByAssetCode("");
+  }
   loadAssetFor_AstCode(evt: any) {
-    this.apiService.getall(`assetMaintenance/GetFomAssetMasterByAssetCode?assetCode=${evt.target.value}`).subscribe(res => {
+    const asstCode = evt.value;// evt.target.value;
+    this.loadAssetDetailsByAssetCode(asstCode);
+  }
+  loadAssetDetailsByAssetCode(asstCode: any) {
+    this.apiService.getall(`assetMaintenance/GetFomAssetMasterByAssetCode?assetCode=${asstCode}`).subscribe(res => {
       if (res) {
         this.form.patchValue(res);
         this.canGenChildSchSelected = res.hasChild;

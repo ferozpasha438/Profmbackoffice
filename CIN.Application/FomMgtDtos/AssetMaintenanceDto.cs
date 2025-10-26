@@ -81,6 +81,7 @@ namespace CIN.Application.FomMgtDtos
         public string ProjectLocation { get; set; }
         public string Status { get; set; }
         public string CustomerCode { get; set; }
+        public string JobQuantity { get; set; }
 
     }
 
@@ -159,6 +160,7 @@ namespace CIN.Application.FomMgtDtos
         public bool IsClosed { get; set; }
         public bool IsVoid { get; set; }
         public bool HasChild { get; set; }
+        public bool IsUserApproved { get; set; }
 
         public List<TblErpFomJobPlanMasterDateScheduleDto> JobPlanSchedules { get; set; }
     }
@@ -171,8 +173,8 @@ namespace CIN.Application.FomMgtDtos
         public string DeptCode { get; set; }
         [StringLength(20)]
         public string SectionCode { get; set; }
-        public DateTime ContStartDate { get; set; }
-        public DateTime ContEndDate { get; set; }
+        public DateTime? ContStartDate { get; set; }
+        public DateTime? ContEndDate { get; set; }
         public bool HasChild { get; set; }
     }
 
@@ -199,6 +201,9 @@ namespace CIN.Application.FomMgtDtos
         public DateTime Date { get; set; }
         public string Remarks { get; set; }
         public bool IsClosed { get; set; }
+        public List<TblErpFomJobPlanScheduleClosureItemDto> Materials { get; set; }
+        public List<TblErpFomJobPlanScheduleClosureItemDto> Tools { get; set; }
+        public List<TblErpFomJobPlanScheduleClosureItemDto> LaborHours { get; set; }
     }
     public class TblErpFomJobPlanMasterApprovalDto
     {
@@ -222,7 +227,7 @@ namespace CIN.Application.FomMgtDtos
     public class GetAssetjoborderchilditemsByJobDto
     {
         public string ChildCode { get; set; }
-        public List<TblErpFomJobPlanMasterDateScheduleDto> ChildItems { get; set; }
+        public List<TblErpFomJobPlanMasterDateScheduleDto> ChildItems { get; set; }        
     }
 
 

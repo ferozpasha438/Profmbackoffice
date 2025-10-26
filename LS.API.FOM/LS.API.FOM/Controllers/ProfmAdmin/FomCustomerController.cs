@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace LS.API.FOM.Controllers.ProfmAdmin
 {
-    public class FomCustomerController :BaseController
+    public class FomCustomerController : BaseController
     {
         private IConfiguration _Config;
         private readonly IWebHostEnvironment _env;
@@ -92,9 +92,17 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         //    return Ok(); // Return a general success response
         //}
 
+        [HttpGet("checkLoginCodeExists")]
+        public async Task<IActionResult> CheckLoginCodeExists([FromQuery] string loginCode, [FromQuery] int id)
+        {
+            var obj = await Mediator.Send(new CheckLoginCodeExists() { Id = id, LoginCode = loginCode, User = UserInfo() });
+            return Ok(obj);
+        }
+
+
+
         [HttpPost("CreateUpdateMultiLoginCustomer")]
         public async Task<ActionResult> CreateUpdateMultiLoginCustomer([FromBody] List<TblErpFomUserClientLoginMappingDto> dtoList)
-
         {
             var request = new CreateUpdateMultiLoginCustomer
             {
@@ -108,6 +116,17 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
                 return Ok();
             else
                 return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Failed });
+        }
+
+        [HttpPost("CreateMappingLoginCodesToSites")]
+        public async Task<ActionResult> CreateMappingLoginCodesToSites([FromBody] TblErpFomUserClientLoginMappingDto dtoList)
+
+        {
+            var result = await Mediator.Send(new CreateMappingLoginCodesToSites { Input = dtoList, User = UserInfo() });
+            if (result.Id > 0)
+                return Ok();
+            else
+                return BadRequest(new ApiMessageDto { Message = result.Message });
         }
 
 
@@ -143,7 +162,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             bool exists = System.IO.Directory.Exists(webRoot);
             if (!exists)
                 System.IO.Directory.CreateDirectory(webRoot);
-            var (res, message) = await Mediator.Send(new UploadCustomerFiles() { Input = dTO,WebRoot=webRoot, User = UserInfo() });
+            var (res, message) = await Mediator.Send(new UploadCustomerFiles() { Input = dTO, WebRoot = webRoot, User = UserInfo() });
             if (res)
                 return Ok(new ApiMessageDto { Message = ApiMessageInfo.Success });
             else
@@ -180,6 +199,20 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         public async Task<IActionResult> GetSelectCustomerList()
         {
             var obj = await Mediator.Send(new GetCustomersCustomList() { User = UserInfo() });
+            return obj is not null ? Ok(obj) : NotFound(ApiMessageNotFound());
+        }
+
+        [HttpGet("getSelectCustomerLoginList")]
+        public async Task<IActionResult> GetSelectCustomerLoginList([FromQuery] string custCode)
+        {
+            var obj = await Mediator.Send(new GetSelectCustomerLoginList() { CustCode = custCode, User = UserInfo() });
+            return obj is not null ? Ok(obj) : NotFound(ApiMessageNotFound());
+        }
+
+        [HttpGet("getSelectSitesByCustomerLoginCode")]
+        public async Task<IActionResult> GetSelectSitesByCustomerLoginCode([FromQuery] string custCode, [FromQuery] string loginCode)
+        {
+            var obj = await Mediator.Send(new GetSelectSitesByCustomerLoginCode() { CustCode = custCode, LoginCode = loginCode, User = UserInfo() });
             return obj is not null ? Ok(obj) : NotFound(ApiMessageNotFound());
         }
 

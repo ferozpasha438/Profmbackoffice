@@ -33,7 +33,7 @@ export class AssetmasterComponent extends ParentB2CFrontComponent implements OnI
   isImporting: boolean = false;
   totalItemsCount: number = 0;
   data: MatTableDataSource<any> = new MatTableDataSource();
-  displayedColumns: string[] = ['assetCode', 'nameEng', 'nameArabic', 'sectionCode', 'deptCode', 'contractCode', 'createdDate', 'isActive', 'Actions'];
+  displayedColumns: string[] = ['assetCode', 'nameEng', 'nameArabic', 'sectionCode', 'deptCode', 'location', 'contractCode', 'jobQuantity', 'createdDate', 'isActive', 'Actions'];
   isArab: boolean = false;
 
   constructor(private apiService: ApiService, private authService: AuthorizeService, private translate: TranslateService,
@@ -60,7 +60,7 @@ export class AssetmasterComponent extends ParentB2CFrontComponent implements OnI
 
   onPageSwitch(event: PageEvent) {
     this.pageService.change(event);
-    this.loadList(event.pageIndex, event.pageSize, "", this.sortingOrder);
+    this.loadList(event.pageIndex, event.pageSize, this.searchValue, this.sortingOrder);
   }
 
   private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined) {

@@ -61,7 +61,7 @@
 
                     <ng-container matColumnDef="custSiteCode">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                        {{'Contract_Site_Code' | translate}}
+                        {{'Site_Code' | translate}}
                       </th>
                       <td mat-cell *matCellDef="let row">{{ !isArab ? row.custSiteCode : row.custSiteCode }}</td>
                     </ng-container>
@@ -69,7 +69,8 @@
                       <th mat-header-cell *matHeaderCellDef mat-sort-header>
                         {{'Department_Code' | translate}}
                       </th>
-                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.contDeptCode : row.contDeptCode }}</td>
+                      <td mat-cell *matCellDef="let row"><div class="deptBreakAll"> {{ !isArab ? row.contDeptCode : row.contDeptCode }} </div></td>
+                      <!--<td mat-cell *matCellDef="let row"><span>Asphalt, Auxilliary , Carpentry, Civil works, DEP1, Electrical, Electrical Works, FDAS,HVAC,Land Scaping,Low Current,Masonry,P1,P3,P4,Painting,Plumbing,Pool Maintanance,Sanitory,testDept001,Tiling</span></td>-->
                     </ng-container>
                     <ng-container matColumnDef="contProjManager">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -99,7 +100,7 @@
                       <th mat-header-cell *matHeaderCellDef mat-sort-header>
                         {{'Created_Date' | translate}}
                       </th>
-                      <td mat-cell *matCellDef="let row">{{ !isArab ? row.createdDate : row.createdDate }}</td>
+                      <td mat-cell *matCellDef="let row">{{ row.createdDate | date : 'dd-MM-yyyy' }}</td>
                     </ng-container>
                     <ng-container matColumnDef="isActive">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -119,7 +120,7 @@
                         <!--<a class="tableicons" (click)="Approve(row.id)" matTooltip="{{'Approved_Item' | translate}}">
     <i class="fas fa-arrow-up"></i>
   </a>-->
-                        <a class="tableicons" (click)="schedule(row)" matTooltip="{{'Schedule_Item' | translate}}">
+                        <a class="tableicons" (click)="schedule(row)" *ngIf="row.isUserApproved" matTooltip="{{'Schedule_Item' | translate}}">
                           <i class="fas fa-address-card"></i>
                         </a>
                         <a class="tableicons" (click)="genSchDetails(row)" matTooltip="{{'Schedule_Details' | translate}}">

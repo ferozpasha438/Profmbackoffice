@@ -4037,7 +4037,7 @@ input[type="button"].btn-block {
 
   .custom-select:disabled {
     color: #6c757d;
-    background-color: #e9ecef;
+    background-color: #eeeeee;/*#e9ecef*/;
   }
 
   .custom-select::-ms-expand {

@@ -4,7 +4,7 @@
       <div class="d-flex align-items-center">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb m-0 p-0">
-            <li class="breadcrumb-item text-muted">Dashboard</li>
+            <li class="breadcrumb-item text-muted"><a routerLink="/dashboard" class="text-primary">Dashboard</a></li>
             <li class="breadcrumb-item text-muted ">Tickets</li>
           </ol>
         </nav>
@@ -101,14 +101,23 @@
                             <td>
                               {{row.statusStr}}
                             </td>
-                            <td style="border-radius: 0px 15px 15px 0px;">
+                            <td class="td-actions">
                               &nbsp;
                               <a class="tableicons" matTooltip="Ticket Details"
                                  (click)="ticketdetail(row.ticketNumber)"><i class="icon-list"> </i></a>
-                              &nbsp;
+                              &nbsp;  
                               <!--<a class="tableicons" matTooltip="Ticket Details"
-                                 (click)="editTicket(row.ticketNumber)"><i class="icon-list"> </i></a>
-                              &nbsp;-->
+     (click)="editTicket(row.ticketNumber)"><i class="icon-list"> </i></a>
+  &nbsp;-->
+
+                              <!--<ng-select [items]="statusSelectionListActions"
+                                         bindLabel="text"
+                                         bindValue="value" [(ngModel)]="filter.status" [ngModelOptions]="{standalone: true}" (change)="loadData()" placeholder="{{'Select_Status' |translate}}">
+                              </ng-select>-->
+                              <select class="custom-select mr-sm-2 status-selectitems" (change)="changeStatus($event,row)" [disabled]="(row.joStatus == joStatusVoid || row.joStatus == joStatusCompleted)" >
+                                <option value="0">{{ 'Set_Status' | translate}}</option>
+                                <option *ngFor="let item of statusSelectionListActionItems(row.joStatus)" value="{{item.value}}" [selected]="item.value == row.joStatus">{{item.text}}</option>
+                              </select>
                             </td>
                           </tr>
                         </ng-container>

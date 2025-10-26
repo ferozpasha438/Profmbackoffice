@@ -76,6 +76,7 @@ export class AddupdateassetmasterComponent implements OnInit {
         'sectionCode': [''],// [Validators.required, Validators.maxLength(20)]],
         "deptCode": ['', Validators.required],
         "contractCode": ['', Validators.required],
+        "jobQuantity": '',
         "description": '',
         "location": '',
         "classification": '',
@@ -253,6 +254,8 @@ export class AddupdateassetmasterComponent implements OnInit {
         this.form.controls['installDate'].setValue(this.utilService.selectedDate(this.form.controls['installDate'].value));
       if (this.form.controls['replacementDate'].value)
         this.form.controls['replacementDate'].setValue(this.utilService.selectedDate(this.form.controls['replacementDate'].value));
+
+      this.form.controls['jobQuantity'].setValue(this.form.controls['jobQuantity'].value.toString());
 
       if (this.id > 0)
         this.form.value['id'] = this.id;

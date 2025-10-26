@@ -16,40 +16,40 @@ using CIN.Domain.OpeartionsMgt;
 
 namespace CIN.Application.FomMgtQuery
 {
-#region GetCustomerSitesPagedList
- 
-        public class GetCustomerSitesPagedList : IRequest<PaginatedList<TblSndDefSiteMasterDto>>
-        {
-            public UserIdentityDto User { get; set; }
-            public PaginationFilterDto Input { get; set; }
-        }
+    #region GetCustomerSitesPagedList
 
-        public class GetCustomerSitesPagedListHandler : IRequestHandler<GetCustomerSitesPagedList, PaginatedList<TblSndDefSiteMasterDto>>
-        {
-            private readonly CINDBOneContext _context;
-            private readonly IMapper _mapper;
-            public GetCustomerSitesPagedListHandler(CINDBOneContext contextDMC, AutoMapper.IMapper mapper)
-            {
-                _context = contextDMC;
-                _mapper = mapper;
-            }
-            public async Task<PaginatedList<TblSndDefSiteMasterDto>> Handle(GetCustomerSitesPagedList request, CancellationToken cancellationToken)
-            {
-                var search = request.Input.Query;
-                var list = await _context.OprSites.AsNoTracking()
-                  .Where(e =>  (e.SiteCityCode.Contains(search) ||
-                                e.SiteArbName.Contains(search) ||
-                                e.SiteName.Contains(search)||
-                                e.SiteCode.Contains(search)||
-                                e.CustomerCode.Contains(search)||
-                               search == "" || search == null
-                                 ))
-                     .ProjectTo<TblSndDefSiteMasterDto>(_mapper.ConfigurationProvider)
-                     .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+    public class GetCustomerSitesPagedList : IRequest<PaginatedList<TblSndDefSiteMasterDto>>
+    {
+        public UserIdentityDto User { get; set; }
+        public PaginationFilterDto Input { get; set; }
+    }
 
-                return list;
-            }
+    public class GetCustomerSitesPagedListHandler : IRequestHandler<GetCustomerSitesPagedList, PaginatedList<TblSndDefSiteMasterDto>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public GetCustomerSitesPagedListHandler(CINDBOneContext contextDMC, AutoMapper.IMapper mapper)
+        {
+            _context = contextDMC;
+            _mapper = mapper;
         }
+        public async Task<PaginatedList<TblSndDefSiteMasterDto>> Handle(GetCustomerSitesPagedList request, CancellationToken cancellationToken)
+        {
+            var search = request.Input.Query;
+            var list = await _context.OprSites.AsNoTracking()
+              .Where(e => (e.SiteCityCode.Contains(search) ||
+                            e.SiteArbName.Contains(search) ||
+                            e.SiteName.Contains(search) ||
+                            e.SiteCode.Contains(search) ||
+                            e.CustomerCode.Contains(search) ||
+                           search == "" || search == null
+                             ))
+                 .ProjectTo<TblSndDefSiteMasterDto>(_mapper.ConfigurationProvider)
+                 .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+
+            return list;
+        }
+    }
     #endregion
 
     #region GetCustomerSitesByCustCodePagedList
@@ -73,7 +73,7 @@ namespace CIN.Application.FomMgtQuery
         {
             var search = request.Input.Query;
             var list = await _context.OprSites.AsNoTracking()
-              .Where(e => e.CustomerCode==request.Input.Query)
+              .Where(e => e.CustomerCode == request.Input.Query)
                .OrderBy(request.Input.OrderBy)
               .ProjectTo<TblSndDefSiteMasterDto>(_mapper.ConfigurationProvider)
                  .PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
@@ -119,7 +119,7 @@ namespace CIN.Application.FomMgtQuery
                 {
 
 
-                     var st = await _context.OprSites.AsNoTracking().OrderByDescending(e => e.Id).FirstOrDefaultAsync();
+                    var st = await _context.OprSites.AsNoTracking().OrderByDescending(e => e.Id).FirstOrDefaultAsync();
 
                     if (st is not null)
                     {
@@ -133,13 +133,13 @@ namespace CIN.Application.FomMgtQuery
                     {
                         return -1;
                     }
-                   // site.SiteCode = obj.SiteCode.ToUpper();
+                    // site.SiteCode = obj.SiteCode.ToUpper();
                 }
-              
+
                 site.Id = obj.Id;
                 //site.CreatedOn = obj.CreatedOn;
                 site.IsActive = obj.IsActive;
-              
+
                 site.SiteName = obj.SiteName;
                 site.SiteArbName = obj.SiteArbName;
                 site.CustomerCode = obj.CustomerCode;
@@ -178,9 +178,9 @@ namespace CIN.Application.FomMgtQuery
         }
     }
 
-#endregion
+    #endregion
 
-#region GetSiteBySiteCode
+    #region GetSiteBySiteCode
     public class GetSiteBySiteCode : IRequest<TblSndDefSiteMasterDto>
     {
         public UserIdentityDto User { get; set; }
@@ -223,7 +223,7 @@ namespace CIN.Application.FomMgtQuery
 
     #endregion
 
-#region GetSiteById
+    #region GetSiteById
     public class GetSiteById : IRequest<TblSndDefSiteMasterDto>
     {
         public UserIdentityDto User { get; set; }
@@ -291,7 +291,7 @@ namespace CIN.Application.FomMgtQuery
             var search = request.Input;
             var list = await _context.OprSites.AsNoTracking()
                 .Where(e => e.CustomerCode.Contains(search))
-              .Select(e => new CustomSelectListItem { Text = e.SiteName, Value = e.SiteCode.ToString(),TextTwo=e.SiteArbName})
+              .Select(e => new CustomSelectListItem { Text = e.SiteName, Value = e.SiteCode.ToString(), TextTwo = e.SiteArbName })
                  .ToListAsync(cancellationToken);
             return list;
         }
@@ -323,8 +323,40 @@ namespace CIN.Application.FomMgtQuery
             var search = request.Search;
             var list = await _context.OprSites.AsNoTracking()
                 .Where(e => e.CustomerCode.Contains(search))
-              .Select(e => new CustomSelectListItem { Text = e.SiteName, Value = e.SiteCode ,TextTwo=e.SiteArbName})
+              .Select(e => new CustomSelectListItem { Text = e.SiteName, Value = e.SiteCode, TextTwo = e.SiteArbName })
                  .ToListAsync(cancellationToken);
+            return list;
+        }
+    }
+
+    #endregion
+
+    #region GetSelectFomCustomerContractByCustCode
+
+    public class GetSelectFomCustomerContractByCustCode : IRequest<List<CustomSelectListItem>>
+    {
+        public UserIdentityDto User { get; set; }
+        public string CustCode { get; set; }
+    }
+
+    public class GetSelectFomCustomerContractByCustCodeHandler : IRequestHandler<GetSelectFomCustomerContractByCustCode, List<CustomSelectListItem>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public GetSelectFomCustomerContractByCustCodeHandler(CINDBOneContext contextDMC, IMapper mapper)
+        {
+            _context = contextDMC;
+            _mapper = mapper;
+        }
+        public async Task<List<CustomSelectListItem>> Handle(GetSelectFomCustomerContractByCustCode request, CancellationToken cancellationToken)
+        {
+            var custCode = request.CustCode;
+            var list = await (from custSiteCode in _context.FomCustomerContracts.AsNoTracking()
+                .Where(e => e.CustCode == custCode && e.IsActive == true).Select(e => e.CustSiteCode).Distinct()
+                              join site in _context.OprSites.Select(e => new { e.SiteCode, e.SiteName, e.SiteArbName })
+                              on custSiteCode equals site.SiteCode
+                              select new CustomSelectListItem { Text = site.SiteName, Value = site.SiteCode, TextTwo = site.SiteArbName })
+                         .ToListAsync(cancellationToken);
             return list;
         }
     }
@@ -352,8 +384,8 @@ namespace CIN.Application.FomMgtQuery
         {
             var search = request.Input;
             var list = await _context.OprSites.AsNoTracking()
-                .Where(e => e.SiteName.Contains(search)||e.SiteCode.Contains(search)||e.CustomerCode.Contains(search)||search==null)
-              .Select(e => new CustomSelectListItem { Text = e.SiteName, Value = e.SiteCode.ToString()})
+                .Where(e => e.SiteName.Contains(search) || e.SiteCode.Contains(search) || e.CustomerCode.Contains(search) || search == null)
+              .Select(e => new CustomSelectListItem { Text = e.SiteName, Value = e.SiteCode.ToString() })
                  .ToListAsync(cancellationToken);
             return list;
         }
@@ -381,25 +413,25 @@ namespace CIN.Application.FomMgtQuery
         public async Task<List<TblSndDefSiteMasterDto>> Handle(GetSelectSiteListByProjectCode request, CancellationToken cancellationToken)
         {
             var sites = await _context.OprSites.AsNoTracking().ToListAsync();
-            var enquiries = await _context.OprEnquiries.AsNoTracking().Where(e=>e.EnquiryNumber==request.ProjectCode).ToListAsync();
-           List<TblSndDefSiteMasterDto> selectionSiteList =(from e in enquiries
-                                    group e by e.SiteCode into sg
-                                    join s in sites on sg.FirstOrDefault().SiteCode equals s.SiteCode
-                                    select new TblSndDefSiteMasterDto
-                                    {
-                                        Id=s.Id,
-                                        SiteCode=s.SiteCode,
-                                        SiteName=s.SiteName,
-                                        SiteArbName =s.SiteArbName,
-                                        CustomerCode =s.CustomerCode,
-                                        SiteAddress =s.SiteAddress,
-                                        SiteCityCode=s.SiteCityCode,
-                                        SiteGeoLatitude=s.SiteGeoLatitude,
-                                        SiteGeoLongitude=s.SiteGeoLongitude,
-                                        SiteGeoGain=s.SiteGeoGain
-                                    }).ToList();
+            var enquiries = await _context.OprEnquiries.AsNoTracking().Where(e => e.EnquiryNumber == request.ProjectCode).ToListAsync();
+            List<TblSndDefSiteMasterDto> selectionSiteList = (from e in enquiries
+                                                              group e by e.SiteCode into sg
+                                                              join s in sites on sg.FirstOrDefault().SiteCode equals s.SiteCode
+                                                              select new TblSndDefSiteMasterDto
+                                                              {
+                                                                  Id = s.Id,
+                                                                  SiteCode = s.SiteCode,
+                                                                  SiteName = s.SiteName,
+                                                                  SiteArbName = s.SiteArbName,
+                                                                  CustomerCode = s.CustomerCode,
+                                                                  SiteAddress = s.SiteAddress,
+                                                                  SiteCityCode = s.SiteCityCode,
+                                                                  SiteGeoLatitude = s.SiteGeoLatitude,
+                                                                  SiteGeoLongitude = s.SiteGeoLongitude,
+                                                                  SiteGeoGain = s.SiteGeoGain
+                                                              }).ToList();
 
-               
+
             return selectionSiteList;
         }
     }
@@ -431,30 +463,30 @@ namespace CIN.Application.FomMgtQuery
         public async Task<int> Handle(DeleteSite request, CancellationToken cancellationToken)
         {
             try
-                {
-                    Log.Info("----Info DeleteSite start----");
+            {
+                Log.Info("----Info DeleteSite start----");
 
-                    if (request.Id > 0)
-                    {
-                        var site = await _context.OprSites.FirstOrDefaultAsync(e => e.Id == request.Id);
-                        _context.Remove(site);
-                       
-                        await _context.SaveChangesAsync();
-                      
-                        return request.Id;
-                    }
-                    return 0;
-                }
-                catch (Exception ex)
+                if (request.Id > 0)
                 {
-                    
-                    Log.Error("Error in DeleteSite");
-                    Log.Error("Error occured time : " + DateTime.UtcNow);
-                    Log.Error("Error message : " + ex.Message);
-                    Log.Error("Error StackTrace : " + ex.StackTrace);
-                    return 0;
+                    var site = await _context.OprSites.FirstOrDefaultAsync(e => e.Id == request.Id);
+                    _context.Remove(site);
+
+                    await _context.SaveChangesAsync();
+
+                    return request.Id;
                 }
-            
+                return 0;
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error("Error in DeleteSite");
+                Log.Error("Error occured time : " + DateTime.UtcNow);
+                Log.Error("Error message : " + ex.Message);
+                Log.Error("Error StackTrace : " + ex.StackTrace);
+                return 0;
+            }
+
         }
     }
 
@@ -481,9 +513,9 @@ namespace CIN.Application.FomMgtQuery
         public async Task<List<CustomSelectListItem>> Handle(GetSelectSiteList2 request, CancellationToken cancellationToken)
         {
             var search = request.Input;
-            var list = await _context.HRM_DEF_Sites.GroupBy(x=>x.SiteCode)
-                .Where(e => e.Key.Contains(search) || e.FirstOrDefault(k=>k.SiteCode==e.Key).SiteName_EN.Contains(search) || e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_AR.Contains(search) || search == null )
-              .Select(e => new CustomSelectListItem { Text =e.Key+"/"+ e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_EN + "/"+ e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_AR, Value = e.Key.ToString() })
+            var list = await _context.HRM_DEF_Sites.GroupBy(x => x.SiteCode)
+                .Where(e => e.Key.Contains(search) || e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_EN.Contains(search) || e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_AR.Contains(search) || search == null)
+              .Select(e => new CustomSelectListItem { Text = e.Key + "/" + e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_EN + "/" + e.FirstOrDefault(k => k.SiteCode == e.Key).SiteName_AR, Value = e.Key.ToString() })
                  .ToListAsync(cancellationToken);
             return list;
         }
@@ -517,7 +549,7 @@ namespace CIN.Application.FomMgtQuery
         {
             try
             {
-              //  bool isAdmin = _context.SystemLogins.AsNoTracking().FirstOrDefault(e => e.Id == request.User.UserId).LoginId == "Admin" ? true : false;
+                //  bool isAdmin = _context.SystemLogins.AsNoTracking().FirstOrDefault(e => e.Id == request.User.UserId).LoginId == "Admin" ? true : false;
 
                 Log.Info("----Info GetSitesPagedListWithFilter method start----");
                 var oprAuths = _context.TblOpAuthoritiesList.AsNoTracking();
@@ -544,9 +576,9 @@ namespace CIN.Application.FomMgtQuery
                 {
                     list = list.Where(e => e.SiteCityCode == request.FilterInput.BranchCode);
                 }
-                
 
-              
+
+
 
 
                 var nreports = await list.OrderBy(request.Input.OrderBy).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
@@ -593,11 +625,12 @@ namespace CIN.Application.FomMgtQuery
                 var branches = _context.CompanyBranches.Where(e => e.IsActive).AsNoTracking().ToList();
 
                 List<CustomSelectListItem> items = new();
-                branches.ForEach(b => {
+                branches.ForEach(b =>
+                {
                     CustomSelectListItem item = new();
                     item.Text = b.BranchName;
                     item.Value = b.BranchCode;
-                   // item.TextTwo = b.BranchAddress;
+                    // item.TextTwo = b.BranchAddress;
                     items.Add(item);
                 });
 

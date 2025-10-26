@@ -52,10 +52,11 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     ContractCode = e.ContractCode,
                     DeptCode = e.DeptCode,
                     SectionCode = e.SectionCode,
+                    Location = e.Location,
                     Created = e.Created,
                     IsActive = e.IsActive,
 
-                }).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+                }).OrderByDescending(e=>e.Id).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
             return filteredlist;
 
         }
@@ -108,6 +109,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                         InstallDate = e.InstallDate,
                                         ReplacementDate = e.ReplacementDate,
                                         AssetScale = e.AssetScale ?? 0,
+                                        JobQuantity = e.JobQuantity,
                                     })
                                     .FirstOrDefaultAsync();
 
@@ -200,6 +202,9 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                                     })
                                     .FirstOrDefaultAsync();
 
+            if (assetMaster is null)
+                return new() { ContEndDate = null, ContStartDate = null };
+
             assetMaster.HasChild = await _context.FomAssetMasterChilds.AsNoTracking().AnyAsync(e => e.AssetCode == request.AssetCode);
 
 
@@ -207,8 +212,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                 .Select(e => new { e.ContStartDate, e.ContEndDate })
                 .FirstOrDefaultAsync();
 
-            assetMaster.ContStartDate = contract.ContStartDate;
-            assetMaster.ContEndDate = contract.ContEndDate;
+            assetMaster.ContStartDate = contract?.ContStartDate;
+            assetMaster.ContEndDate = contract?.ContEndDate;
 
             return assetMaster;
         }
@@ -342,6 +347,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     assetMst.HasChild = obj.HasChild;
                     assetMst.IsActive = obj.IsActive;
                     assetMst.InstallDate = obj.InstallDate;
+                    assetMst.JobQuantity = obj.JobQuantity;
                     assetMst.ReplacementDate = obj.ReplacementDate;
                     assetMst.IsWrittenOff = obj.IsWrittenOff;
                     assetMst.AssetScale = obj.AssetScale;

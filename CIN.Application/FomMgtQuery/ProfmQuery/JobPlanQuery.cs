@@ -35,6 +35,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
         {
             var search = request.Input;
             var list = _context.FomJobPlanMasters.Include(e => e.CustomerContract).AsNoTracking();
+            var userAuthority = await _context.LoginAuthority.FirstOrDefaultAsync(e => e.LoginID == request.User.UserId);
 
             if (search.Query.HasValue())
                 list = list.Where(e => e.JobPlanCode.Contains(search.Query) || e.AssetCode.Contains(request.Input.Query));
@@ -54,7 +55,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     IsClosed = e.IsClosed,
                     IsVoid = e.IsVoid,
 
-                }).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+                }).OrderByDescending(e => e.Id).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
 
             foreach (var item in filteredlist.Items)
             {
@@ -64,6 +65,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     var custMaster = await _context.OprCustomers.FirstOrDefaultAsync(e => e.CustCode == item.Customer);
                     item.Location = astMaster?.Location ?? string.Empty;
                     item.Customer = custMaster?.CustName ?? string.Empty;
+                    item.IsUserApproved = userAuthority?.VoidAfterApproval ?? false;
                 }
                 catch (Exception ex)
                 {
@@ -864,7 +866,7 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                     IsClosed = e.IsClosed,
                     IsVoid = e.IsVoid,
 
-                }).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
+                }).OrderByDescending(e => e.Id).PaginationListAsync(request.Input.Page, request.Input.PageCount, cancellationToken);
 
             foreach (var item in filteredlist.Items)
             {
@@ -926,6 +928,8 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
 
                 var groupedChildList = new List<GetAssetjoborderchilditemsByJobDto>();
                 IEnumerable<TblErpFomJobPlanChildSchedule> cItems = null;
+                var jobPlanSchItems = _context.FomJobPlanScheduleClosureItems.AsNoTracking();
+                var jobPlanSchClosures = _context.FomJobPlanScheduleClosures.AsNoTracking();
 
                 foreach (var cItem in list.GroupBy(e => e.ChildCode).ToList())
                 {
@@ -940,17 +944,38 @@ namespace CIN.Application.FomMgtQuery.ProfmQuery
                         ChildCode = cItem.Key,
                         ChildItems = cItems.Select(item => new TblErpFomJobPlanMasterDateScheduleDto
                         {
+                            Id = item.Id,
                             AssetCode = item.AssetCode,
                             ChildCode = item.ChildCode,
                             Date = item.PlanStartDate,
                             Frequency = item.Frequency,
                             Remarks = item.Remarks,
                             IsClosed = item.IsClosed,
-                            Id = item.Id
+                            Materials = (jobPlanSchItems.Where(sitem => sitem.Source == "mat" && sitem.ScheduleClosureId ==
+                                          jobPlanSchClosures.FirstOrDefault(e => e.ChildScheduleId == item.Id).Id)
+                                        .Select(sitem => new TblErpFomJobPlanScheduleClosureItemDto
+                                        {
+                                            Description = sitem.Description,
+                                            Quantity = sitem.Quantity,
+                                        })).ToList(),
+                            Tools = (jobPlanSchItems.Where(sitem => sitem.Source == "tl" && sitem.ScheduleClosureId ==
+                                         jobPlanSchClosures.FirstOrDefault(e => e.ChildScheduleId == item.Id).Id)
+                                        .Select(sitem => new TblErpFomJobPlanScheduleClosureItemDto
+                                        {
+                                            Description = sitem.Description,
+                                            Quantity = sitem.Quantity,
+                                        })).ToList(),
+                            LaborHours = (jobPlanSchItems.Where(sitem => sitem.Source == "labh" && sitem.ScheduleClosureId ==
+                                         jobPlanSchClosures.FirstOrDefault(e => e.ChildScheduleId == item.Id).Id)
+                                        .Select(sitem => new TblErpFomJobPlanScheduleClosureItemDto
+                                        {
+                                            Description = sitem.Description,
+                                            Quantity = sitem.Quantity,
+                                            Hours = sitem.Hours,
+                                        })).ToList()
                         }).ToList()
                     });
                 }
-
                 return groupedChildList;
             }
             catch (Exception ex)

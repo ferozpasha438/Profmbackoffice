@@ -53,7 +53,9 @@ export class AuthorizeService {
     //    map(user => user && user.access_token));
   }
 
-
+  public GetFomCpApiEndPoint(): string {
+    return data.fomapiurl ?? ''
+  };
   public SetApiEndPoint(apiEndpoint: string) {
     //localStorage.removeItem('apiEndpoint');
     localStorage.setItem('apiEndpoint', apiEndpoint);

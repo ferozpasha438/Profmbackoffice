@@ -66,6 +66,8 @@ namespace CIN.Domain.FomMgt.AssetMaintenanceMgt
         public DateTime? ReplacementDate { get; set; }
         public bool? IsWrittenOff { get; set; }
         public int? AssetScale { get; set; }
+        [StringLength(120)]
+        public string JobQuantity { get; set; }
     }
 
     [Table("tblErpFomAssetMasterChild")]

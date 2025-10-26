@@ -964,4 +964,11 @@ namespace CIN.Application
         InTransit = 12,
         Hold = 13,
     }
+
+    public enum PPTMgmtStatusEnum
+    {
+        Open = 0,
+        Completed = 1,
+        Cancel = 2,
+    }
 }

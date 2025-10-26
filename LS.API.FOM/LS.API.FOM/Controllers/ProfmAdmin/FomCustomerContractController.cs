@@ -3,16 +3,21 @@ using CIN.Application.Common;
 using CIN.Application.FomMgtDtos;
 using CIN.Application.FomMgtQuery;
 using CIN.Application.FomMgtQuery.ProfmQuery;
+using CIN.Application.ProfmQuery;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace LS.API.FOM.Controllers.ProfmAdmin
 {
@@ -50,7 +55,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         public async Task<IActionResult> GetSelectAuthResourcesList(string search)
         {
 
-            var list = await Mediator.Send(new GetSelectResourcesQuery() { Input = search, User = UserInfo() });
+            var list = await Mediator.Send(new CIN.Application.FomMgtQuery.ProfmQuery.GetSelectResourcesQuery() { Input = search, User = UserInfo() });
             return Ok(list);
         }
 
@@ -64,7 +69,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             {
                 dTO.Id = id;
                 return Created($"get/{id}", dTO);
-            }                
+            }
             else if (id == -1)
             {
                 return BadRequest(new ApiMessageDto { Message = ApiMessageInfo.Duplicate(nameof(dTO.Id)) });
@@ -106,7 +111,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         [HttpGet("GetFomCalenderScheduleList/{contractId}/{startDate}/{endDate}")]
         public async Task<IActionResult> GetScheduleById([FromRoute] int contractId, [FromRoute] DateTime startDate, [FromRoute] DateTime endDate)
         {
-            var obj = await Mediator.Send(new GetFomCalenderScheduleList() { ContractId = contractId, StartDate = startDate,EndDate=endDate ,User = UserInfo() });
+            var obj = await Mediator.Send(new GetFomCalenderScheduleList() { ContractId = contractId, StartDate = startDate, EndDate = endDate, User = UserInfo() });
             return obj is not null ? Ok(obj) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
         }
         [HttpGet("GetFomCalenderScheduleList/{contractId}/{deptCode}")]
@@ -130,9 +135,9 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
 
 
         [HttpGet("GetScheduleById/{deptCode}/{contractCode}")]
-        public async Task<IActionResult> GetScheduleById([FromRoute] string deptCode,[FromRoute] string contractCode)
+        public async Task<IActionResult> GetScheduleById([FromRoute] string deptCode, [FromRoute] string contractCode)
         {
-            var obj = await Mediator.Send(new GetScheduleSummaryById() { DeptCode= deptCode,ContractCode = contractCode, User = UserInfo() });
+            var obj = await Mediator.Send(new GetScheduleSummaryById() { DeptCode = deptCode, ContractCode = contractCode, User = UserInfo() });
             return obj is not null ? Ok(obj) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
         }
 
@@ -183,7 +188,7 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
         }
 
         [HttpPost("getCustomerAnalyticsInScope")]
-        public async Task<IActionResult> GetCustomerAnalytics([FromQuery]string outscope, [FromBody] InputTicketsPaginationFilterDto input)
+        public async Task<IActionResult> GetCustomerAnalytics([FromQuery] string outscope, [FromBody] InputTicketsPaginationFilterDto input)
         {
             var res = await Mediator.Send(new GetCustomerAnalytics() { Input = input, IsInScope = outscope.HasValue() ? false : true, User = UserInfo() });
             return Ok(res);
@@ -234,6 +239,82 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
                  .Select(v => new CustomSelectListItem { Text = v.ToString(), Value = ((int)v).ToString() })
                  .ToList();
         }
+
+        [HttpGet("getSelectJobStatusesEnumForTicketList")]
+        public List<CustomSelectListItem> GetSelectJobStatusesEnumForTicketList()
+        {
+            return Enum.GetValues(typeof(MetadataJoStatusEnum))
+                 .Cast<MetadataJoStatusEnum>()
+                 .Select(v => new CustomSelectListItem { Text = v.ToString(), Value = ((int)v).ToString() })
+                 .Where(v => v.Text == MetadataJoStatusEnum.Approved.ToString() || v.Text == MetadataJoStatusEnum.WorkInProgress.ToString() ||
+                            v.Text == MetadataJoStatusEnum.Closed.ToString() || v.Text == MetadataJoStatusEnum.Void.ToString() ||
+                            v.Text == MetadataJoStatusEnum.Completed.ToString())
+                 .ToList();
+        }
+
+        [HttpGet("getSelectPPTMgmtStatusEnumForPPTList")]
+        public List<CustomSelectListItem> GetSelectPPTMgmtStatusEnumForPPTList()
+        {
+            return Enum.GetValues(typeof(PPTMgmtStatusEnum))
+                 .Cast<PPTMgmtStatusEnum>()
+                 .Select(v => new CustomSelectListItem { Text = v.ToString(), Value = ((int)v).ToString() })
+                 .ToList();
+        }
+
+
+        [HttpPost("changeJobStatusForTicket")]
+        public async Task<IActionResult> ChangeJobStatusForTicket([FromBody] ChangeJobStatusForTicketDto input)
+        {
+            //return BadRequest(new ApiMessageDto { Message = "tckt.Message" });
+            var tckt = await Mediator.Send(new ChangeJobStatusForTicket() { Input = input, User = UserInfo() });
+            return tckt.Id > 0 ? Ok(tckt) : BadRequest(new ApiMessageDto { Message = tckt.Message });
+        }
+
+        [HttpPost("changePptMgmtStatusForPpt")]
+        public async Task<IActionResult> ChangePptMgmtStatusForPpt()
+        {
+            //return BadRequest(new ApiMessageDto { Message = "tckt.Message" });
+            //ChangePptMgmtStatusWithFileForPptDto input
+            var formData = Request.Form["input"];
+            ChangePptMgmtStatusForPptDto input = JsonConvert.DeserializeObject<ChangePptMgmtStatusForPptDto>(formData);
+
+            var files = Request.Form.Files;
+            //var file = fileData.Count > 0 ? fileData[0] : null;
+            foreach (var file in files)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var guid = Guid.NewGuid().ToString();
+                    string fileName = file.FileName;
+                    string name = file.Name;
+                    string description = Convert.ToString(HttpContext.Request.Form[name]);
+                    description = string.IsNullOrEmpty(description) ? file.FileName : description;
+
+                    guid = $"{guid}_{Path.GetExtension(file.FileName)}";
+                    var webRoot = $"{_env.ContentRootPath}/CustomerContractfiles";
+                    var filePath = Path.Combine(webRoot, guid);
+
+                    if (name == "fileone")
+                    {
+                        input.ImageName = fileName;
+                        input.ImageUrl = guid;
+                    }
+                    else if (name == "filetwo")
+                    {
+                        input.Image1Name = fileName;
+                        input.Image1Url = guid;
+                    }
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+            }
+            var tckt = await Mediator.Send(new ChangePptMgmtStatusForPpt() { Input = input, User = UserInfo() });
+            return tckt.Id > 0 ? Ok(tckt) : BadRequest(new ApiMessageDto { Message = tckt.Message });
+        }
+
+
         [HttpPost("getWorkOrderListPaginationWithFilter")]
         public async Task<IActionResult> getWorkOrderListPaginationWithFilter([FromBody] InputTicketsPaginationFilterDto input)
         {
@@ -260,6 +341,14 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
             //}
             return tckt is not null ? Ok(tckt) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
         }
+
+        [HttpGet("viewScheduleById/{id}")]
+        public async Task<IActionResult> ViewScheduleById([FromRoute] int id)
+        {
+            var tckt = await Mediator.Send(new ViewScheduleById() { Id = id });
+            return tckt is not null ? Ok(tckt) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
+        }
+
         [HttpGet("viewWorkOrderByTicketNumber/{ticketNumber}")]
         public async Task<IActionResult> ViewWorkOrderById([FromRoute] string ticketNumber)
         {
@@ -298,10 +387,10 @@ namespace LS.API.FOM.Controllers.ProfmAdmin
 
 
         [HttpGet("GetActivitiesByDeptCodes/{codes}/{contarctCode}")]
-        public async Task<IActionResult> GetActivitiesByDeptCodes([FromRoute] string codes,string contarctCode)
+        public async Task<IActionResult> GetActivitiesByDeptCodes([FromRoute] string codes, string contarctCode)
         {
             var deptCodes = codes.Split(','); // Splitting the codes by comma
-            var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes() { DeptCodes = deptCodes,ContractCode=contarctCode, User = UserInfo() });
+            var obj = await Mediator.Send(new GetDeptActivitiesByDeptCodes() { DeptCodes = deptCodes, ContractCode = contarctCode, User = UserInfo() });
             return obj is not null ? Ok(obj) : NotFound(new ApiMessageDto { Message = ApiMessageInfo.NotFound });
         }
 

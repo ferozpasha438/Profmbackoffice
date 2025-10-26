@@ -221,13 +221,13 @@ namespace CIN.Domain.FomMgt
         [StringLength(20)]
         public string UserClientLoginCode { get; set; }
 
-        [StringLength(20)]
+        [StringLength(200)]
         public string CustName { get; set; }
 
         [StringLength(20)]
         public string CustCode { get; set; }
 
-        [StringLength(20)]
+        [StringLength(450)]
         public string SiteCode { get; set; }
 
         [StringLength(256)]
@@ -240,6 +240,8 @@ namespace CIN.Domain.FomMgt
         [StringLength(15)]
         public string LoginType { get; set; } //user,client
         public string LastLoginDate { get; set; }
+        [StringLength(200)]
+        public string ImageUrl { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
@@ -326,9 +328,15 @@ namespace CIN.Domain.FomMgt
         public bool IsConvertedToWorkOrder { get; set; } = false;
 
         public string ForecloseReasonCode { get; set; }
+        [StringLength(500)]
+        public string CompletedReasonCode { get; set; }
         public DateTime? ForecloseDate { get; set; }
         public string ForecloseBy { get; set; }
         public string CancelReasonCode { get; set; }
+        [StringLength(500)]
+        public string ApprovedReasonCode { get; set; }
+        [StringLength(500)]
+        public string ClosedReasonCode { get; set; }
         public DateTime? CancelDate { get; set; }
         public string CancelBy { get; set; }
 
@@ -1146,6 +1154,8 @@ namespace CIN.Domain.FomMgt
         public TimeSpan Time { get; set; }
         public bool AllDayLong { get; set; }
         public string Remarks { get; set; }
+        public string Shifts { get; set; }
+        public int? BoxIndex { get; set; }
         public bool IsActive { get; set; }
     }
 
@@ -1166,10 +1176,20 @@ namespace CIN.Domain.FomMgt
         public string TranNumber { get; set; }
         public string ServiceItem { get; set; }
         public string Remarks { get; set; }
+        public string Shifts { get; set; }
         public TimeSpan Time { get; set; }
         public bool IsReschedule { get; set; }
         public bool IsActive { get; set; }
         public bool? IsB2c { get; set; }
+        public int? PptStatus { get; set; }
+        [StringLength(500)]
+        public string CompletedReasonCode { get; set; }
+        [StringLength(500)]
+        public string VoidReasonCode { get; set; }
+        public string ImageName { get; set; }
+        public string Image1Name { get; set; }
+        public string ImageUrl { get; set; }
+        public string Image1Url { get; set; }
     }
 
 

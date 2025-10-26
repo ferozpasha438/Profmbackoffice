@@ -41,7 +41,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery/dist/jquery.min.js",
               "src/assets/libs/popper.js/dist/umd/popper.min.js",
               "src/assets/libs/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/dist/js/app-style-switcher.js",
@@ -62,7 +62,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2mb",
-                  "maximumError": "8mb"
+                  "maximumError": "50mb"
                 }
               ],
               "fileReplacements": [

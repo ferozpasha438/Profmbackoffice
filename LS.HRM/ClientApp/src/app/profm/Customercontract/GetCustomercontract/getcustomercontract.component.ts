@@ -21,6 +21,7 @@ import { GetschedulelistComponent } from '../Sharedpages/getschedulelist.compone
   selector: 'app-getcustomercontract',
   templateUrl: './getcustomercontract.component.html',
   styles: [
+    '.deptBreakAll{white-space: pre-wrap; word-break: break-word;}'
   ]
 })
 export class GetcustomercontractComponent extends ParentFomMgtComponent implements OnInit {
@@ -33,7 +34,7 @@ export class GetcustomercontractComponent extends ParentFomMgtComponent implemen
   isLoading: boolean = false;
   totalItemsCount: number = 0;
   data: MatTableDataSource<any> = new MatTableDataSource();
-  displayedColumns: string[] = ['contractCode', 'custCode','contDeptCode', 'contProjManager', 'contProjSupervisor', 'contApprAuthorities','createdDate', 'isActive','Actions'];
+  displayedColumns: string[] = ['contractCode', 'custSiteCode', 'custCode', 'contDeptCode', 'contProjManager', 'contProjSupervisor', 'contApprAuthorities', 'isActive', 'Actions']; //'createdDate',
   isArab: boolean = false;
 
   constructor(private apiService: ApiService, private authService: AuthorizeService, private translate: TranslateService,
@@ -102,6 +103,17 @@ export class GetcustomercontractComponent extends ParentFomMgtComponent implemen
         this.initialLoading();
     });
   }
+  private openScheduleDialogManageRow(row: any, dbops: DBOperation, modalTitle: string, modalBtnTitle: string) {
+    let dialogRef = this.utilService.openCrudDialog(this.dialog, GetschedulesComponent,'100');
+    (dialogRef.componentInstance as any).dbops = dbops;
+    (dialogRef.componentInstance as any).modalTitle = modalTitle;
+    (dialogRef.componentInstance as any).modalBtnTitle = modalBtnTitle;
+    (dialogRef.componentInstance as any).row = row;
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && res === true)
+        this.initialLoading();
+    });
+  }
 
   private openSheduleConfig(id: number = 0, dbops: DBOperation, modalTitle: string, modalBtnTitle: string) {
     let dialogRef = this.utilService.openCrudDialog(this.dialog, GetschedulesComponent);
@@ -148,7 +160,7 @@ export class GetcustomercontractComponent extends ParentFomMgtComponent implemen
   }
 
   public schedule(row: any) {
-    this.openDialogManageRow(row, DBOperation.create, this.translate.instant('Add_Schedule_Contract'), 'Schedule');
+    this.openScheduleDialogManageRow(row, DBOperation.create, this.translate.instant('Add_Schedule_Contract'), 'Schedule');
   }
 
   public genSchDetails(row: any) {

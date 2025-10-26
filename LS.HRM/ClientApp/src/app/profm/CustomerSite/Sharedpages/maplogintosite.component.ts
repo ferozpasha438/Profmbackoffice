@@ -17,6 +17,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { ValidationService } from 'src/app/sharedcomponent/ValidationService';
 import { ParentOptMgtComponent } from 'src/app/sharedcomponent/parentoptmgt.component';
 import { ParentFomMgtComponent } from '../../../sharedcomponent/parentfommgt.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-maplogintosite',
@@ -34,7 +35,8 @@ export class MaplogintositeComponent extends ParentFomMgtComponent implements On
   customerCode!: string;
   custCityCode!: string;
   CustomerCodeList: Array<CustomSelectListItem> = [];
-  cityList1: Array<CustomSelectListItem> = [];
+  CustomerLoginList: Array<CustomSelectListItem> = [];
+  sitesList: Array<CustomSelectListItem> = [];
   custCodeControl = new FormControl('', Validators.required);
   //filteredCustCodes: Observable<Array<CustomSelectListItem>>;
   isDataLoading: boolean = false;
@@ -42,171 +44,96 @@ export class MaplogintositeComponent extends ParentFomMgtComponent implements On
   customerForm!: FormGroup;
   customerCodes: any[] = [];
   loginSites: any[] = [];
+  selection = new SelectionModel<any>(true, []);
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private apiService: ApiService,
     private authService: AuthorizeService, private utilService: UtilityService, private translate: TranslateService,
     private notifyService: NotificationService, private validationService: ValidationService, public dialogRef: MatDialogRef<MaplogintositeComponent>) {
     super(authService);
-   
+
 
   }
 
   ngOnInit(): void {
     this.customerForm = this.fb.group({
-      customerCode: ['']
+      custCode: ['', Validators.required],
+      userClientLoginCode: ['', Validators.required],
     });
 
-   // this.getCustomerCodes();
+    this.getCustomerCodes();
   }
 
 
   getCustomerCodes() {
-    //this.customerService.getCustomerCodes().subscribe((data) => {
-    //  this.customerCodes = data;
-    //});
+    this.apiService.getall('FomCustomer/getSelectCustomerList').subscribe(res => {
+      if (res)
+        this.CustomerCodeList = res;
+    });  
+  }
+
+  getSelectFomCustomerContractByCustCode(custCode: string) {
+    this.apiService.getall(`FomCustomerSite/getSelectFomCustomerContractByCustCode/${custCode}`).subscribe(res => {
+      if (res)
+        this.sitesList = res;
+    });
   }
 
   onCustomerSelect(event: any) {
     const customerCode = event.target.value;
-    //this.customerService.getLoginCodes(customerCode).subscribe((data) => {
-    //  this.loginSites = data.map((site: any) => ({
-    //    ...site,
-    //    checked: !!site.siteCode // Check if site code is not null
-    //  }));
-   // });
+    this.getSelectFomCustomerContractByCustCode(customerCode);
+    this.apiService.getall(`FomCustomer/getSelectCustomerLoginList?custCode=${customerCode}`).subscribe(res => {
+      if (res)
+        this.CustomerLoginList = res;
+    });
   }
 
+  onCustomerLoginCodeSelect(event: any) {
+    const loginCode = event.target.value;
+    this.apiService.getall(`FomCustomer/getSelectSitesByCustomerLoginCode?custCode=${this.customerForm.get('custCode')?.value}&loginCode=${loginCode}`).subscribe(res => {
+      this.selection = new SelectionModel<any>(true, []);
+      if (res && res.length > 0) {
+        const selectedSites: Array<any> = (res as Array<any>[]).map((item: any) => item);        
+        this.selection.select(...this.sitesList.filter(item => selectedSites.some(d => d.value === item.value)));
+      }      
+    });
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.sitesList.length;
+    return numSelected === numRows;
+  }
+
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.sitesList);
+  }
 
   saveMapping() {
-    //const selectedSites = this.loginSites
-    //  .filter((site) => site.checked)
-    //  .map((site) => site.siteCode)
-    //  .join(',');
+    if (this.customerForm.valid) {
+      const siteCodes = this.selection.selected.map(item => item.value).join(',');
+      this.customerForm.value['siteCode'] = siteCodes;
+      this.apiService.post('FomCustomer/CreateMappingLoginCodesToSites', this.customerForm.value)
+        .subscribe(res => {
+          this.utilService.OkMessage();
+          this.dialogRef.close(true);
+        },
+          error => {
+            console.error(error);
+            this.utilService.ShowApiErrorMessage(error);
+          });
 
-    //const payload = {
-    //  customerCode: this.customerForm.value.customerCode,
-    //  siteCodes: selectedSites
-    //};
-
-    //this.customerService.updateSiteMapping(payload).subscribe((response) => {
-    //  console.log('Mapping saved successfully:', response);
-    //  alert('Mapping saved successfully!');
-    //});
+    }
+    else
+      this.notifyService.showError('Please fill all fields!');
   }
-
-  selectAll(checked: boolean) {
-   // this.loginSites.forEach((site) => (site.checked = checked));
-  }
-
-
 
   closeModel() {
     this.dialogRef.close();
   }
-  //setForm() {
-  //  //this.form = this.fb.group({
-
-  //  //  'siteCode': ['SITEXXXXXX'],
-  //  //  'siteName': ['', Validators.required],
-  //  //  'siteArbName': ['', Validators.required],
-  //  //  'customerCode': [''],
-  //  //  'siteAddress': ['', Validators.required],
-  //  //  'siteCityCode': ['', Validators.required],
-  //  //  'siteGeoLatitude': ['', Validators.required],
-  //  //  'siteGeoLongitude': ['', Validators.required],
-  //  //  'siteGeoGain': ['', Validators.required],
-  //  //  'isChildCustomer': [false],
-  //  //  'vatNumber': [''],
-  //  //  'isActive': [true]
-  //  //});
-
-  //}
-  //submit() {
-
-  //  if (this.id > 0)
-  //    this.form.value['id'] = this.id;
-
-  //  let custCode = this.customerCode;
-
-  //  if (this.utilService.hasValue(custCode)) {
-  //    this.form.value['customerCode'] = custCode;
-  //    this.custCodeControl.setValue(custCode);
-
-  //  }
-  //  else {
-  //    this.utilService.FillUpFields();
-  //  }
-  //  if (this.form.valid) {
-
-    
-
-  //    this.apiService.post('FomCustomerSite', this.form.value)
-  //      .subscribe(res => {
-  //        this.utilService.OkMessage();
-  //        this.dialogRef.close(true);
-  //      },
-  //        error => {
-  //          console.error(error);
-  //          this.utilService.ShowApiErrorMessage(error);
-  //        });
-
-  //  }
-  //  else
-  //    this.utilService.FillUpFields();
-  //  // this.ngOnInit();
-  //}
-
-  
-  //setEditForm() {
-  //  this.apiService.get('FomCustomerSite/getSiteById', this.id).subscribe(res => {
-
-  //    if (res) {
-       
-  //      this.form.patchValue(res);
-  //      this.custCodeControl.setValue(res['customerCode']);
-       
-  //      this.form.patchValue({ 'id': 0 });
-  //    }
-
-
-  //  });
-
-
-
-  //}
-
-  //loadCities() {
-  //  this.apiService.getall('FomCustomer/getCitiesSelectList').subscribe(res => {
-  //    this.cityList1 = res;
-  //  });
-
-  //  this.apiService.getPagination('FomCustomer', this.utilService.getQueryString(0, 1000, '', '')).subscribe(res => {
-  //    if (res)
-  //      this.CustomerCodeList = res['items'];
-  //  });
-  //}
-  //reset() {
-  //  this.form.controls['siteCode'].setValue('');
-  //  this.form.controls['siteName'].setValue('');
-  //  this.form.controls['SiteArbName'].setValue('');
-  //  this.form.controls['customerCode'].setValue('');
-  //  this.form.controls['siteAddress'].setValue('');
-  //  this.form.controls['siteCityCode'].setValue('');
-  //  this.form.controls['siteGeoLatitude'].setValue('');
-  //  this.form.controls['siteGeoLongitude'].setValue('');
-  //  this.form.controls['siteGeoGain'].setValue('');
-  //  this.form.controls['isChildCustomer'].setValue('');
-  //  this.form.controls['vatNumber'].setValue('');
-  //  this.form.controls['isActive'].setValue(true);
-
-  //}
-
-  
-  
-
- 
-
- 
-
 }
 

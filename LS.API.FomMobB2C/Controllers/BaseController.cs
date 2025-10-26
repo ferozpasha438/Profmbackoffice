@@ -47,7 +47,7 @@ namespace LS.API.FomMobB2C.Controllers
         public int UserId => HasClaims() ? Convert.ToInt32(GetCliams().FirstOrDefault(c => c.Type == "userid").Value) : 0;
         public int ClientUserMapId => HasClaims() ? Convert.ToInt32(GetCliams().FirstOrDefault(c => c.Type == "mapid").Value) : 0;
         public string UserName => HasClaims() ? Convert.ToString(GetCliams().FirstOrDefault(c => c.Type == "username")?.Value ?? string.Empty) : string.Empty;
-        //public int CompanyId => HasClaims() ? Convert.ToInt32(GetCliams().FirstOrDefault(c => c.Type == "companyid").Value) : 0;
+        public int CompanyId => HasClaims() ? Convert.ToInt32(GetCliams().FirstOrDefault(c => c.Type == "companyid").Value) : 0;
         //public int BranchId => HasClaims() ? Convert.ToInt32(GetCliams().FirstOrDefault(c => c.Type == "branchid").Value) : 0;
         //public string BranchCode => HasClaims() ? Convert.ToString(GetCliams().FirstOrDefault(c => c.Type == "branchcode").Value) : string.Empty;
         public string Email => HasClaims() ? Convert.ToString(GetCliams().FirstOrDefault(c => c.Type == "email")?.Value ?? string.Empty) : string.Empty;
@@ -69,7 +69,7 @@ namespace LS.API.FomMobB2C.Controllers
         protected string Culture => HttpContext.Request.Headers["Accept-Language"].ToString() ?? "en-US";
         //protected string Culture => HttpContext.Items["SelectedLng"]?.ToString() ?? "en-US";
 
-        protected UserIdentityDto UserInfo() => new UserIdentityDto { UserId = UserId,UserName=UserName, Email=Email, LoginType=LoginType,Role=Role, Mobile=Mobile,  Culture = Culture }; //ConnectionString = GetConnectionString(),
+        protected UserIdentityDto UserInfo() => new UserIdentityDto { UserId = UserId, CompanyId = CompanyId, UserName=UserName, Email=Email, LoginType=LoginType,Role=Role, Mobile=Mobile,  Culture = Culture }; //ConnectionString = GetConnectionString(),
 
     }
 

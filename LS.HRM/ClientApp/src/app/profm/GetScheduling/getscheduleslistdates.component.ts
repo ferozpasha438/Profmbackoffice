@@ -15,6 +15,11 @@ import { ParentFomMgtComponent } from 'src/app/sharedcomponent/parentfommgt.comp
 import { CustomSelectListItem } from '../../models/MenuItemListDto';
 import { DBOperation } from '../../services/utility.constants';
 import { AllschedulecalendarComponent } from './SharedPages/allschedulecalendar.component';
+import { DeleteConfirmDialogComponent } from '../../sharedcomponent/delete-confirm-dialog';
+import { TicketstatusactionComponent } from '../Tickets/shared/ticketstatusaction/ticketstatusaction.component';
+import { FomSharedService } from '../../services/fomShared.service';
+import { ScheduleDetailComponent } from './scheduledetail/scheduledetail.component';
+import { formatDate } from '@angular/common';
 
  @Component({
   selector: 'app-getscheduleslistdates',
@@ -32,17 +37,26 @@ export class GetscheduleslistdatesComponent extends ParentFomMgtComponent implem
   isLoading: boolean = false;
   totalItemsCount: number = 0;
   data: MatTableDataSource<any> = new MatTableDataSource();
-   displayedColumns: string[] = ['contractCode', 'siteName','customerName', 'schDate', 'time','department', 'remarks','tranNumber', 'serType', 'frequency',  'serviceItem'];
-  isArab: boolean = false;
+   displayedColumns: string[] = ['contractCode', 'siteName', 'customerName', 'schDate', 'time', 'department', 'remarks', 'tranNumber', 'statusStr', 'action'];//'serType', 'frequency',  'serviceItem'
+   isArab: boolean = false;
+   statusSelectionList: Array<any> = [];
+   statusSelectionListActions: Array<CustomSelectListItem> = [];
 
+   joStatusOpen: number = 0;
+   joStatusCompleted: number = 1;
+   joStatusVoid: number = 2;
+   remarks: string = '';
+   formData!: FormData;
   constructor(private apiService: ApiService, private authService: AuthorizeService, private translate: TranslateService,
-    private utilService: UtilityService, private notifyService: NotificationService, public dialog: MatDialog,
+    private utilService: UtilityService, private notifyService: NotificationService, public dialog: MatDialog, private sharedService: FomSharedService,
     public pageService: PaginationService, private router: Router, private fb: FormBuilder) {
     super(authService);
     this.form = this.fb.group({
       startDate: [''], // Start Date FormControl
       endDate: [''], // End Date FormControl
-      contractId: [''] // Contract ID FormControl
+      contractId: [''], // Contract ID FormControl
+      status: [''], // Contract ID FormControl
+
     });
   }
 
@@ -99,10 +113,10 @@ export class GetscheduleslistdatesComponent extends ParentFomMgtComponent implem
        this.isLoading = false;
      }, error => this.utilService.ShowApiErrorMessage(error));
    }
-   private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined, contractId: number=0, startDate: string | null | undefined, endDate: string | null | undefined) {
+   private loadList(page: number | undefined, pageCount: number | undefined, query: string | null | undefined, orderBy: string | null | undefined, contractId: number = 0, startDate: string | null | undefined, endDate: string | null | undefined, status: string | undefined) {
     this.isLoading = true;
 
-     this.apiService.getPagination('FomCustomerContract/GetAllSchedulingList', this.utilService.getQueryStringWithContractData(page, pageCount, query, orderBy,contractId, startDate,endDate)).subscribe(result => {
+     this.apiService.getPagination('FomCustomerContract/GetAllSchedulingList', this.utilService.getQueryStringWithContractData(page, pageCount, query, orderBy, contractId, startDate, endDate, status)).subscribe(result => {
       this.totalItemsCount = 0;
       this.data = new MatTableDataSource(result.items);
 
@@ -121,6 +135,77 @@ export class GetscheduleslistdatesComponent extends ParentFomMgtComponent implem
     }, error => this.utilService.ShowApiErrorMessage(error));
    }
 
+   ticketdetail(row: any) {
+     row.timeFormat = this.formatTime(row.time);
+    let scheDetailRef = this.utilService.openCrudDialog(this.dialog, ScheduleDetailComponent, '100%');
+     (scheDetailRef.componentInstance as any).scheduleId = row.id;
+     (scheDetailRef.componentInstance as any).data = row;
+     scheDetailRef.afterClosed().subscribe(res => {
+
+     });
+   }
+
+   changeStatus(evt: any, row: any) {
+     const ticketStatus = +evt.target.value;
+     if (ticketStatus > 0) {
+       const dialogRef = this.utilService.openDeleteConfirmDialog(this.dialog, DeleteConfirmDialogComponent);
+       dialogRef.afterClosed().subscribe(canDelete => {
+         if (canDelete) {
+           if (ticketStatus == this.joStatusVoid || ticketStatus == this.joStatusCompleted) { //For Void or Complete        
+             let statusRef = this.utilService.openCrudDialog(this.dialog, TicketstatusactionComponent, '40%');
+             (statusRef.componentInstance as any).modalTitle = 'Enter_Remarks';
+             (statusRef.componentInstance as any).hasFile = true;
+             statusRef.afterClosed().subscribe(res => {
+               if (res && res.remarks.length > 0) {
+                 this.formData = new FormData();
+                 this.remarks = res.remarks;
+                 if (res.uploadfile) {
+                   this.formData.append("fileone", res.uploadfile, res.uploadfile.name);                   
+                 }
+                 if (res.uploadfileTwo) {
+                   this.formData.append("filetwo", res.uploadfileTwo, res.uploadfileTwo.name);                   
+                 }                 
+                 this.changeTicketStatus(ticketStatus, row.id);
+               }
+             });
+           }
+           else {
+             //this.changeTicketStatus(ticketStatus, row.id);
+           }
+         }
+         else {
+           //this.resetFilter();
+           this.initialLoading();
+         }
+       });
+     }
+   }
+
+   changeTicketStatus(ticketStatus: number, id: number) {
+     this.formData.append("input", JSON.stringify({ userName: this.authService.getUserName(), status: ticketStatus, id: id, remarks: this.remarks }));
+     this.apiService.post(`FomCustomerContract/changePptMgmtStatusForPpt`, this.formData).subscribe(res => {
+       this.utilService.OkMessage();
+       this.initialLoading();
+     }, error => {
+       this.utilService.ShowApiErrorMessage(error);
+     });
+   }
+
+
+   statusSelectionListActionItems(joStatus: any): Array<CustomSelectListItem> {
+     if (joStatus == this.joStatusVoid) {
+       return this.getStatusSelectionListActionItems([this.joStatusVoid.toString()]);
+     }
+     else if (joStatus == this.joStatusCompleted) {
+       return this.getStatusSelectionListActionItems([this.joStatusCompleted.toString()]);
+     }    
+     return this.getStatusSelectionListActionItems([this.joStatusVoid.toString(), this.joStatusOpen.toString(), this.joStatusCompleted.toString()]);
+   }
+
+   getStatusSelectionListActionItems(joStatusList: Array<string>): Array<CustomSelectListItem> {
+     return this.statusSelectionListActions.filter(item => joStatusList.includes(item.value));
+   }
+
 
    //loadCustomerContract(){
    //  this.apiService.getPagination('FomCustomerContract', this.utilService.getQueryString(0, 1000, '', '')).subscribe(res => {
@@ -134,7 +219,12 @@ export class GetscheduleslistdatesComponent extends ParentFomMgtComponent implem
        if (res) {
          this.CustomerContractList = res;
        }
-     })
+     });
+     this.apiService.getall('FomCustomerContract/getSelectPPTMgmtStatusEnumForPPTList').subscribe(res => {
+       this.statusSelectionListActions = res;
+       this.statusSelectionList = res;
+     });
+
    }
 
    searchFilter() {
@@ -157,7 +247,7 @@ export class GetscheduleslistdatesComponent extends ParentFomMgtComponent implem
        let ed = new Date(this.form.controls['endDate'].value);
        endDate = ed.getFullYear().toString() + "-" + (ed.getMonth()+1).toString() + "-" + ed.getDate().toString();
      }
-     this.loadList(0, this.pageService.pageCount, "", this.sortingOrder, contractId, startDate, endDate);
+     this.loadList(0, this.pageService.pageCount, "", this.sortingOrder, contractId, startDate, endDate, this.form.controls['status'].value ?? '');
 
      //this.apiService.get('FomCustomerContract/GetFomCalenderScheduleList/${contractId}/${this.utilService.selectedDate(startDate)}/${this.utilService.selectedDate(endDate)}`).subscribe(result => {
      //this.apiService.postFomUrl('FomCustomerContract/GetFomCalenderScheduleList', this.form.value).subscribe(result => {

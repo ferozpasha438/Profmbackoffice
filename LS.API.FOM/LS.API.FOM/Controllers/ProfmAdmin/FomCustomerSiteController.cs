@@ -108,6 +108,13 @@ namespace LS.API.OPR.Controllers.OperationsMgt
             return items;
         }
 
+        [HttpGet("getSelectFomCustomerContractByCustCode/{custCode}")]
+        public async Task<IActionResult> GetSelectFomCustomerContractByCustCode([FromRoute] string custCode)
+        {
+            var item = await Mediator.Send(new GetSelectFomCustomerContractByCustCode() { CustCode = custCode, User = UserInfo() });
+            return Ok(item);
+        }
+
 
         [HttpPost("getSitesPagedListWithFilter")]
         public async Task<IActionResult> GetSitesPagedListWithFilter([FromQuery] PaginationFilterDto filter, [FromBody] OprFilter filterInput)

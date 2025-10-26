@@ -175,7 +175,7 @@
                       <label>{{'User' | translate}}</label>
                       <!--<input class="form-control" type="text" placeholder=" {{'Please_Enter' | translate}}  {{'User' | translate}}"
         formControlName="userCode" maxlength="10" readonly="readonly">-->
-                      <select (change)="loadPermission($event)" [(ngModel)]="PermissionUserId" class="form-control">
+                      <select (change)="loadAuth()" [(ngModel)]="PermissionUserId" class="form-control">
                         <option value="0">{{'Select_User' | translate}}</option>
                         <option *ngFor="let user of userList" value="{{user.value}}">{{user.text}}</option>
                       </select>

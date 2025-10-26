@@ -85,8 +85,7 @@ export class LoginandsecurityComponent extends ParentSystemSetupComponent implem
     //var loggedUserName = this.authService.getUserName();
     //this.PermissionUserId = parseInt(this.userList.filter(x => x.text == loggedUserName)[0].value);
     this.loadAllUsers();
-    this.loadAuthUsers();
-    this.loadAuth();
+    this.loadAuthUsers();   
     this.loadAllBranches();
 
     this.config = TreeviewConfig.create({
@@ -175,8 +174,9 @@ export class LoginandsecurityComponent extends ParentSystemSetupComponent implem
 
     this.apiService.getall('menuOption/getAllUsersList').subscribe(res => {
       this.userList = res;
-      this.PermissionUserId = parseInt(this.userList.filter(x => x.text == loggedUserName)[0].value);
+      this.PermissionUserId = parseInt(this.userList.filter(x => x.text == loggedUserName)[0].value);      
       // this.PermissionUserId = parseInt(item['id']);
+      this.loadAuth();
       this.loginID = parseInt(this.userList.filter(x => x.text == loggedUserName)[0].value);
     });
   }
@@ -366,13 +366,16 @@ export class LoginandsecurityComponent extends ParentSystemSetupComponent implem
 
 
   loadAuth() {
-    var loggedUserName = this.authService.getUserName();
-    const Id = this.PermissionUserId;
+    var loggedUserName = this.authService.getUserName();    
+    const Id = this.PermissionUserId;    
+    //const Id = this.authService.getUser().id;
    // this.form1.value['loginID'] = this.loginID;
-   // const bCode = evt.target.value as string;
+    // const bCode = evt.target.value as string;
+
     if (this.Id !== null) {
-      this.apiService.getFomUrl(`FomSysAuthority/{id}?Id=${Id}`).subscribe(res => {
+      this.apiService.getFomUrl(`FomSysAuthority/${Id}`).subscribe(res => {
         if (res) {
+          this.form1.patchValue(res);
           this.form1.controls['userName'].setValue('');
         }
       })
@@ -435,7 +438,7 @@ export class LoginandsecurityComponent extends ParentSystemSetupComponent implem
 
   submitSecondTab() {
     var loggedUserName = this.authService.getUserName();
-    this.loginID = parseInt(this.userList.filter(x => x.text == loggedUserName)[0].value);
+    this.loginID = this.PermissionUserId;// parseInt(this.userList.filter(x => x.text == loggedUserName)[0].value);
     this.form1.value['loginID'] = this.loginID;
     this.apiService.postFomUrl('fomSysAuthority', this.form1.value).subscribe(
         (res) => {

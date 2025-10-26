@@ -1,0 +1,29 @@
+<h3 class="modal-title">{{modalTitle | translate}}</h3>
+<button type="button" class="close" aria-hidden="true" (click)="closeModel()"> ×</button>
+
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <label class="mr-sm-2">{{'Remarks' | translate}}</label>
+    <textarea class="form-control" placeholder="{{'Enter' | translate}} {{'Remarks' | translate}}" [(ngModel)]="remarks">    
+</textarea>
+  </div>
+  <div class="col-md-12 col-lg-12 pt-3" *ngIf="hasFile">
+    <label class="mr-sm-2">{{'Before Image' | translate}} </label>
+    <br />
+    <input type="file" (change)="onSelectFile1($event)">
+  </div>
+  <div class="col-md-12 col-lg-12 pt-3" *ngIf="hasFile">
+    <label class="mr-sm-2">{{'After Image' | translate}} </label>
+    <br />
+    <input type="file" (change)="onSelectFile2($event)">
+  </div>
+</div>
+
+<div class="row mt-3 ">
+  <div class="col-md-12 col-lg-12 text-center">
+    <input type="button" class="btn waves-effect waves-light btn-rounded   btn-secondary btn-midblock"
+           value="{{'Cancel' | translate}}" (click)="closeModel()" /> &nbsp;
+    <input type="submit" class="btn waves-effect waves-light btn-rounded btn-primary btn-midblock"
+           value="{{'Save' | translate}}" (click)="save()"/>
+  </div>
+</div>

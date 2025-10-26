@@ -110,7 +110,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                   {{'Address' | translate}}
                 </th>
-                <td mat-cell *matCellDef="let row">{{ row.siteAddress }}</td>
+                <td mat-cell *matCellDef="let row"><div class="deptBreakAll">{{ row.siteAddress }}</div></td>
               </ng-container>
               <!--<ng-container matColumnDef="siteCityCode">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>

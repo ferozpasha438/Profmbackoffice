@@ -92,6 +92,33 @@ namespace CIN.Application.FomMgtQuery
     }
     #endregion
 
+    #region CheckLoginCodeExists
+
+    public class CheckLoginCodeExists : IRequest<ApiMessageDto>
+    {
+        public UserIdentityDto User { get; set; }
+        public string LoginCode { get; set; }
+        public int Id { get; set; }
+    }
+
+    public class CheckLoginCodeExistsHandler : IRequestHandler<CheckLoginCodeExists, ApiMessageDto>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public CheckLoginCodeExistsHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<ApiMessageDto> Handle(CheckLoginCodeExists request, CancellationToken cancellationToken)
+        {
+            var loginMapping = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.Id != request.Id && e.UserClientLoginCode == request.LoginCode);
+            return loginMapping is not null ? new() { Message = ApiMessageInfo.Duplicate(nameof(request.LoginCode)), Type = 1 } : new() { Type = 0 };
+        }
+    }
+    #endregion
+
     #region Create_And_Update
 
     public class CreateUpdateFomCustomer : IRequest<int>
@@ -232,7 +259,7 @@ namespace CIN.Application.FomMgtQuery
 
 
 
-                    TblErpFomUserClientLoginMapping loginMapping = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.RegEmail == customer.CustEmail1);
+                    TblErpFomUserClientLoginMapping loginMapping = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.CustCode == customer.CustCode);
 
                     if (loginMapping is null)
                     {
@@ -246,20 +273,20 @@ namespace CIN.Application.FomMgtQuery
                             LastLoginDate = null,
                             IsActive = true,
                             CreatedOn = DateTime.Now,
-                           
+
                         };
                         await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
 
                     }
                     else
                     {
-                        loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
-                        loginMapping.RegEmail = customer.CustEmail1;
-                        loginMapping.RegMobile = customer.CustMobile1;
-                        loginMapping.CreatedOn=DateTime.Now;
+                        //loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
+                        //loginMapping.RegEmail = customer.CustEmail1;
+                        //loginMapping.RegMobile = customer.CustMobile1;
+                        //loginMapping.CreatedOn = DateTime.Now;
 
-                        // userBranch.BranchCode = obj.PrimaryBranch;
-                        _context.ErpFomUserClientLoginMapping.Update(loginMapping);
+                        //// userBranch.BranchCode = obj.PrimaryBranch;
+                        //_context.ErpFomUserClientLoginMapping.Update(loginMapping);
 
                     }
 
@@ -462,6 +489,82 @@ namespace CIN.Application.FomMgtQuery
                   .ToListAsync(cancellationToken);
             Log.Info("----Info GetCustomersCustomList method Ends----");
             return newList;
+        }
+    }
+
+
+    #endregion
+
+    #region GetSelectCustomerLoginList
+
+    public class GetSelectCustomerLoginList : IRequest<List<CustomSelectListItem>>
+    {
+        public UserIdentityDto User { get; set; }
+        public string CustCode { get; set; }
+    }
+
+    public class GetSelectCustomerLoginListHandler : IRequestHandler<GetSelectCustomerLoginList, List<CustomSelectListItem>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public GetSelectCustomerLoginListHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<List<CustomSelectListItem>> Handle(GetSelectCustomerLoginList request, CancellationToken cancellationToken)
+        {
+
+            Log.Info("----Info GetSelectCustomerLoginList method start----");
+            var list = _context.ErpFomUserClientLoginMapping.Where(e => e.IsActive && e.CustCode == request.CustCode);
+
+            var newList = await list.AsNoTracking()
+            .OrderBy(e => e.Id)
+                 .Select(e => new CustomSelectListItem { Text = e.CustName, Value = e.UserClientLoginCode })
+                  .ToListAsync(cancellationToken);
+            Log.Info("----Info GetSelectCustomerLoginList method Ends----");
+            return newList;
+        }
+    }
+
+
+    #endregion
+
+    #region GetSelectSitesByCustomerLoginCode
+
+    public class GetSelectSitesByCustomerLoginCode : IRequest<List<CustomSelectListItem>>
+    {
+        public UserIdentityDto User { get; set; }
+        public string LoginCode { get; set; }
+        public string CustCode { get; set; }
+    }
+
+    public class GetSelectSitesByCustomerLoginCodeHandler : IRequestHandler<GetSelectSitesByCustomerLoginCode, List<CustomSelectListItem>>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public GetSelectSitesByCustomerLoginCodeHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<List<CustomSelectListItem>> Handle(GetSelectSitesByCustomerLoginCode request, CancellationToken cancellationToken)
+        {
+
+            Log.Info("----Info GetSelectSitesByCustomerLoginCode method start----");
+            var list = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.IsActive && e.CustCode == request.CustCode && e.UserClientLoginCode == request.LoginCode);
+
+            if (list.SiteCode.HasValue() && list.SiteCode.Length > 0)
+            {
+                var sites = _context.OprSites.AsNoTracking();
+                var newList = list.SiteCode.Split(',')
+                     .Select(siteCode => new CustomSelectListItem { Value = siteCode }).ToList();
+                Log.Info("----Info GetSelectSitesByCustomerLoginCode method Ends----");
+                foreach (var item in newList)
+                    item.Text = (await sites.FirstOrDefaultAsync(e => e.SiteCode == item.Value)).SiteName;
+                return newList;
+            }
+            return new List<CustomSelectListItem>();
         }
     }
 
@@ -696,6 +799,92 @@ namespace CIN.Application.FomMgtQuery
             _mapper = mapper;
         }
 
+        public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                Log.Info("----Info Create Update Multi Login Customer method start----");
+
+                if (request.FomUserClientLoginMappingList == null || !request.FomUserClientLoginMappingList.Any())
+                {
+                    Log.Error("Invalid request data");
+                    return 0;
+                }
+
+                using (var transaction = await _context.Database.BeginTransactionAsync(cancellationToken))
+                {
+                    foreach (var obj in request.FomUserClientLoginMappingList)
+                    {
+                        if (string.IsNullOrEmpty(obj.CustCode))
+                        {
+                            Log.Error("Invalid request data");
+                            continue;
+                        }
+
+
+                        var customer = await _context.OprCustomers.Select(e => new { e.CustCode, e.ImageUrl }).FirstOrDefaultAsync(e => e.CustCode == obj.CustCode);
+                        var loginMapping = await _context.ErpFomUserClientLoginMapping
+                            .FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.UserClientLoginCode && e.CustCode == obj.CustCode);
+
+                        if (loginMapping != null) // ✅ Update existing record
+                        {
+                            loginMapping.CustCode = obj.CustCode;
+                            loginMapping.CustName = obj.CustName;
+                            loginMapping.RegEmail = obj.RegEmail;
+                            loginMapping.RegMobile = obj.RegMobile;
+                            loginMapping.ImageUrl = customer.ImageUrl;
+
+                            if (!string.IsNullOrEmpty(obj.Password))
+                            {                                 
+                                loginMapping.Password = SecurePasswordHasher.EncodePassword(obj.Password);
+                            }
+
+                            loginMapping.LoginType = "client";
+                            loginMapping.IsActive = obj.IsActive;
+                            loginMapping.CreatedOn = DateTime.UtcNow;
+
+                            _context.ErpFomUserClientLoginMapping.Update(loginMapping);
+                        }
+                        else // ✅ Create new record
+                        {
+                            loginMapping = new TblErpFomUserClientLoginMapping
+                            {
+                                UserClientLoginCode = obj.UserClientLoginCode,
+                                CustCode = obj.CustCode,
+                                CustName = obj.CustName,
+                                RegEmail = obj.RegEmail,
+                                RegMobile = obj.RegMobile,
+                                Password = SecurePasswordHasher.EncodePassword(obj.Password),
+                                LoginType = "client",
+                                ImageUrl = customer.ImageUrl,
+                                IsActive = obj.IsActive,
+                                CreatedOn = DateTime.UtcNow
+                            };
+
+                            await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
+                        }
+                    }
+
+                    // ✅ Save all records at once
+                    await _context.SaveChangesAsync();
+
+                    // ✅ Commit transaction only after saving all records
+                    await transaction.CommitAsync();
+
+                    Log.Info("----Info Create Update Fom Customer Master method Exit----");
+                    return 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in Create Update Fom Customer Master method");
+                Log.Error("Error occurred time : " + DateTime.UtcNow);
+                Log.Error("Error message : " + ex.Message);
+                Log.Error("Error StackTrace : " + ex.StackTrace);
+                return 0;
+            }
+        }
+
         //public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
         //{
         //    try
@@ -771,90 +960,45 @@ namespace CIN.Application.FomMgtQuery
         //    }
         //}
 
-        public async Task<int> Handle(CreateUpdateMultiLoginCustomer request, CancellationToken cancellationToken)
-        {
-            try
-            {
-                Log.Info("----Info Create Update Multi Login Customer method start----");
-
-                if (request.FomUserClientLoginMappingList == null || !request.FomUserClientLoginMappingList.Any())
-                {
-                    Log.Error("Invalid request data");
-                    return 0;
-                }
-
-                using (var transaction = await _context.Database.BeginTransactionAsync(cancellationToken))
-                {
-                    foreach (var obj in request.FomUserClientLoginMappingList)
-                    {
-                        if (string.IsNullOrEmpty(obj.CustCode))
-                        {
-                            Log.Error("Invalid request data");
-                            continue;
-                        }
-
-                        var loginMapping = await _context.ErpFomUserClientLoginMapping
-                            .FirstOrDefaultAsync(e => e.UserClientLoginCode == obj.UserClientLoginCode && e.CustName==obj.CustName);
-
-                        if (loginMapping != null) // ✅ Update existing record
-                        {
-                            loginMapping.CustCode = obj.CustCode;
-                            loginMapping.CustName = obj.CustName;
-                            loginMapping.RegEmail = obj.RegEmail;
-                            loginMapping.RegMobile = obj.RegMobile;
-
-                            if (!string.IsNullOrEmpty(obj.Password))
-                            {
-                                loginMapping.Password =obj.Password;
-                            }
-
-                            loginMapping.LoginType = "client";
-                            loginMapping.IsActive = obj.IsActive;
-                            loginMapping.CreatedOn = DateTime.UtcNow;
-
-                            _context.ErpFomUserClientLoginMapping.Update(loginMapping);
-                        }
-                        else // ✅ Create new record
-                        {
-                            loginMapping = new TblErpFomUserClientLoginMapping
-                            {
-                                UserClientLoginCode = obj.UserClientLoginCode,
-                                CustCode = obj.CustCode,
-                                CustName = obj.CustName,
-                                RegEmail = obj.RegEmail,
-                                RegMobile = obj.RegMobile,
-                                Password = obj.Password,
-                                LoginType = "client",
-                                IsActive = obj.IsActive,
-                                CreatedOn = DateTime.UtcNow
-                            };
-
-                            await _context.ErpFomUserClientLoginMapping.AddAsync(loginMapping);
-                        }
-                    }
-
-                    // ✅ Save all records at once
-                    await _context.SaveChangesAsync();
-
-                    // ✅ Commit transaction only after saving all records
-                    await transaction.CommitAsync();
-
-                    Log.Info("----Info Create Update Fom Customer Master method Exit----");
-                    return 1;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Error in Create Update Fom Customer Master method");
-                Log.Error("Error occurred time : " + DateTime.UtcNow);
-                Log.Error("Error message : " + ex.Message);
-                Log.Error("Error StackTrace : " + ex.StackTrace);
-                return 0;
-            }
-        }
-
     }
-  #endregion
+    #endregion
+
+    #region CreateMappingLoginCodesToSites
+
+    public class CreateMappingLoginCodesToSites : IRequest<AppCtrollerDto>
+    {
+        public UserIdentityDto User { get; set; }
+        public TblErpFomUserClientLoginMappingDto Input { get; set; }
+    }
+
+    public class CreateMappingLoginCodesToSitesHandler : IRequestHandler<CreateMappingLoginCodesToSites, AppCtrollerDto>
+    {
+        private readonly CINDBOneContext _context;
+        private readonly IMapper _mapper;
+        public CreateMappingLoginCodesToSitesHandler(CINDBOneContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<AppCtrollerDto> Handle(CreateMappingLoginCodesToSites request, CancellationToken cancellationToken)
+        {
+
+            Log.Info("----Info CreateMappingLoginCodesToSites method start----");
+            var obj = request.Input;
+            var userLoginMappingItem = await _context.ErpFomUserClientLoginMapping.FirstOrDefaultAsync(e => e.CustCode == obj.CustCode && e.UserClientLoginCode == obj.UserClientLoginCode);
+            if (userLoginMappingItem is not null)
+            {
+                userLoginMappingItem.SiteCode = obj.SiteCode;
+                _context.ErpFomUserClientLoginMapping.Update(userLoginMappingItem);
+                await _context.SaveChangesAsync();
+                return ApiMessageInfo.Status(1, userLoginMappingItem.Id);
+            }
+            return ApiMessageInfo.Status(0);
+        }
+    }
+
+
+    #endregion
 
 
     #region DeleteMultiLoginCustomer
@@ -916,6 +1060,7 @@ namespace CIN.Application.FomMgtQuery
         }
         public async Task<List<TblErpFomUserClientLoginMappingDto>> Handle(GetClientsByCustomerCode request, CancellationToken cancellationToken)
         {
+
             TblErpFomUserClientLoginMappingDto obj = new();
             var Clients = await _context.ErpFomUserClientLoginMapping.AsNoTracking().Where(e => e.CustCode == request.CustomerCode).ProjectTo<TblErpFomUserClientLoginMappingDto>(_mapper.ConfigurationProvider).ToListAsync();
 
@@ -961,7 +1106,7 @@ namespace CIN.Application.FomMgtQuery
                     var (res, fileName) = FileUploads.FileUploadWithIform(customer.CustCode, request.WebRoot, request.Input.Image1IForm);
                     if (res)
                     {
-                        customer.CustUDF1 = obj.WebRoot+fileName;
+                        customer.CustUDF1 = obj.WebRoot + fileName;
                     }
                 }
                 if (request.Input.Image2IForm != null && request.Input.Image2IForm.Length > 0)

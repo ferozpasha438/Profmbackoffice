@@ -159,12 +159,19 @@
       </div>
     </div>
 
-    <div class="col-md-6 col-lg-6">
+    <div class="col-md-3 col-lg-3">
       <div class="form-group">
         <label for="isWrittenOff">{{'isWrittenOff' | translate}}</label>
         <br />
         <mat-slide-toggle color="primary" formControlName="isWrittenOff"></mat-slide-toggle>
       </div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+       <div class="form-group">
+         <label for="isWrittenOff">{{'AssetMaster_Quantity' | translate}}</label>
+         <input class="form-control" type="number"
+                placeholder="{{'Please_Enter' | translate}} {{'Quantity' | translate}}" formControlName="jobQuantity">
+       </div>
     </div>
 
   </div>

@@ -63,6 +63,7 @@ export class AddupdatemultiloginComponent extends ParentFomMgtComponent implemen
   existingLogins: CustomerLogin[] = [];
 
   isEditMode: boolean = false;
+  isDuplicateLoginCode: boolean = false;
 
 
 
@@ -210,7 +211,7 @@ export class AddupdatemultiloginComponent extends ParentFomMgtComponent implemen
   //}
   addLogin() {
     if (!this.newLogin.userClientLoginCode || !this.newLogin.custCode || !this.newLogin.custName || !this.newLogin.password) {
-      alert('Please fill all fields!');
+      this.notifyService.showError('Please fill all fields!');
       return;
     }
 
@@ -221,12 +222,12 @@ export class AddupdatemultiloginComponent extends ParentFomMgtComponent implemen
       );
 
       if (isDuplicate) {
-        alert('User Client Login Code already exists!');
+        this.notifyService.showError('User Client Login Code already exists!');
         return;
       }
 
       this.existingLogins.push({ ...this.newLogin });
-      alert('Record added successfully!');
+      this.notifyService.showSuccess('Record added, Pls Save!');
     } else {
       // Update existing record (based on userClientLoginCode)
       const existingIndex = this.existingLogins.findIndex(
@@ -237,7 +238,7 @@ export class AddupdatemultiloginComponent extends ParentFomMgtComponent implemen
         this.existingLogins[existingIndex].custCode = this.newLogin.custCode;
         this.existingLogins[existingIndex].custName = this.newLogin.custName;
         this.existingLogins[existingIndex].password = this.newLogin.password;
-        alert('Record updated successfully!');
+        this.notifyService.showSuccess('Record updated, Pls Save!');
       }
     }
 
@@ -269,13 +270,13 @@ export class AddupdatemultiloginComponent extends ParentFomMgtComponent implemen
     if (confirm('Are you sure you want to delete this customer login?')) {
       this.apiService.delete('fomCustomer/DeleteMultiLoginCustomer', id).subscribe({
         next: () => {
-          alert('Record deleted successfully!');
+          this.notifyService.showSuccess('Record deleted successfully!');
           this.resetNewLogin();
           this.initializeData();
         },
         error: (err) => {
           console.error('Delete failed:', err);
-          alert('Failed to delete record.');
+          this.notifyService.showError('Failed to delete record.');
         }
       });
     }
@@ -307,20 +308,32 @@ export class AddupdatemultiloginComponent extends ParentFomMgtComponent implemen
 //    else
 //this.utilService.FillUpFields();
 
-
+  checkLoginCodeExists() {
+    if (!this.isEditMode) {
+      this.apiService.getall(`fomCustomer/checkLoginCodeExists/?loginCode=${this.newLogin.userClientLoginCode}&id=${0}`).subscribe(res => {
+        if (res.type === 1) {
+          this.notifyService.showError(res.message);
+          this.isDuplicateLoginCode = true;
+        }
+        else
+          this.isDuplicateLoginCode = false;
+      });
+    }
+  }
 
    //Save login using API
   saveLogin() {
     const dataToSave = this.existingLogins;
     this.apiService.post('FomCustomer/CreateUpdateMultiLoginCustomer', dataToSave).subscribe(
       (res) => {
-        alert('Login saved successfully!');
+        this.notifyService.showSuccess('Login saved successfully!');
         this.resetNewLogin();
         this.initializeData();
+        this.dialogRef.close();
       },
       (err) => {
         console.error('Error saving login:', err);
-        alert('Failed to save login.');
+        this.notifyService.showError('Failed to save login.');
       }
     );
   }

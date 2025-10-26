@@ -26,6 +26,7 @@ import { MaplogintositeComponent } from '../Sharedpages/maplogintosite.component
   selector: 'app-getcustomersites',
   templateUrl: './getcustomersites.component.html',
   styles: [
+    '.deptBreakAll{white-space: pre-wrap; word-break: break-word;}'
   ]
 })
 export class GetcustomersitesComponent extends ParentFomMgtComponent implements OnInit {

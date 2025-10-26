@@ -43,7 +43,10 @@
                       <i class="icon-close text-danger"> </i>
                     </a>
                     <ng-template #notClosed>
-                      <b class="text-primary">{{'Closed' | translate}}</b>
+                      <b class="text-primary">{{'Closed' | translate}}</b>&nbsp;&nbsp;
+                      <a class="tableicons" (click)="toolsMatLabInfo(citem)" matTooltip="{{'View_Items' | translate}}">
+                        <i class="icon-list text-secondary"> </i>
+                      </a>
                     </ng-template>
                   </td>
                 </tr>

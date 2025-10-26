@@ -36,10 +36,14 @@ namespace LS.API.FOM.Controllers
         {
             string auth = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
             //   var jwtEncodedString = auth.Substring(7);
-           // var jwtEncodedString = auth;
-          //  var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
+            // var jwtEncodedString = auth;
+            //  var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
             //return token.Claims;
-             return new List<Claim>();
+            //return new List<Claim>();
+
+            var jwtEncodedString = auth.Contains("Bearer") ? auth.Substring(7) : auth;
+            var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
+            return token.Claims;
         }
         private bool HasClaims() => GetCliams().Count() != 0;
 

@@ -67,14 +67,6 @@ export class CustomeranalyticsComponent extends ParentFomMgtComponent implements
 
   }
 
-
-  customerList = [
-    { id: 1, name: 'CUST00001' },
-    { id: 2, name: 'CUST00002' },
-    { id: 3, name: 'CUST00003' },
-    { id: 4, name: 'CUST00004' }
-  ];
-
   ngOnInit(): void {
     // this.initialLoading();
     this.form = this.fb.group({
@@ -83,9 +75,9 @@ export class CustomeranalyticsComponent extends ParentFomMgtComponent implements
       fromDate: ['', Validators.required],
     });
 
-    this.apiService.getFomUrlPagination('FomCustomer', this.utilService.getQueryString(0, 1000, '', '')).subscribe(res => {
+    this.apiService.getall('FomCustomer/getSelectCustomerList').subscribe(res => {
       if (res)
-        this.CustomerCodeList = res['items'];
+        this.CustomerCodeList = res;
     });
   }
 
